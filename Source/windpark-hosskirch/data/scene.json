@@ -1,0 +1,2106 @@
+{
+ "origin": {
+  "lon": 9.4452,
+  "lat": 47.9595
+ },
+ "proj": "tmerc k=1 WGS84",
+ "core": 4096.0,
+ "wide": 12800.0,
+ "base": 400.0,
+ "sections": {
+  "demCore": {
+   "n": 261,
+   "res": 32.0,
+   "ext": 4160.0,
+   "q": 0.1,
+   "base": 400.0,
+   "off": 0,
+   "len": 68287
+  },
+  "demWide": {
+   "n": 201,
+   "res": 128.0,
+   "ext": 12800.0,
+   "q": 0.5,
+   "base": 400.0,
+   "off": 68287,
+   "len": 40403
+  },
+  "forest": {
+   "count": 112,
+   "attrs": [],
+   "q": 5.0,
+   "off": 108690,
+   "len": 10857
+  },
+  "landuse": {
+   "count": 749,
+   "attrs": [
+    "cls",
+    "ang"
+   ],
+   "q": 5.0,
+   "off": 119547,
+   "len": 38579
+  },
+  "water": {
+   "count": 40,
+   "attrs": [
+    "level",
+    "kind"
+   ],
+   "q": 5.0,
+   "off": 158126,
+   "len": 1612
+  },
+  "waterway": {
+   "count": 195,
+   "attrs": [
+    "width"
+   ],
+   "q": 5.0,
+   "off": 159738,
+   "len": 3830
+  },
+  "roads": {
+   "count": 1631,
+   "attrs": [
+    "cls",
+    "surf",
+    "width",
+    "flags"
+   ],
+   "q": 5.0,
+   "off": 163568,
+   "len": 50972
+  },
+  "rail": {
+   "count": 3,
+   "attrs": [],
+   "q": 5.0,
+   "off": 214540,
+   "len": 292
+  },
+  "buildings": {
+   "count": 3685,
+   "attrs": [
+    "height",
+    "eave",
+    "cls",
+    "roof"
+   ],
+   "q": 5.0,
+   "off": 214832,
+   "len": 66941
+  },
+  "power": {
+   "count": 35,
+   "attrs": [
+    "kind",
+    "cables"
+   ],
+   "q": 5.0,
+   "off": 281773,
+   "len": 1726
+  },
+  "supports": {
+   "count": 313,
+   "attrs": [
+    "kind"
+   ],
+   "q": 5.0,
+   "off": 283499,
+   "len": 2157
+  },
+  "trees": {
+   "count": 211,
+   "attrs": [
+    "kind"
+   ],
+   "q": 5.0,
+   "off": 285656,
+   "len": 2014
+  },
+  "pads": {
+   "count": 6,
+   "attrs": [
+    "level"
+   ],
+   "q": 5.0,
+   "off": 287670,
+   "len": 458
+  },
+  "cranepads": {
+   "count": 6,
+   "attrs": [
+    "level",
+    "ramp",
+    "axis"
+   ],
+   "q": 5.0,
+   "off": 288128,
+   "len": 1174
+  },
+  "forestWide": {
+   "n": 1024,
+   "res": 25,
+   "ext": 12800.0,
+   "off": 289302,
+   "len": 131072
+  },
+  "openness": {
+   "n": 512,
+   "res": 16,
+   "ext": 4096.0,
+   "levels": 7,
+   "off": 420374,
+   "len": 262144
+  },
+  "demFar": {
+   "n": 257,
+   "res": 500.0,
+   "ext": 64000.0,
+   "q": 1.0,
+   "base": 0.0,
+   "lake": 395.3,
+   "off": 682518,
+   "len": 68318
+  },
+  "farCover": {
+   "n": 129,
+   "res": 1000.0,
+   "ext": 64000.0,
+   "off": 750836,
+   "len": 16641
+  },
+  "horizon": {
+   "n": 1024,
+   "scale": 5e-05,
+   "eye": 900,
+   "off": 767477,
+   "len": 1964
+  }
+ },
+ "turbines": [
+  {
+   "id": "WEA 1",
+   "lon": 9.4264449,
+   "lat": 47.9608403,
+   "x": -1400.66,
+   "y": 149.2,
+   "ground": 648.0,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE900783549690",
+   "start": "2025-10-28",
+   "osm": "03859372-ab24-39eb-b03f-7340f27ad2c6"
+  },
+  {
+   "id": "WEA 2",
+   "lon": 9.4338187,
+   "lat": 47.9582348,
+   "x": -850.02,
+   "y": -140.61,
+   "ground": 645.0,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE937744919643",
+   "start": "2025-10-09",
+   "osm": "467eec1d-9aa8-3949-a421-92bded1bd4be"
+  },
+  {
+   "id": "WEA 3",
+   "lon": 9.4413519,
+   "lat": 47.9563677,
+   "x": -287.41,
+   "y": -348.27,
+   "ground": 645.0,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE914656798139",
+   "start": "2025-09-18",
+   "osm": "d5077ca4-a92c-3121-91ff-a45acb612e4d"
+  },
+  {
+   "id": "WEA 4",
+   "lon": 9.450617,
+   "lat": 47.9580903,
+   "x": 404.57,
+   "y": -156.73,
+   "ground": 663.0,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE982721870653",
+   "start": "2025-09-18",
+   "osm": "2a9f958b-d4bb-3143-bc92-aa52a765fc24"
+  },
+  {
+   "id": "WEA 5",
+   "lon": 9.4628562,
+   "lat": 47.9600875,
+   "x": 1318.62,
+   "y": 65.47,
+   "ground": 671.0,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE901865111347",
+   "start": "2025-10-28",
+   "osm": "39ad8aba-ffec-39a6-b967-efef246c5526"
+  },
+  {
+   "id": "WEA 6",
+   "lon": 9.4560887,
+   "lat": 47.9631767,
+   "x": 813.15,
+   "y": 408.87,
+   "ground": 663.0,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE985393714256",
+   "start": "2025-10-16",
+   "osm": "56cf0a45-3aae-375d-9889-61047bb5a297"
+  }
+ ],
+ "others": [
+  {
+   "x": -10815,
+   "y": -10444,
+   "hub": 80.0,
+   "rotor": 120.0,
+   "model": "Vensys VS120"
+  },
+  {
+   "x": -10913,
+   "y": -10068,
+   "hub": 80.0,
+   "rotor": 120.0,
+   "model": "Vensys VS120"
+  },
+  {
+   "x": -10809,
+   "y": -10784,
+   "hub": 80.0,
+   "rotor": 120.0,
+   "model": "Vensys VS120"
+  },
+  {
+   "x": -6931,
+   "y": -8183,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": -6864,
+   "y": -7878,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": -6520,
+   "y": -8191,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": 23942,
+   "y": -21460,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": -15481,
+   "y": 24105,
+   "hub": 95.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": -15992,
+   "y": 13931,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": -9950,
+   "y": 18152,
+   "hub": 160.0,
+   "rotor": 138.0,
+   "model": "Enercon E-138 EP3 E2"
+  },
+  {
+   "x": -9751,
+   "y": 17712,
+   "hub": 160.0,
+   "rotor": 138.0,
+   "model": "Enercon E-138 EP3 E2"
+  },
+  {
+   "x": -10990,
+   "y": 18765,
+   "hub": 160.0,
+   "rotor": 138.0,
+   "model": "Enercon E-138 EP3 E2"
+  },
+  {
+   "x": -11361,
+   "y": 19571,
+   "hub": 160.0,
+   "rotor": 138.0,
+   "model": "Enercon E-138 EP3 E2"
+  },
+  {
+   "x": -12261,
+   "y": 19431,
+   "hub": 160.0,
+   "rotor": 138.0,
+   "model": "Enercon E-138 EP3 E2"
+  },
+  {
+   "x": -12615,
+   "y": 20030,
+   "hub": 160.0,
+   "rotor": 138.0,
+   "model": "Enercon E-138 EP3 E2"
+  },
+  {
+   "x": -13044,
+   "y": 20433,
+   "hub": 160.0,
+   "rotor": 138.0,
+   "model": "Enercon E-138 EP3 E2"
+  },
+  {
+   "x": -13288,
+   "y": 20746,
+   "hub": 160.0,
+   "rotor": 138.0,
+   "model": "Enercon E-138 EP3 E2"
+  },
+  {
+   "x": -6411,
+   "y": 13037,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": 8763,
+   "y": 6843,
+   "hub": 149.0,
+   "rotor": 136.0,
+   "model": "Vestas V136"
+  },
+  {
+   "x": 9271,
+   "y": 6854,
+   "hub": 149.0,
+   "rotor": 136.0,
+   "model": "Vestas V136"
+  },
+  {
+   "x": 9697,
+   "y": 6622,
+   "hub": 149.0,
+   "rotor": 136.0,
+   "model": "Vestas V136"
+  },
+  {
+   "x": 4812,
+   "y": 6900,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": 15269,
+   "y": 17825,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": 14810,
+   "y": 20541,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": ""
+  },
+  {
+   "x": 15825,
+   "y": -6228,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": "Enercon E-160 EP5 E2"
+  },
+  {
+   "x": 15673,
+   "y": -5816,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": "Enercon E-160 EP5 E2"
+  },
+  {
+   "x": 15949,
+   "y": -6647,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": "Enercon E-160 EP5 E3 R1"
+  },
+  {
+   "x": 16247,
+   "y": -6917,
+   "hub": 135.0,
+   "rotor": 130,
+   "model": "Enercon E-160 EP5 E3 R1"
+  }
+ ],
+ "labels": [
+  {
+   "name": "Unterrehna",
+   "x": -10330,
+   "y": -12636,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Moos",
+   "x": -12109,
+   "y": -11979,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bühlen",
+   "x": -10293,
+   "y": -12039,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Reute",
+   "x": -5520,
+   "y": -11666,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Krumbach",
+   "x": -6233,
+   "y": -12260,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Oberboshasel",
+   "x": -7873,
+   "y": -11962,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Volzen",
+   "x": -6728,
+   "y": -11052,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Buhhof",
+   "x": -4411,
+   "y": -10489,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Illmensee",
+   "x": -5243,
+   "y": -10826,
+   "rank": 3,
+   "pop": 2002
+  },
+  {
+   "name": "Ruschweiler",
+   "x": -5527,
+   "y": -9542,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Langgassen",
+   "x": -8546,
+   "y": -9748,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Echbeck",
+   "x": -8629,
+   "y": -11197,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Rickertsreute",
+   "x": -9016,
+   "y": -11180,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Oberhaslach",
+   "x": -11229,
+   "y": -11386,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Furthof",
+   "x": -12330,
+   "y": -11003,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Straß",
+   "x": -12045,
+   "y": -9906,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hilpensberg",
+   "x": -11659,
+   "y": -10040,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hattenweiler",
+   "x": -12655,
+   "y": -11132,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Brunnhausen",
+   "x": -11722,
+   "y": -4581,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hahnennest",
+   "x": -8975,
+   "y": -4497,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Mettenbuch",
+   "x": -10009,
+   "y": -4586,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Kalkreute",
+   "x": -8116,
+   "y": -3185,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Spöck",
+   "x": -6680,
+   "y": -3020,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Dichtenhausen",
+   "x": -5620,
+   "y": -2826,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Burgweiler",
+   "x": -6936,
+   "y": -4785,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Judentenberg",
+   "x": -6823,
+   "y": -7269,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Zoznegg",
+   "x": -7871,
+   "y": -7248,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Oberochsenbach",
+   "x": -8010,
+   "y": -6847,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ulzhausen",
+   "x": -6238,
+   "y": -6296,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Waldbeuren",
+   "x": -7335,
+   "y": -5445,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ochsenbach",
+   "x": -8680,
+   "y": -6120,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Sylvenstal",
+   "x": -11814,
+   "y": -6555,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Neubrunn",
+   "x": -8728,
+   "y": -8246,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Denkingen",
+   "x": -10170,
+   "y": -7363,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Kleinstadelhofen",
+   "x": -12228,
+   "y": -8667,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Andelsbach",
+   "x": -8741,
+   "y": -8957,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Egelreute",
+   "x": -5218,
+   "y": -7578,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Rommetsreute",
+   "x": 427,
+   "y": -9344,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Nassach",
+   "x": 523,
+   "y": -8578,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Fleischwangen",
+   "x": 2643,
+   "y": -8959,
+   "rank": 3,
+   "pop": 635
+  },
+  {
+   "name": "Guggenhausen",
+   "x": 812,
+   "y": -7335,
+   "rank": 3,
+   "pop": 205
+  },
+  {
+   "name": "Wendenreute",
+   "x": 1323,
+   "y": -6751,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Unterwaldhausen",
+   "x": 1854,
+   "y": -6342,
+   "rank": 3,
+   "pop": 292
+  },
+  {
+   "name": "Oberholz",
+   "x": 3896,
+   "y": -6503,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Egg",
+   "x": 3227,
+   "y": -6231,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Oberwaldhausen",
+   "x": 1365,
+   "y": -5753,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Riedhausen",
+   "x": -1099,
+   "y": -5626,
+   "rank": 3,
+   "pop": 627
+  },
+  {
+   "name": "Königseggwald",
+   "x": -1775,
+   "y": -3498,
+   "rank": 3,
+   "pop": 658
+  },
+  {
+   "name": "Laubbach",
+   "x": -4037,
+   "y": -3203,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Unterweiler",
+   "x": -3189,
+   "y": -1965,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Oberweiler",
+   "x": -1986,
+   "y": -1893,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hoßkirch",
+   "x": -103,
+   "y": -2170,
+   "rank": 3,
+   "pop": 725
+  },
+  {
+   "name": "Ratzenreute",
+   "x": 2045,
+   "y": -1853,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Eichstegen",
+   "x": 3815,
+   "y": -2324,
+   "rank": 3,
+   "pop": 537
+  },
+  {
+   "name": "GVV Altshausen",
+   "x": 3764,
+   "y": -2626,
+   "rank": 1,
+   "pop": null
+  },
+  {
+   "name": "Kreenried",
+   "x": 3104,
+   "y": -4015,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Käfersulgen",
+   "x": 2730,
+   "y": -3979,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bauhof",
+   "x": 1587,
+   "y": -4639,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Mauren",
+   "x": 4387,
+   "y": -4629,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Haggenmoos",
+   "x": 5633,
+   "y": -4042,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Litzelbach",
+   "x": 4778,
+   "y": -3044,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Reute",
+   "x": 4941,
+   "y": -2305,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Altshausen",
+   "x": 6980,
+   "y": -2784,
+   "rank": 3,
+   "pop": 4735
+  },
+  {
+   "name": "Geigelbach",
+   "x": 10843,
+   "y": -1735,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Steinenbach",
+   "x": 12203,
+   "y": -3239,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Blönried",
+   "x": 10758,
+   "y": -3617,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Mendelbeuren",
+   "x": 8271,
+   "y": -5214,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Stuben",
+   "x": 9995,
+   "y": -5122,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bruggen",
+   "x": 11455,
+   "y": -6191,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hühlen",
+   "x": 8742,
+   "y": -6342,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ingenhart",
+   "x": 8115,
+   "y": -6023,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ebenweiler",
+   "x": 5167,
+   "y": -6458,
+   "rank": 3,
+   "pop": 1107
+  },
+  {
+   "name": "Malmishaus",
+   "x": 7251,
+   "y": -6816,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Schreckensee",
+   "x": 7621,
+   "y": -8040,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Oberaichen",
+   "x": 6722,
+   "y": -7926,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Groppach",
+   "x": 4320,
+   "y": -7459,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ruprechtsbruck",
+   "x": 5374,
+   "y": -8575,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Steinishaus",
+   "x": 4617,
+   "y": -9263,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Möllenbronn",
+   "x": 6451,
+   "y": -9102,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "GVV Fronreute-Wolpertswende",
+   "x": 9321,
+   "y": -9266,
+   "rank": 1,
+   "pop": null
+  },
+  {
+   "name": "Buchsee",
+   "x": 9514,
+   "y": -8812,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Grünlingen",
+   "x": 8473,
+   "y": -8632,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Vorsee",
+   "x": 10188,
+   "y": -7910,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Niedersweiler",
+   "x": 12190,
+   "y": -7976,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Oberspringen",
+   "x": 11606,
+   "y": -9486,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Eyb",
+   "x": 12373,
+   "y": -9834,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Unterspringen",
+   "x": 11497,
+   "y": -9981,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Einöd",
+   "x": 8660,
+   "y": -9580,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Fronreute",
+   "x": 8522,
+   "y": -10635,
+   "rank": 1,
+   "pop": 4340
+  },
+  {
+   "name": "Blitzenreute",
+   "x": 10876,
+   "y": -10759,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Dietenhofen",
+   "x": 9517,
+   "y": -12539,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Kellenried",
+   "x": 9244,
+   "y": -12688,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Horb",
+   "x": 9771,
+   "y": -11945,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Baienbach",
+   "x": 9134,
+   "y": -11448,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Bettenreute",
+   "x": 6453,
+   "y": -11639,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Luft",
+   "x": 4297,
+   "y": -12699,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ergetsweiler",
+   "x": 5411,
+   "y": -11742,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Fronhofen",
+   "x": 5535,
+   "y": -10938,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Geratsreute",
+   "x": 6946,
+   "y": -11065,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ried",
+   "x": 7091,
+   "y": -10381,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wielatsried",
+   "x": 7786,
+   "y": -10126,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wiesenhofen",
+   "x": 7447,
+   "y": -9404,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Obelhofen",
+   "x": 3464,
+   "y": -9854,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Feldmoos",
+   "x": 4058,
+   "y": -10803,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Rimmersberg",
+   "x": 2249,
+   "y": -10607,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Rimmersberg",
+   "x": 1459,
+   "y": -10530,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ziegelhütte",
+   "x": 406,
+   "y": -10091,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Reute",
+   "x": 1875,
+   "y": -9616,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Lengenweiler",
+   "x": -543,
+   "y": -9797,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Pfrungen",
+   "x": -3525,
+   "y": -9648,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Tafern",
+   "x": -2750,
+   "y": -10231,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Niederweiler",
+   "x": -2129,
+   "y": -10855,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Birkhof",
+   "x": -3713,
+   "y": -11309,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wolfshalde",
+   "x": -1548,
+   "y": -11322,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wilhelmsdorf",
+   "x": -1469,
+   "y": -10521,
+   "rank": 3,
+   "pop": 4985
+  },
+  {
+   "name": "Esenhausen",
+   "x": -148,
+   "y": -10582,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Rotachmühle",
+   "x": -753,
+   "y": -11360,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Zußdorf",
+   "x": -1034,
+   "y": -12282,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Höhreute",
+   "x": -2770,
+   "y": -11925,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Gattenhof",
+   "x": 1590,
+   "y": -12720,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ringenhausen",
+   "x": 156,
+   "y": -12387,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hasenhaus",
+   "x": 1064,
+   "y": -11652,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Frimmenweiler",
+   "x": 2334,
+   "y": -11492,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Blümetsweiler",
+   "x": 2777,
+   "y": -11835,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wechsetsweiler",
+   "x": 3515,
+   "y": -12712,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Danketsweiler",
+   "x": 2792,
+   "y": -12673,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Wolpertswende",
+   "x": 12537,
+   "y": -7207,
+   "rank": 3,
+   "pop": 4142
+  },
+  {
+   "name": "Hatzenturm",
+   "x": 12716,
+   "y": -6212,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Oberweiler",
+   "x": 12485,
+   "y": 843,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Reichenbach",
+   "x": 12564,
+   "y": 6693,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Bad Buchau",
+   "x": 12264,
+   "y": 11809,
+   "rank": 4,
+   "pop": 4070
+  },
+  {
+   "name": "GVV Bad Buchau",
+   "x": 12264,
+   "y": 11809,
+   "rank": 1,
+   "pop": null
+  },
+  {
+   "name": "Kappel",
+   "x": 11619,
+   "y": 11296,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Dürnau",
+   "x": 8124,
+   "y": 11228,
+   "rank": 3,
+   "pop": 459
+  },
+  {
+   "name": "Herbertingen",
+   "x": -786,
+   "y": 11182,
+   "rank": 3,
+   "pop": 4893
+  },
+  {
+   "name": "Marbach",
+   "x": 2260,
+   "y": 11624,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Moosheim",
+   "x": 3687,
+   "y": 9374,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Schwarzach",
+   "x": 1644,
+   "y": 9437,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Mieterkingen",
+   "x": 354,
+   "y": 10043,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hagelsburg",
+   "x": -2800,
+   "y": 8864,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ölkofen",
+   "x": -4102,
+   "y": 8619,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Eichen",
+   "x": -1968,
+   "y": 7235,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Fulgenstadt",
+   "x": 256,
+   "y": 7133,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "VVG der Stadt Bad Saulgau",
+   "x": 4375,
+   "y": 7841,
+   "rank": 1,
+   "pop": null
+  },
+  {
+   "name": "Kammerhof",
+   "x": 7909,
+   "y": 7104,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Engenweiler",
+   "x": 6227,
+   "y": 8408,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Braunenweiler",
+   "x": 7589,
+   "y": 8042,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Kleintissen",
+   "x": 5605,
+   "y": 9700,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Großtissen",
+   "x": 4862,
+   "y": 9876,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Nonnenweiler",
+   "x": 4469,
+   "y": 10999,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Krumbach",
+   "x": 7013,
+   "y": 9245,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Untereggatsweiler",
+   "x": 8720,
+   "y": 8293,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Obereggatsweiler",
+   "x": 9474,
+   "y": 7743,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Allmannsweiler",
+   "x": 11093,
+   "y": 7729,
+   "rank": 3,
+   "pop": 324
+  },
+  {
+   "name": "Bierstetten",
+   "x": 10494,
+   "y": 5487,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Steinbronnen",
+   "x": 8660,
+   "y": 5495,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bondorf",
+   "x": 6299,
+   "y": 6757,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Bad Saulgau",
+   "x": 4165,
+   "y": 6262,
+   "rank": 4,
+   "pop": 17011
+  },
+  {
+   "name": "Lampertsweiler",
+   "x": 7520,
+   "y": 4630,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Rieden",
+   "x": 8063,
+   "y": 4328,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Haid",
+   "x": 4706,
+   "y": 3326,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Badhaus",
+   "x": 9651,
+   "y": 3881,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Boos",
+   "x": 8912,
+   "y": 3635,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Renhardsweiler",
+   "x": 9483,
+   "y": 4858,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Schwemme",
+   "x": 10550,
+   "y": 4348,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Oberatzenberg",
+   "x": 10560,
+   "y": 3516,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Menzenweiler",
+   "x": 11386,
+   "y": 1996,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Winnenden",
+   "x": 10974,
+   "y": 2776,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Musbach",
+   "x": 10124,
+   "y": 2125,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Ebersbach-Musbach",
+   "x": 10258,
+   "y": 1245,
+   "rank": 1,
+   "pop": 1808
+  },
+  {
+   "name": "Buch",
+   "x": 11247,
+   "y": 1386,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ried",
+   "x": 10663,
+   "y": -9,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ried",
+   "x": 11015,
+   "y": 79,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Laubbronnen",
+   "x": 11696,
+   "y": -95,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ebersbach",
+   "x": 10004,
+   "y": -444,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Baltshaus",
+   "x": 6449,
+   "y": 92,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Dornahof",
+   "x": 7560,
+   "y": -912,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hirschegg",
+   "x": 5982,
+   "y": -985,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Ragenreute",
+   "x": 5036,
+   "y": -799,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Boms",
+   "x": 4766,
+   "y": 1136,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Glochen",
+   "x": 5948,
+   "y": 1202,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Luditsweiler",
+   "x": 7271,
+   "y": 1424,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hochberg",
+   "x": 6714,
+   "y": 2757,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Schwarzenbach",
+   "x": 5341,
+   "y": 1907,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wilfertsweiler",
+   "x": 4014,
+   "y": 2598,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bolstern",
+   "x": 1079,
+   "y": 2779,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Hundsrücken",
+   "x": 4038,
+   "y": 1200,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Heratskirch",
+   "x": 2843,
+   "y": 835,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wolfertsreute",
+   "x": 3451,
+   "y": -955,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Milpishaus",
+   "x": 2686,
+   "y": -905,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Hüttenreute",
+   "x": 1458,
+   "y": -1147,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wirnsweiler",
+   "x": -696,
+   "y": 1735,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bachhaupten",
+   "x": -1259,
+   "y": 2578,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Tafertsweiler",
+   "x": -2764,
+   "y": 1899,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Eschendorf",
+   "x": -2302,
+   "y": 3623,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Birkhöfe",
+   "x": -4104,
+   "y": 4047,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Friedberg",
+   "x": -2380,
+   "y": 4865,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Wolfartsweiler",
+   "x": -588,
+   "y": 4645,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Sießen",
+   "x": 2174,
+   "y": 4372,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bogenweiler",
+   "x": 3530,
+   "y": 4254,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wagenhausen",
+   "x": 1046,
+   "y": 5410,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Günzkofen",
+   "x": -3412,
+   "y": 6745,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Völlkofen",
+   "x": -4378,
+   "y": 5542,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Ursendorf",
+   "x": -5906,
+   "y": 5438,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Rosna",
+   "x": -8845,
+   "y": 5021,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Habsthal",
+   "x": -9007,
+   "y": 3660,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Einhart",
+   "x": -7241,
+   "y": 3249,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Altensweiler",
+   "x": -6895,
+   "y": 4866,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Repperweiler",
+   "x": -5941,
+   "y": 4230,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Gunzenhausen",
+   "x": -4525,
+   "y": 1985,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bernweiler",
+   "x": -7898,
+   "y": 2590,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Wangen",
+   "x": -6978,
+   "y": 1569,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Jettkofen",
+   "x": -5718,
+   "y": 1073,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Ostrach",
+   "x": -4873,
+   "y": -747,
+   "rank": 3,
+   "pop": 6831
+  },
+  {
+   "name": "Magenbuch-Lausheim",
+   "x": -9239,
+   "y": 348,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Lausheim",
+   "x": -10142,
+   "y": 614,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Mottschieß",
+   "x": -11835,
+   "y": 307,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Levertsweiler",
+   "x": -9437,
+   "y": 2631,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Zielfingen",
+   "x": -12409,
+   "y": 8910,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Rulfingen",
+   "x": -11122,
+   "y": 7658,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Granheim",
+   "x": -7790,
+   "y": 7408,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Enzkofen",
+   "x": -5809,
+   "y": 7024,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Bremen",
+   "x": -6157,
+   "y": 7398,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Hohentengen",
+   "x": -5108,
+   "y": 7794,
+   "rank": 3,
+   "pop": 4459
+  },
+  {
+   "name": "GVV Mengen",
+   "x": -7968,
+   "y": 9918,
+   "rank": 1,
+   "pop": null
+  },
+  {
+   "name": "Ennetach",
+   "x": -9253,
+   "y": 10353,
+   "rank": 3,
+   "pop": null
+  },
+  {
+   "name": "Mengen",
+   "x": -8430,
+   "y": 10057,
+   "rank": 4,
+   "pop": 10175
+  },
+  {
+   "name": "Hipfelsberg",
+   "x": -10956,
+   "y": 10787,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Scheer",
+   "x": -11078,
+   "y": 12649,
+   "rank": 3,
+   "pop": 2636
+  },
+  {
+   "name": "Walke",
+   "x": -8148,
+   "y": 11323,
+   "rank": 2,
+   "pop": null
+  },
+  {
+   "name": "Blochingen",
+   "x": -7412,
+   "y": 12205,
+   "rank": 3,
+   "pop": null
+  }
+ ],
+ "imagery": {
+  "core": {
+   "ext": 4096.0,
+   "res": 8,
+   "gain": 2.5
+  },
+  "wide": {
+   "ext": 12800.0,
+   "res": 40,
+   "gain": 2.5
+  },
+  "scene": "S2C_32UNU_20260619_0_L2A",
+  "date": "2026-06-19"
+ },
+ "sources": {
+  "osm": "Overture Maps 2026-09-23.1 (OpenStreetMap © contributors, ODbL; Microsoft ML building heights)",
+  "dem": "Copernicus GLO-30 DSM (canopy removed)",
+  "imagery": "Copernicus Sentinel-2 L2A 2026-06-19"
+ }
+}

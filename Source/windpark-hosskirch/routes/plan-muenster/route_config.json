@@ -1,0 +1,31 @@
+{
+ "id": "plan-muenster",
+ "waypoints": [
+  [
+   14.7928,
+   53.5511
+  ],
+  [
+   10.92308,
+   48.60508
+  ]
+ ],
+ "policy": {
+  "near_m": 20000.0,
+  "urban_x": 8.0
+ },
+ "vehicle": {
+  "blade": 84.3,
+  "root_d": 4.2,
+  "maxchord": 4.3,
+  "height": 4.7,
+  "load_w": 4.2,
+  "support": 50.0,
+  "under_sup": 1.6
+ },
+ "transport_height": 4.7,
+ "convoy": {
+  "weight_t": 72.0,
+  "length_m": 97.2
+ }
+}

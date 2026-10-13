@@ -1,0 +1,387 @@
+<!--HEAD-->
+<script>(function(d){var h=d.documentElement;h.lang='en';h.setAttribute('translate','no');h.classList.add('notranslate');if(!d.querySelector('meta[name="google"]')){var m=d.createElement('meta');m.name='google';m.content='notranslate';(d.head||h).appendChild(m);}})(document);</script>
+<title>%%TITLE%%</title>
+<meta name="description" content="%%DESC%%">
+<link rel="modulepreload" href="__THREE_URL__">
+<script>window.ROUTE_PARK_LINK="%%PARK_URL%%";window.ROUTE_SITE="%%SITE%%";window.ROUTE_KEY="%%KEY%%";window.ROUTE_BUILT="%%BUILT%%";</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..750&display=swap">
+<script>(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..750&display=swap';document.head.appendChild(l);})();</script>
+<style>
+/* A route survey as a working document: the map is the drawing, the panels are its legend, schedule and findings. */
+:root{
+  --ink:#16252d; --ink-2:#43545d; --ink-3:#6f7f87;
+  --glass:rgba(246,248,247,.95); --glass-2:rgba(236,241,240,.94); --line:rgba(22,37,45,.14);
+  --accent:#145A73; --accent-ink:#fff; --focus:#0B7BA8; --signal:#C8352B;
+  --ok:#2c8f63; --care:#c98a06; --hard:#cf3a2b;
+  --shadow:0 1px 2px rgba(15,30,38,.12),0 8px 28px rgba(15,30,38,.16);
+  --f:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --r:10px; --bg:#0d171d;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#e6eef1; --ink-2:#a9b9c0; --ink-3:#7f9199;
+    --glass:rgba(14,24,30,.93); --glass-2:rgba(22,36,44,.92); --line:rgba(230,238,241,.14);
+    --accent:#6CC3DE; --accent-ink:#08161c; --focus:#8ED6EE; --signal:#ff6b5e;
+    --ok:#4cc58d; --care:#f0b429; --hard:#ff6b5e;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#e6eef1; --ink-2:#a9b9c0; --ink-3:#7f9199;
+  --glass:rgba(14,24,30,.93); --glass-2:rgba(22,36,44,.92); --line:rgba(230,238,241,.14);
+  --accent:#6CC3DE; --accent-ink:#08161c; --focus:#8ED6EE; --signal:#ff6b5e;
+  --ok:#4cc58d; --care:#f0b429; --hard:#ff6b5e;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:14px;line-height:1.4;overflow:hidden;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+#app{position:fixed;inset:0}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#c:active{cursor:grabbing}
+/* solid panels (no backdrop blur: blurring the 3D view behind every panel on every frame is what made driving slow) */
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.label{font-stretch:78%;font-weight:650;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+#ui{position:absolute;inset:0;pointer-events:none;display:grid;gap:10px;
+  padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));
+  grid-template-columns:minmax(0,330px) minmax(0,1fr) minmax(0,330px);grid-template-rows:minmax(0,1fr) auto;
+  grid-template-areas:"left . right" "dock dock dock"}
+#ui.hide>*{visibility:hidden}
+#ui .panel{pointer-events:auto}
+#left{grid-area:left;display:flex;flex-direction:column;gap:10px;align-self:start;min-width:0;max-height:100%;min-height:0}
+#right{grid-area:right;display:flex;flex-direction:column;gap:10px;align-self:start;min-width:0;max-height:100%;min-height:0}
+#title{padding:14px 16px 12px}
+#title .label{display:block;margin-bottom:4px}
+#title h1{margin:0;font-stretch:84%;font-weight:720;font-size:24px;letter-spacing:-.01em;line-height:1.05;text-wrap:balance}
+#title .from{margin:6px 0 0;font-size:12.5px;color:var(--ink-2)}
+#stats{margin:10px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+#stats div{background:var(--glass-2);border:1px solid var(--line);border-radius:7px;padding:5px 7px;min-width:0}
+#stats b{display:block;font-stretch:84%;font-weight:720;font-size:17px;line-height:1.1}
+#stats span{font-size:11px;color:var(--ink-3)}
+#stops{padding:10px 8px 8px;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:2px}
+#stops .label{padding:0 8px 4px}
+.stop{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:none;border-radius:7px;padding:6px 8px}
+.stop:hover{background:var(--glass-2)}
+.stop.on{background:var(--accent);color:var(--accent-ink)}
+.stop.on .km{color:inherit;opacity:.85}
+.dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-stretch:80%;font-weight:750;font-size:12px;color:#fff;background:var(--ok)}
+.dot.s1{background:var(--care)}.dot.s2{background:var(--hard)}.dot.s0{background:var(--ok)}
+.dot.start{background:var(--accent);color:var(--accent-ink)}
+.stop .t{font-weight:580;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stop .km{font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.stop.overview .dot{background:none;color:var(--ink-2);border:1.5px solid var(--ink-3)}
+#legend{display:flex;flex-wrap:wrap;gap:4px 12px;padding:6px 8px 2px;font-size:11.5px;color:var(--ink-2)}
+#legend i{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+#card{padding:14px 16px;min-height:0;overflow:auto}
+#card header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+#card .label{display:block;margin-bottom:3px}
+#card h2{margin:0;font-stretch:85%;font-weight:720;font-size:20px;line-height:1.12;text-wrap:balance}
+#card .sub{margin:4px 0 10px;color:var(--ink-2);font-size:12.5px}
+#card .verdict{display:inline-flex;align-items:center;gap:6px;font-weight:650;font-size:12.5px;padding:3px 9px;border-radius:999px;color:#fff;background:var(--ok);margin:0 0 10px}
+#card .verdict.s1{background:var(--care)}#card .verdict.s2{background:var(--hard)}
+#card dl{margin:0 0 10px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-size:13px}
+#card dt{color:var(--ink-3)}
+#card dd{margin:0;text-align:right;font-weight:580;min-width:0;overflow-wrap:anywhere}
+#card h3{margin:12px 0 5px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-stretch:78%;font-weight:650;color:var(--ink-3)}
+#card ul,#card ol{margin:0;padding-left:17px;font-size:13px;color:var(--ink-2)}
+#card .pix-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory}
+#card .pix-row a{flex:0 0 auto;width:200px;scroll-snap-align:start;text-decoration:none;color:var(--ink-3);font-size:11px}
+#card .pix-row img,#card .pix.one img{display:block;width:200px;aspect-ratio:4/3;object-fit:cover;border-radius:6px;border:1px solid var(--line);margin-bottom:3px;background:var(--glass-2)}
+#card .pix.one{margin:8px 0 0}#card .pix.one a{display:inline-block;width:200px;text-decoration:none;color:var(--ink-3);font-size:11px}
+#card .pass{margin:12px 0 4px;padding:10px 12px 8px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:9px;background:var(--glass-2)}
+#card .pass>h3:first-child{margin-top:0;font-size:12px;letter-spacing:.04em;color:var(--ink)}
+#card li{margin:0 0 4px}
+#card li b{color:var(--ink);font-weight:620}
+#card blockquote{margin:6px 0 8px;padding:7px 10px;border-left:3px solid var(--signal);background:var(--glass-2);border-radius:0 7px 7px 0;font-size:12.5px;color:var(--ink-2)}
+#card blockquote cite{display:block;margin-top:4px;font-style:normal;font-size:11.5px;color:var(--ink-3)}
+#card a{color:var(--accent)}
+#card .note{font-size:11.5px;color:var(--ink-3);margin:8px 0 0}
+#close-card{border:0;background:none;font-size:18px;line-height:1;color:var(--ink-3);padding:2px 4px}
+#dock{grid-area:dock;justify-self:center;width:min(1060px,100%);padding:9px 14px 8px;display:grid;gap:6px}
+#dock .top{display:flex;align-items:center;gap:8px 12px;min-width:0}
+#dock .bottom{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;min-width:0}
+#back{display:none}
+.hot-mode #back{display:inline-block}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:5px 13px;font-weight:620;font-size:12.5px;white-space:nowrap}
+.chip{border:1px solid var(--line);background:var(--glass-2);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:560;white-space:nowrap}
+.chip:hover{border-color:var(--accent)}
+#km-out{font-stretch:82%;font-weight:720;font-size:20px;min-width:86px;white-space:nowrap}
+#km-out small{font-size:12px;font-weight:600;color:var(--ink-3)}
+#track{position:relative;flex:1;min-width:0;height:30px}
+#speed{display:flex;align-items:center;gap:4px;white-space:nowrap}
+#speed .chip{padding:3px 10px;font-size:15px;line-height:1.1;font-weight:700}
+#spd-out{min-width:62px;text-align:center;font-size:12px;font-weight:650;color:var(--ink-2);font-variant-numeric:tabular-nums}
+#track input{position:absolute;inset:0;width:100%;margin:0;accent-color:var(--accent);height:30px;background:transparent}
+#ticks{position:absolute;left:8px;right:8px;top:0;height:7px;pointer-events:none}
+#ticks i{position:absolute;top:0;width:3px;height:7px;border-radius:2px;margin-left:-1px;background:var(--hard)}
+#ticks i.s1{background:var(--care)}#ticks i.s0{background:var(--ok)}
+#legs{position:absolute;left:8px;right:8px;bottom:0;height:4px;pointer-events:none;display:flex;gap:2px}
+#legs span{height:4px;border-radius:2px;background:var(--line)}
+.readout{font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.toggle{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2)}
+#src-btn,#park-link{border:0;background:none;padding:0;color:var(--accent);font-size:11.5px;text-decoration:underline;white-space:nowrap}
+#here{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+#here a,#here .linkish,.maps-link{color:var(--accent);text-decoration:underline;white-space:nowrap}
+#here .linkish{border:0;background:none;padding:0;font:inherit;cursor:pointer}
+#here-ll{white-space:nowrap}
+#src-btn{margin-left:auto}
+#hot-ctl{display:none;align-items:center;gap:6px 14px;flex-wrap:wrap}
+.hot-mode #hot-ctl{display:flex}
+.hot-mode #map-ctl{display:none}
+.road-only{display:none!important}
+.flag.ok{background:#1f8a55;color:#fff}
+.flag.lane{background:#6b3cf0;color:#fff}
+.lane-h{color:#6b3cf0}
+.road-mode .road-only{display:inline-flex!important}
+.road-mode .hot-only{display:none!important}
+table.cmp{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;margin:4px 0 8px}
+table.cmp th,table.cmp td{text-align:left;padding:3px 4px;border-bottom:1px solid var(--line,rgba(127,127,127,.25));vertical-align:top}
+table.cmp thead th{font-weight:600;color:var(--ink-2)}
+.lane-cmp h3{color:#7a4dff}
+#pm{position:fixed;z-index:31;left:16px;bottom:16px;width:min(390px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;padding:12px 14px}
+#pm header{display:flex;justify-content:space-between;align-items:center}#pm h3{margin:0;font-size:15px}
+#pm .pm-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+#pm .pm-file{position:relative;overflow:hidden;cursor:pointer}#pm .pm-file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+#pm-sl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) 54px;gap:4px 8px;align-items:center;font-size:12px;font-variant-numeric:tabular-nums}
+#pm-sl input{width:100%}
+.pm-on #tags,.pm-on #convoy-tag,.pm-on #left,.pm-on #right{display:none!important}
+#vehicle{position:fixed;z-index:30;right:16px;top:16px;bottom:16px;width:min(440px,calc(100vw - 32px));overflow:auto;padding:14px 16px}
+#vehicle header{display:flex;justify-content:space-between;align-items:center}
+#vehicle h3{margin:0;font-size:16px}
+#veh-form fieldset{border:0;margin:10px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:5px 10px;align-items:center}
+#veh-form legend{font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:650;color:var(--ink-3);margin-bottom:4px;grid-column:1/-1}
+#veh-form label{font-size:13px;color:var(--ink-2);min-width:0}
+#veh-form input{width:92px;font:inherit;font-size:13px;padding:4px 6px;border-radius:6px;border:1px solid var(--line, rgba(127,127,127,.4));background:var(--glass-2);color:var(--ink);font-variant-numeric:tabular-nums}
+.veh-actions{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+#veh-btn{margin-left:auto}
+#prof{display:block;width:100%;height:150px;margin:6px 0 4px;border-radius:8px;background:var(--glass-2)}
+#card .kv-strong{font-size:22px;font-weight:720;font-stretch:85%}
+#card .warn{color:var(--hard);font-weight:650}
+#card .clist{max-height:220px;overflow:auto;padding-left:16px}
+#card .howto{background:var(--glass-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:8px 0;font-size:12.5px;line-height:1.45}
+#card .howto .goto{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
+#card .howto .mini{display:block}
+#card .howto input{width:5.5em;font:inherit;padding:2px 4px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink)}
+#route-tip{position:fixed;left:0;top:0;z-index:20;pointer-events:none;background:var(--ink);color:var(--glass-2);font-size:11.5px;font-weight:600;padding:3px 7px;border-radius:6px;white-space:nowrap}
+.veh-sketch{display:block;width:100%;max-width:560px;height:auto;margin:4px 0 8px}
+.veh-sketch .vs-body rect{fill:var(--ink-3);opacity:.55}.veh-sketch .vs-wheel circle{fill:var(--ink)}
+.veh-sketch .vs-blade{fill:var(--ink-3);fill-opacity:.22;stroke:var(--ink-2);stroke-width:1.2}.veh-sketch .vs-ring{fill:none;stroke:var(--ink-2);stroke-width:1.4}
+.veh-sketch .vs-road{stroke:var(--ink-3);stroke-width:1.5}.veh-sketch .vs-dim path{fill:none;stroke:var(--accent);stroke-width:1.2}
+.veh-sketch .vs-txt text{fill:var(--accent);font:700 15px var(--f)}
+#veh-form b.dim{display:inline-block;min-width:1.2em;color:var(--accent)}
+#card .muted{color:var(--ink-3)}
+#card details.all-clear summary{cursor:pointer;font-weight:600;margin:6px 0}
+#card details.all-clear .clist{max-height:320px}
+#card .ok{color:var(--ok);font-weight:650}
+#measure-out{font-variant-numeric:tabular-nums}
+.road-mode #c{cursor:crosshair}
+#map-ctl{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap}
+.swatches{display:flex;align-items:center;gap:4px 6px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2)}
+.swatches i{display:inline-block;width:14px;height:9px;border-radius:2px;margin-left:6px}
+.swatches i.hatch{background:repeating-linear-gradient(135deg,rgba(255,60,40,.85) 0 2px,rgba(230,40,30,.25) 2px 5px)}
+#card header>div{min-width:0}#card h2{overflow-wrap:anywhere}
+#card dl{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+#stops{-webkit-mask-image:linear-gradient(#000 calc(100% - 26px),transparent);mask-image:linear-gradient(#000 calc(100% - 26px),transparent)}
+#sources::backdrop{background:rgba(0,0,0,.3)}
+/* performance readout (key P or #perf) and the note when the browser draws without the graphics card */
+#perf{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:30;width:min(380px,calc(100vw - 32px));padding:10px 14px;pointer-events:auto}
+#perf header,#sw-note header,#pack-note header{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#perf h3,#sw-note h3,#pack-note h3{margin:0;font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-stretch:78%;color:var(--ink-3)}
+#perf pre{margin:8px 0 0;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;color:var(--ink)}
+#perf .veh-actions{margin-top:8px}
+#sw-note{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:31;width:min(560px,calc(100vw - 32px));padding:12px 16px;pointer-events:auto;border-left:4px solid var(--hard)}
+#sw-note p,#pack-note p{margin:6px 0 0;font-size:13px;color:var(--ink-2)}
+/* the detail data (r/, h/) missing or from another version: amber, below the software note when both show (main.js stackNotes) */
+#pack-note{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:31;width:min(560px,calc(100vw - 32px));padding:12px 16px;pointer-events:auto;border-left:4px solid var(--care)}
+#pack-note a{color:var(--accent)}#pack-note code{font-size:12px}
+.note.warn-note{border-left:3px solid var(--care);padding-left:8px}
+#perf button[aria-label=Close],#sw-note button[aria-label=Close],#pack-note button[aria-label=Close]{border:0;background:none;font-size:20px;line-height:1;color:var(--ink-3);padding:0 2px}
+/* "Sources and method" is modal: above the notes and side panels */
+#scrim{position:fixed;inset:0;background:rgba(8,14,18,.45);z-index:32;pointer-events:auto}
+#sources{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 32px));max-height:min(80vh,660px);overflow:auto;padding:16px 18px;z-index:33;pointer-events:auto}
+#sources header{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#sources h3{margin:0 0 8px;font-stretch:85%;font-size:17px}
+#sources h4{margin:12px 0 4px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-stretch:78%;color:var(--ink-3)}
+#sources p,#sources li{font-size:12.5px;color:var(--ink-2);margin:0 0 6px}
+#sources ul{margin:0 0 6px;padding-left:18px}
+#sources a{color:var(--accent);overflow-wrap:anywhere}
+#sources .ok{color:var(--ok);font-weight:650}#sources .warn{color:var(--hard);font-weight:650}#sources b{color:var(--ink)}
+#sources .ver{font-size:11.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:8px;margin-top:10px}
+#src-close{border:0;background:none;font-size:18px;line-height:1;color:var(--ink-3);padding:2px 4px}
+/* map annotations */
+#tags{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.pin{position:absolute;left:0;top:0;transform:translate(-50%,-50%);pointer-events:auto;border:2px solid #fff;border-radius:50%;width:24px;height:24px;padding:0;
+  display:grid;place-items:center;font-stretch:80%;font-weight:760;font-size:12px;color:#fff;background:var(--hard);box-shadow:0 1px 6px rgba(0,0,0,.45)}
+.pin.s1{background:var(--care)}.pin.s0{background:var(--ok)}.pin.start{background:#145A73}
+.pin:hover{transform:translate(-50%,-50%) scale(1.15)}
+.pin.on{outline:3px solid rgba(255,255,255,.7)}
+.city{position:absolute;left:0;top:0;transform:translate(-50%,-50%);font-size:12px;font-weight:620;color:#fff;white-space:nowrap;
+  text-shadow:0 0 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.6);letter-spacing:.01em}
+.city.big{font-size:13.5px;font-weight:700}
+.city.country{font-size:13px;letter-spacing:.32em;font-weight:650;opacity:.7;text-transform:uppercase}
+.city.leg{font-size:11px;font-weight:700;background:rgba(15,25,30,.72);padding:1px 6px;border-radius:4px;text-shadow:none;letter-spacing:.03em}
+.flag{position:absolute;left:0;top:0;transform:translate(-50%,-100%);pointer-events:none;font-size:11.5px;font-weight:650;color:#fff;background:rgba(207,58,43,.92);
+  padding:2px 7px;border-radius:5px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.flag.obj{font-size:10.5px;font-weight:600}
+.flag.clamped{outline:2px dashed rgba(255,255,255,.7)}
+.flag.s0{background:rgba(20,90,115,.92)}.flag.s2{background:rgba(207,58,43,.92)}.flag.s1{background:rgba(201,138,6,.92)}.flag.info{background:rgba(20,90,115,.92)}
+.flag::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top-color:inherit}
+#convoy-tag{position:absolute;left:0;top:0;transform:translate(-50%,-130%);pointer-events:none;font-size:11.5px;font-weight:700;color:#fff;background:rgba(15,25,30,.8);padding:2px 7px;border-radius:5px;white-space:nowrap;display:none}
+@media (max-width:1100px){ #ui{grid-template-columns:minmax(0,300px) minmax(0,1fr) minmax(0,300px)} }
+@media (max-width:760px){
+  #ui{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"top" "." "card" "dock";gap:8px}
+  #left,#right{display:contents}
+  #title{grid-area:top;padding:10px 12px}
+  #title h1{font-size:19px}
+  #title .from{display:none}
+  #stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #stats b{font-size:15px}
+  #stops{grid-area:card;display:flex;flex-direction:row;overflow-x:auto;padding:6px;gap:4px;max-height:none;-webkit-mask-image:none;mask-image:none;align-self:end}
+  #stops .label,#legend{display:none}
+  #stop-list{display:flex;gap:4px}
+  .stop{grid-template-columns:22px auto;padding:4px 6px;width:auto;flex:none}
+  .stop .t,.stop .km{display:none}
+  .hot-mode #stops{display:none}
+  #card{grid-area:card;max-height:36vh;padding:10px 12px}
+  #dock{padding:8px 10px}
+  #dock .top{flex-wrap:wrap}
+  #track{order:5;flex:1 0 100%}
+  #spd-out{min-width:46px;font-size:11px}
+  #speed .chip{padding:3px 8px}
+  #km-out{font-size:17px;min-width:70px}
+  .hot-mode #stats{display:none}
+  #card{max-height:24vh}
+  #ui:not(.hot-mode) #card{display:none}
+  .swatches{font-size:10.5px}
+}
+#loading{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(120% 90% at 50% 70%,#2b4452 0%,#12212a 55%,#0b141a 100%);color:#e6eef1;transition:opacity .8s ease;z-index:5}
+#loading.done{opacity:0;pointer-events:none}
+#loading .box{width:min(360px,calc(100vw - 48px));display:grid;gap:10px}
+#loading h1{margin:0;font-stretch:88%;font-weight:720;font-size:28px}
+#loading .bar{height:3px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
+#load-bar{height:100%;background:#6CC3DE;transform-origin:left;transform:scaleX(0);transition:transform .35s ease}
+#load-msg{font-size:13px;color:#a9b9c0}
+#loading.error #load-msg{color:#ffb1a8}
+@media (prefers-reduced-motion:reduce){#loading,#load-bar{transition:none}}
+</style>
+<!--/HEAD-->
+<!--BODY-->
+<div id="app">
+  <canvas id="c" aria-label="3D map of the blade route. Drag to orbit, right-drag or two fingers to pan, scroll or pinch to zoom."></canvas>
+  <!-- the WebGL context made here, while the page is still parsing: made later, when the GPU is busy with the page's first
+  paint, its creation waited for it (up to a second). The attributes are those three.js asks for (it gets this context) -->
+  <script>try{document.getElementById('c').getContext('webgl2',{alpha:true,depth:true,stencil:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:false,powerPreference:'high-performance',failIfMajorPerformanceCaveat:false});}catch(e){}</script>
+  <div id="tags" aria-hidden="false"></div>
+  <div id="ui">
+    <div id="left">
+      <section id="title" class="panel">
+        <span class="label">Route survey · rotor blades</span>
+        <h1>%%H1%%</h1>
+        <p class="from">%%FROM%%</p>
+        <div id="stats">
+          <div><b id="st-km">%%KM%% km</b><span>by road</span></div>
+          <div><b>84.3 m</b><span>V172 blade</span></div>
+          <div><b>%%CONVOYS%%</b><span>night convoys</span></div>
+        </div>
+      </section>
+      <nav id="stops" class="panel" aria-label="Route survey stops">
+        <span class="label">Survey points</span>
+        <div id="stop-list"></div>
+        <div id="legend"><span><i style="background:var(--ok)"></i>passes</span><span><i style="background:var(--care)"></i>needs care</span><span><i style="background:var(--hard)"></i>difficult</span></div>
+      </nav>
+    </div>
+    <div id="right">
+      <aside id="card" class="panel" aria-live="polite"></aside>
+    </div>
+    <section id="dock" class="panel" aria-label="Route timeline">
+      <div class="top">
+        <button id="back" class="chip" type="button">← Whole route</button>
+        <output id="km-out" for="km">km 0</output>
+        <div id="track"><div id="legs"></div><div id="ticks"></div><input id="km" type="range" min="0" max="%%KMMAX%%" step="0.1" value="0" aria-label="Position along the route (km)"></div>
+        <button id="play" class="btn" type="button" aria-pressed="false">Drive the route</button>
+        <div id="speed" role="group" aria-label="Driving speed"><button id="spd-dn" class="chip" type="button" aria-label="Slower" title="Slower (−)">−</button><output id="spd-out" aria-live="polite">40 km/h</output><button id="spd-up" class="chip" type="button" aria-label="Faster" title="Faster (+)">+</button></div>
+      </div>
+      <div class="bottom">
+        <div id="map-ctl">
+          <button id="explore" class="chip" type="button">Explore the road here</button>
+          <output id="leg-out" class="readout">%%START%%</output>
+          <output id="night-out" class="readout"></output>
+        </div>
+        <div id="hot-ctl">
+          <label class="toggle"><input id="t-swept" type="checkbox" checked> Swept path</label>
+          <label class="toggle hot-only"><input id="t-labels" type="checkbox" checked> Findings</label>
+          <label class="toggle hot-only"><input id="t-night" type="checkbox"> Night, as driven</label>
+          <label class="toggle"><input id="t-follow" type="checkbox" checked> Follow the convoy</label>
+          <label class="toggle"><input id="t-roads3d" type="checkbox" checked> 3D roads</label>
+          <label class="toggle"><input id="t-photo" type="checkbox"> Street level · photo</label>
+          <label class="toggle road-only"><input id="t-measure" type="checkbox"> Measure</label>
+          <label class="toggle road-only"><input id="t-labels-road" type="checkbox" checked> Labels</label>
+          <span class="swatches road-only" aria-label="Legend"><i style="background:#22e0ff"></i>carriageway edge (measured) <i style="background:rgba(255,176,32,.8)"></i>wheels <i style="background:transparent;border-bottom:2px solid #ff3b30;height:0;vertical-align:middle"></i>blade sweep <i style="background:rgba(255,42,26,.6);outline:1px solid #ff3020"></i>blade beyond the edge <i style="background:transparent;border:2px solid #ff3b30;border-radius:50%"></i>signal / sign <i style="background:rgba(130,70,255,.55);outline:1px solid #8246ff"></i>lane 2 / oncoming lane (escort closes it)</span>
+          <span class="swatches hot-only" aria-label="Legend of the painted areas"><i style="background:rgba(255,170,30,.85)"></i>wheels <i class="hatch"></i>blade <i style="background:rgba(255,40,40,.6);outline:1px solid #e0281e"></i>beyond the road <i style="background:rgba(220,0,200,.9)"></i>wheels off the road <i style="background:repeating-linear-gradient(45deg,rgba(150,90,255,.9) 0 2px,rgba(120,60,255,.3) 2px 5px);outline:1px solid #8246ff"></i>lane 2 / oncoming lane (escort closes it) <i style="background:transparent;border:2px dashed #ff28dc;height:6px"></i>keeping right: wheels off</span>
+          <output id="hot-out" class="readout hot-only"></output>
+        </div>
+        <span id="here" aria-live="off"><span class="mini">View centre</span> <span id="here-ll" title="Centre of the view">–</span> <a id="g-pin" href="https://www.google.com/maps" target="_blank" rel="noopener">Google Maps</a> <a id="g-sat" href="https://www.google.com/maps" target="_blank" rel="noopener">satellite</a> <a id="g-street" href="https://www.google.com/maps" target="_blank" rel="noopener">Street View</a> <button id="g-copy" type="button" class="linkish" title="Copy the coordinates">copy</button></span>
+        <a id="park-link" href="%%PARK_URL%%" target="_blank" rel="noopener">3D wind park</a>
+        <button type="button" id="veh-btn" class="chip" aria-expanded="false" aria-controls="vehicle">Vehicle &amp; blade</button>
+        <button type="button" id="src-btn" aria-expanded="false" aria-controls="sources">Sources and method</button>
+      </div>
+    </section>
+    <div id="scrim" hidden></div>
+    <section id="pm" class="panel" hidden aria-label="Street level and photo match">
+      <header><h3>Street level · photo match</h3><button id="pm-close" type="button" aria-label="Close">×</button></header>
+      <p class="mini">The view 2.5&nbsp;m above the road, as the Street View cameras see it: <a id="pm-gsv" href="https://www.google.com/maps" target="_blank" rel="noopener">open the same view in Google Street View ↗</a></p>
+      <p class="mini">To see the convoy in a real photo, add a street-level photo of your own, or an openly licensed one (Mapillary, Panoramax): choose it, drop it on the page or paste it. Google's terms don't allow screenshots of Street View, so they can't be used here. The photo stays in your browser.</p>
+      <div class="pm-row"><label class="chip pm-file">Choose a photo…<input id="pm-file" type="file" accept="image/*"></label><button id="pm-here" class="chip" type="button">Ahead of the convoy</button><button id="pm-clear" class="chip" type="button" hidden>Remove the photo</button></div>
+      <div id="pm-sl"></div>
+      <p id="pm-msg" class="mini" aria-live="polite"></p>
+    </section>
+    <section id="vehicle" class="panel" hidden aria-label="Vehicle and blade dimensions">
+      <header><h3>Vehicle and blade</h3><button id="veh-close" type="button" aria-label="Close">×</button></header>
+      <p class="note">Enter the haulier's dimensions. The convoy, its swept path, the clear heights under every structure and the width checks are recomputed with them. Kept in this browser only.</p>
+      <svg class="veh-sketch" viewBox="0 0 560 182" role="img" aria-label="Side view of the convoy with the dimensions A to K (not to scale)">
+        <g class="vs-body">
+          <rect x="18" y="96" width="34" height="46" rx="3"/><rect x="18" y="134" width="78" height="7"/>
+          <rect x="78" y="128" width="64" height="7"/><rect x="360" y="134" width="44" height="6"/><rect x="371" y="124" width="20" height="10"/>
+        </g>
+        <g class="vs-wheel"><circle cx="32" cy="143" r="7"/><circle cx="70" cy="143" r="7"/><circle cx="85" cy="143" r="7"/><circle cx="110" cy="143" r="7"/><circle cx="125" cy="143" r="7"/><circle cx="370" cy="143" r="7"/><circle cx="384" cy="143" r="7"/><circle cx="398" cy="143" r="7"/></g>
+        <path class="vs-blade" d="M150 75 L380 96 L540 95 L540 99 L381 124 L150 142 Z"/>
+        <circle class="vs-ring" cx="150" cy="108.5" r="33.5"/>
+        <line class="vs-road" x1="6" y1="150" x2="556" y2="150"/>
+        <g class="vs-dim">
+          <path d="M150 60 H540 M150 55 V65 M540 55 V65"/><path d="M140 174 H381 M140 169 V179 M381 169 V179"/>
+          <path d="M150 75 H200 M194 150 V75"/><path d="M381 124 H412 M406 150 V124"/><path d="M540 99 H556 M551 150 V99"/>
+          <path d="M32 162 H78 M32 157 V167 M78 157 V167"/><path d="M78 162 H140 M140 157 V167"/><path d="M150 75 V142" stroke-dasharray="3 3"/>
+          <path d="M360 158 H404 M360 154 V162 M404 154 V162"/><path d="M18 88 H96 M18 84 V92 M96 84 V92"/>
+        </g>
+        <g class="vs-txt">
+          <text x="345" y="54">A</text><text x="262" y="171">B</text><text x="198" y="118">C</text><text x="410" y="142">D</text><text x="536" y="126">E</text>
+          <text x="51" y="174">F</text><text x="106" y="174">G</text><text x="155" y="104">H</text><text x="408" y="166">J</text><text x="53" y="82">K</text>
+        </g>
+      </svg>
+      <form id="veh-form"></form>
+      <div class="veh-actions"><button type="button" class="btn" id="veh-apply">Apply</button><button type="button" class="chip" id="veh-reset">Modelled defaults</button><output id="veh-out" class="readout"></output></div>
+    </section>
+    <section id="sources" class="panel" hidden>
+      <header><h3>Sources and method</h3><button id="src-close" type="button" aria-label="Close">×</button></header>
+      <div id="src-body"></div>
+    </section>
+  </div>
+  <section id="perf" class="panel" hidden aria-label="Performance readout"><header><h3>Performance</h3><button id="perf-close" type="button" aria-label="Close">×</button></header><pre id="perf-out">measuring…</pre><div class="veh-actions"><button type="button" class="chip" id="perf-copy">Copy</button><span class="mini">P to show / hide</span></div></section>
+  <section id="sw-note" class="panel" role="alert" hidden><header><h3>Running without the graphics card</h3><button id="sw-close" type="button" aria-label="Close">×</button></header>
+    <p><b>This browser is drawing the 3D view in software, so it will be slow.</b> Hardware acceleration is switched off or blocked here. In Chrome or Edge: Settings → System → turn on <b>Use graphics acceleration when available</b> and restart the browser. In Firefox: Settings → General → Performance. Links opened inside Teams or Outlook use their own browser: open them in Chrome or Edge instead.</p></section>
+  <section id="pack-note" class="panel" role="status" hidden><header><h3>Detail data</h3><button id="pack-close" type="button" aria-label="Close">×</button></header><p></p></section>
+  <div id="loading" role="status"><div class="box"><h1>%%H1%%</h1><div class="bar"><div id="load-bar"></div></div><div id="load-msg">Loading</div></div></div>
+</div>
+<script id="route-header" type="application/json">/*__HEADER__*/</script>
+<script id="route-bin" type="application/octet-stream">__BIN__</script>
+<script id="route-img" type="application/json">/*__IMAGES__*/</script>
+<script type="module">/*__APP__*/</script>
+<!--/BODY-->

@@ -1,0 +1,129 @@
+{
+ "id": "plan-hosskirch",
+ "waypoints": [
+  [
+   14.7928,
+   53.5511
+  ],
+  [
+   9.4628562,
+   47.9600875
+  ]
+ ],
+ "policy": {
+  "near_m": 20000.0,
+  "urban_x": 8.0
+ },
+ "vehicle": {
+  "blade": 84.3,
+  "root_d": 4.2,
+  "maxchord": 4.3,
+  "height": 4.7,
+  "load_w": 4.2,
+  "support": 50.0,
+  "under_sup": 1.6
+ },
+ "transport_height": 4.7,
+ "convoy": {
+  "weight_t": 72.0,
+  "length_m": 97.2
+ },
+ "page": "plan-hosskirch-blade-route",
+ "title": "Goleniów → Hoßkirch blade route survey",
+ "start_title": "Leaving the yard",
+ "map_center": [
+  11.48,
+  50.2
+ ],
+ "park": null,
+ "passages": "all",
+ "keep_towns": [
+  "Berlin",
+  "Friedrichshain-Kreuzberg",
+  "Goleniów",
+  "Hoßkirch",
+  "Leipzig",
+  "Lichtenberg",
+  "Marzahn-Hellersdorf",
+  "Mitte",
+  "Nürnberg",
+  "Pankow",
+  "Potsdam",
+  "Reinickendorf",
+  "Spandau",
+  "Szczecin",
+  "Ulm"
+ ],
+ "route_legs": [
+  [
+   "A6 to A 11",
+   "A6",
+   [
+    "A 11"
+   ]
+  ],
+  [
+   "A 11 to A 10",
+   "A 11",
+   [
+    "A 10"
+   ]
+  ],
+  [
+   "A 10 to A 9",
+   "A 10",
+   [
+    "A 9"
+   ]
+  ],
+  [
+   "A 9 to E 50",
+   "A 9",
+   [
+    "E 50"
+   ]
+  ],
+  [
+   "E 50 to E 43",
+   "E 50",
+   [
+    "E 43"
+   ]
+  ],
+  [
+   "E 43 to B 30",
+   "E 43",
+   [
+    "B 30"
+   ]
+  ],
+  [
+   "B 30 to B 32",
+   "B 30",
+   [
+    "B 32"
+   ]
+  ],
+  [
+   "B 32 to Hoßkirch",
+   "B 32",
+   []
+  ]
+ ],
+ "text": {
+  "TITLE": "Goleniów → Hoßkirch Blade Route",
+  "H1": "Goleniów → Hoßkirch blade route",
+  "CONVOYS": "",
+  "START": "Goleniów",
+  "DESC": "Route survey for 84.3 m blades from Goleniów to Hoßkirch: routed and checked from open data only, every difficult stretch found by the swept-path model, measured against the laser terrain and point clouds and driven in 3D.",
+  "FROM": "From Goleniów to Hoßkirch"
+ },
+ "page_text": {
+  "dest": "Hoßkirch",
+  "convoys": "",
+  "intro": "Route survey for 84.3 m blades from Goleniów to Hoßkirch: routed and checked from open data only, every difficult stretch found by the swept-path model, measured against the laser terrain and point clouds and driven in 3D.",
+  "method": "The cheapest heavy-transport path on the road graph, chosen among 3 candidates by the route planner (driving time plus the challenges found on each).",
+  "overview": "Route survey for 84.3 m blades from Goleniów to Hoßkirch: routed and checked from open data only, every difficult stretch found by the swept-path model, measured against the laser terrain and point clouds and driven in 3D.",
+  "vehicle_note": ""
+ }
+}

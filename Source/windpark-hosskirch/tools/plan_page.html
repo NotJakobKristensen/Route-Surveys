@@ -1,0 +1,180 @@
+<title>{{TITLE}} Route Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f4f3ef;--panel:#fbfaf7;--fg:#1d2124;--mute:#5d6468;--line:#d9d6ce;--land:#e8e5dc;--sea:#dfe6e8;--road:#b9b2a2;--city:#6b6f70;
+ --accent:#0b6e8a;--alt:#9aa3a6;--sel:#eef4f5;--c-wheel:#c62828;--c-blade:#e07b00;--c-bridge:#7b3fb0;--c-tunnel:#455a64;--c-town:#a07800;
+ --c-works_narrow:#d84315;--c-works:#c79100;--c-limit:#ad1457;--c-narrow:#6d4c41;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181a;--panel:#1c2023;--fg:#e6e4df;--mute:#9aa1a4;--line:#2f3539;--land:#23282b;--sea:#191d20;
+ --road:#4c5458;--city:#8d9497;--accent:#4fb3cf;--alt:#5d676b;--sel:#1f2b2f;--c-wheel:#ef5350;--c-blade:#ffa040;--c-bridge:#b085e0;--c-tunnel:#90a4ae;--c-town:#d9b440;
+ --c-works_narrow:#ff7043;--c-works:#e0b030;--c-limit:#f06292;--c-narrow:#a1887f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181a;--panel:#1c2023;--fg:#e6e4df;--mute:#9aa1a4;--line:#2f3539;--land:#23282b;--sea:#191d20;
+ --road:#4c5458;--city:#8d9497;--accent:#4fb3cf;--alt:#5d676b;--sel:#1f2b2f;--c-wheel:#ef5350;--c-blade:#ffa040;--c-bridge:#b085e0;--c-tunnel:#90a4ae;--c-town:#d9b440;
+ --c-works_narrow:#ff7043;--c-works:#e0b030;--c-limit:#f06292;--c-narrow:#a1887f;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
+.wrap{max-width:1400px;margin:0 auto;padding-inline:16px;padding-block:20px 40px}
+.mono,td.n,.km{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+header{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:end;justify-content:space-between;margin-bottom:14px}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+h1{font-size:26px;line-height:1.15;margin:2px 0 0;font-weight:600;text-wrap:balance}
+.spec{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;background:var(--panel);white-space:nowrap}
+.rec{border-left:3px solid var(--accent);background:var(--panel);padding:10px 14px;margin-bottom:14px;max-width:none}
+.rec b{font-weight:600}
+.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+.mapbox{position:sticky;top:env(safe-area-inset-top,0px);border:1px solid var(--line);background:var(--sea);height:min(78vh,760px);min-height:360px;touch-action:none;overflow:hidden}
+@media (max-width:900px){.mapbox{position:relative;height:62vh}}
+canvas{display:block;width:100%;height:100%;cursor:grab}
+.mapctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px}
+.mapctl button{width:32px;height:32px;border:1px solid var(--line);background:var(--panel);color:var(--fg);font-size:16px;cursor:pointer;border-radius:4px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);padding:6px 8px;font-size:12px;max-width:280px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.legend{position:absolute;left:8px;bottom:8px;background:var(--panel);border:1px solid var(--line);padding:6px 8px;font-size:11px;display:flex;flex-wrap:wrap;gap:4px 10px;max-width:calc(100% - 16px)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+section{min-width:0}
+h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 6px;font-weight:600}
+.tbl{overflow-x:auto;border:1px solid var(--line);background:var(--panel);margin-bottom:16px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:500;color:var(--mute);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+td.n,th.n{text-align:right}
+tbody tr{cursor:pointer}tbody tr:hover{background:var(--sel)}
+tr.on{background:var(--sel);box-shadow:inset 3px 0 0 var(--accent)}
+.via{white-space:normal;min-width:180px;color:var(--mute);font-size:12px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.filters button{border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:2px 10px;font:inherit;font-size:12px;cursor:pointer}
+.filters button[aria-pressed="false"]{opacity:.45}
+.list{border:1px solid var(--line);background:var(--panel);max-height:62vh;overflow:auto}
+.item{display:grid;grid-template-columns:62px minmax(0,1fr);gap:2px 10px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer}
+.item:hover,.item.on{background:var(--sel)}
+.item .km{color:var(--mute);font-size:12px;padding-top:1px}
+.item .t{min-width:0}
+.item .k{font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.item a{color:var(--accent);font-size:12px;text-decoration:none;margin-right:10px}
+.item .r{color:var(--mute);font-size:12px}
+.parts{font-size:12px;color:var(--mute);margin:-8px 0 16px}
+footer{margin-top:24px;color:var(--mute);font-size:12.5px;max-width:80ch}
+footer h2{margin-top:14px}
+footer p{margin:4px 0}
+</style>
+<div class="wrap">
+ <header>
+  <div><div class="eyebrow">Blade transport · route plan</div><h1 id="ttl"></h1></div>
+  <div class="spec" id="spec"></div>
+ </header>
+ <div class="rec" id="rec"></div>
+ <div class="grid">
+  <div class="mapbox" id="mapbox"><canvas id="cv"></canvas>
+   <div class="mapctl"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zfit" aria-label="Fit route">⤢</button></div>
+   <div class="legend" id="legend"></div><div class="tip" id="tip" hidden></div></div>
+  <section>
+   <h2>Candidates</h2>
+   <div class="tbl"><table><thead><tr><th></th><th class="n">Score</th><th class="n">km</th><th class="n">Hours</th><th class="n">Bends</th><th class="n">Town km</th><th class="n">Bridges</th><th class="n">Works</th><th>Via</th></tr></thead><tbody id="cands"></tbody></table></div>
+   <div class="parts" id="parts"></div>
+   <h2 id="chh">Challenges</h2>
+   <div class="filters" id="filters"></div>
+   <div class="list" id="list"></div>
+  </section>
+ </div>
+ <footer>
+  <h2>How this plan was made</h2>
+  <p>The road graph of Germany (Overture Maps transportation, derived from OpenStreetMap: motorways to secondary roads, every road within about 20 km of the start and the end). Roads whose signed weight, height, length or width limit this convoy exceeds are left out. Up to four distinct routes are found under a heavy-transport policy: motorways, trunk and federal roads on the long haul, town streets of 50 km/h or less avoided, minor roads only near the ends, Germany only (plus the Goleniów – Szczecin area).</p>
+  <p>Each candidate is driven with the swept-path model of this blade's convoy (tractor, front support, remote-steered rear dolly, the blade's real plan shape) on every bend under 700 m radius, with carriageway widths by road class. It is also checked for town streets, road bridges over it (from the map), tunnels, signed limits close to the convoy's, mapped narrow roads, and today's roadworks and lane restrictions on the motorways (Autobahn GmbH). The score is the convoy's driving time in minutes plus a time-equivalent for each challenge (weights below).</p>
+  <h2>Limits</h2>
+  <p>A screening, not a permit route. Carriageway widths here are typical widths for the road class. The full survey (<span class="mono">survey_route.py survey</span>) measures the real edges on 20 cm aerial photos, clear heights from laser terrain and point clouds, and every sign and map tag. Railway bridges and footbridges over the route are not in the bridge count. Roadworks are a snapshot of the day the plan was made. Restrictions that are signed but not mapped are unknown.</p>
+  <p id="wts" class="mono"></p>
+ </footer>
+</div>
+<script>
+const PLAN=/*PLAN*/null, BASE=/*BASE*/null;
+const KIND={wheel:'Tight bend / junction',blade:'Blade overswing',bridge:'Bridge over route',tunnel:'Tunnel',town:'Town streets',works_narrow:'Narrow roadworks',works:'Roadworks',limit:'Signed limit',narrow:'Narrow road'};
+const $=id=>document.getElementById(id);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const V=PLAN.vehicle, cands=PLAN.candidates, byId=Object.fromEntries(cands.map(c=>[c.id,c]));
+const letter=i=>String.fromCharCode(65+i);
+let sel=PLAN.best, selCh=null, on=Object.fromEntries(Object.keys(KIND).map(k=>[k,true]));
+$('ttl').textContent=`${PLAN.start.place} → ${PLAN.end.place}`;
+$('spec').innerHTML=[`${V.blade.toFixed(1)} m blade`,`root ${V.root_d.toFixed(1)} m`,`chord ${V.maxchord.toFixed(1)} m`,`${V.height.toFixed(2)} m high`,`load ${V.load_w.toFixed(1)} m wide`,`${V.weight} t`,`${V.length} m long`,PLAN.date].map(t=>`<span class="chip mono">${t}</span>`).join('');
+const sorted=[...cands].sort((a,b)=>a.score-b.score), best=byId[PLAN.best], second=sorted[1];
+$('rec').innerHTML=`<b>Recommended: route ${letter(best.id)}</b>, ${best.km} km via ${best.via.slice(0,6).join(' · ')||'—'}: about ${best.hours} h of driving (${best.nights} night${best.nights>1?'s':''} at 7 h), ${best.counts.wheel} tight bends or junctions where the wheels leave the carriageway, ${best.urban_km} km of town streets.`+(second?` The next best (route ${letter(second.id)}) scores ${Math.round((second.score/best.score-1)*100)} % higher.`:'');
+$('wts').textContent='Weights (min): '+Object.entries(PLAN.weights).map(([k,v])=>`${k} ${v}`).join(' · ');
+const gm=(lat,lon)=>`https://www.google.com/maps/search/?api=1&query=${lat.toFixed(5)},${lon.toFixed(5)}`;
+const sat=(lat,lon)=>`https://www.google.com/maps/@${lat.toFixed(5)},${lon.toFixed(5)},180m/data=!3m1!1e3`;
+function renderCands(){
+ $('cands').innerHTML=sorted.map(c=>`<tr data-id="${c.id}" class="${c.id===sel?'on':''}"><td><b>${letter(c.id)}</b>${c.id===PLAN.best?' ★':''}</td><td class="n">${c.score}</td><td class="n">${c.km}</td><td class="n">${c.hours}</td><td class="n">${c.counts.wheel}</td><td class="n">${c.urban_km}</td><td class="n">${c.counts.bridge}</td><td class="n">${c.counts.works_narrow+c.counts.works}</td><td class="via">${c.via.slice(0,8).join(' · ')}</td></tr>`).join('');
+ const c=byId[sel];
+ $('parts').textContent=`Route ${letter(sel)} score: `+Object.entries(c.score_parts).filter(([,v])=>v).map(([k,v])=>`${k} ${v}`).join(' + ');
+}
+$('cands').addEventListener('click',e=>{const tr=e.target.closest('tr');if(!tr)return;sel=+tr.dataset.id;selCh=null;renderAll();fit(byId[sel].line);});
+function renderFilters(){
+ const c=byId[sel], n={};c.challenges.forEach(x=>n[x.kind]=(n[x.kind]||0)+1);
+ $('filters').innerHTML=Object.keys(KIND).filter(k=>n[k]).map(k=>`<button data-k="${k}" aria-pressed="${on[k]}"><span class="dot" style="background:var(--c-${k})"></span>${KIND[k]} ${n[k]}</button>`).join('');
+ $('legend').innerHTML=Object.keys(KIND).filter(k=>n[k]).map(k=>`<span><span class="dot" style="background:var(--c-${k})"></span>${KIND[k]}</span>`).join('');
+}
+$('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;on[b.dataset.k]=!on[b.dataset.k];renderFilters();renderList();draw();});
+function renderList(){
+ const c=byId[sel];const L=c.challenges.filter(x=>on[x.kind]);
+ $('chh').textContent=`Challenges on route ${letter(sel)} · ${c.challenges.length}`;
+ $('list').innerHTML=L.map((x,i)=>`<div class="item${x===selCh?' on':''}" data-i="${c.challenges.indexOf(x)}"><div class="km">km ${(x.s/1000).toFixed(1)}</div><div class="t"><div class="k" style="color:var(--c-${x.kind})">${KIND[x.kind]}</div><div>${esc(x.text)}</div><div class="r">${x.road?esc(x.road)+' · ':''}<a href="${gm(x.lat,x.lon)}" target="_blank" rel="noopener">Map</a><a href="${sat(x.lat,x.lon)}" target="_blank" rel="noopener">Satellite</a></div></div></div>`).join('')||'<div class="item"><div></div><div>Nothing of this kind.</div></div>';
+}
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+$('list').addEventListener('click',e=>{const it=e.target.closest('.item');if(!it||e.target.closest('a')||it.dataset.i==null)return;selCh=byId[sel].challenges[+it.dataset.i];renderList();zoomTo(selCh.lon,selCh.lat,9000);});
+function renderAll(){renderCands();renderFilters();renderList();draw();}
+
+// ── map ──
+const cv=$('cv'), ctx=cv.getContext('2d'), box=$('mapbox');
+const lat0=51, kx=Math.cos(lat0*Math.PI/180);
+let W=0,H=0,dpr=1, view={cx:10.4*kx,cy:-51.2,s:90};           // s: px per projected degree
+const pj=(lon,lat)=>[(lon*kx-view.cx)*view.s+W/2,(-lat-view.cy)*view.s+H/2];
+const unpj=(x,y)=>[((x-W/2)/view.s+view.cx)/kx,-((y-H/2)/view.s+view.cy)];
+function resize(){const r=box.getBoundingClientRect();dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;draw();}
+function fit(line){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const [lo,la] of line){const x=lo*kx,y=-la;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}
+ const px=Math.max(.15,(x1-x0)*.12),py=Math.max(.1,(y1-y0)*.1);view.cx=(x0+x1)/2+(x1-x0)*.04;view.cy=(y0+y1)/2+py*.35;view.s=Math.min(W/(x1-x0+2*px+ (W<600?.6:1.2)),H/(y1-y0+2*py));draw();}
+function zoomTo(lon,lat,m){view.cx=lon*kx;view.cy=-lat;view.s=Math.min(W,H)/(m/111000);draw();}
+let raf=0;function draw(){if(!raf)raf=requestAnimationFrame(()=>{raf=0;paint();});}
+function path(line){ctx.beginPath();line.forEach(([lo,la],i)=>{const [x,y]=pj(lo,la);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});}
+function paint(){
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=css('--sea');ctx.fillRect(0,0,W,H);
+ ctx.fillStyle=css('--land');ctx.strokeStyle=css('--line');ctx.lineWidth=1;
+ for(const r of BASE.outline){path(r);ctx.closePath();ctx.fill();ctx.stroke();}
+ ctx.strokeStyle=css('--road');ctx.lineWidth=view.s>400?1.6:1;for(const l of BASE.motorways){path(l);ctx.stroke();}
+ ctx.fillStyle=css('--city');ctx.font='11px "IBM Plex Sans",system-ui,sans-serif';
+ const showAll=view.s>350;
+ for(const [n,lo,la] of PLAN.cities){const [x,y]=pj(lo,la);if(x<-50||y<-20||x>W+50||y>H+20)continue;ctx.beginPath();ctx.arc(x,y,2,0,7);ctx.fill();if(showAll||/^(Berlin|Hamburg|München|Köln|Frankfurt am Main|Stuttgart|Düsseldorf|Leipzig|Dortmund|Essen|Bremen|Dresden|Hannover|Nürnberg|Szczecin)$/.test(n))ctx.fillText(n,x+4,y-3);}
+ ctx.lineJoin=ctx.lineCap='round';
+ for(const c of cands){if(c.id===sel)continue;ctx.strokeStyle=css('--alt');ctx.lineWidth=2.5;path(c.line);ctx.stroke();
+  const m=c.line[Math.floor(c.line.length*.45)];const [x,y]=pj(m[0],m[1]);label(letter(c.id),x,y,css('--alt'));}
+ const c=byId[sel];ctx.strokeStyle=css('--panel');ctx.lineWidth=7;path(c.line);ctx.stroke();ctx.strokeStyle=css('--accent');ctx.lineWidth=4;path(c.line);ctx.stroke();
+ const m=c.line[Math.floor(c.line.length*.45)];{const [x,y]=pj(m[0],m[1]);label(letter(c.id),x,y,css('--accent'));}
+ hits=[];const r=view.s>2000?6:4.5;
+ for(const x of c.challenges){if(!on[x.kind])continue;const [px,py]=pj(x.lon,x.lat);if(px<-10||py<-10||px>W+10||py>H+10)continue;
+  ctx.beginPath();ctx.arc(px,py,x===selCh?r+3:r,0,7);ctx.fillStyle=css('--c-'+x.kind);ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle=css('--panel');ctx.stroke();hits.push([px,py,x]);}
+ for(const [p,t] of [[PLAN.start,'Start'],[PLAN.end,'End']]){const [x,y]=pj(p.lon,p.lat);ctx.beginPath();ctx.arc(x,y,7,0,7);ctx.fillStyle=css('--fg');ctx.fill();ctx.strokeStyle=css('--panel');ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle=css('--fg');ctx.font='600 12px "IBM Plex Sans",system-ui,sans-serif';ctx.fillText(`${t}: ${p.place}`,x+10,y+4);}
+}
+function label(t,x,y,col){ctx.font='600 12px "IBM Plex Sans",system-ui,sans-serif';ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,9,0,7);ctx.fill();ctx.fillStyle=css('--panel');ctx.textAlign='center';ctx.fillText(t,x,y+4);ctx.textAlign='left';}
+let hits=[];
+const pts=new Map();let drag=null,pinch=null,moved=0;
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.offsetX,e.offsetY]);moved=0;
+ if(pts.size===1)drag=[e.offsetX,e.offsetY,view.cx,view.cy];else if(pts.size===2){const [a,b]=[...pts.values()];pinch=[Math.hypot(a[0]-b[0],a[1]-b[1]),view.s];drag=null;}});
+cv.addEventListener('pointermove',e=>{if(pts.has(e.pointerId))pts.set(e.pointerId,[e.offsetX,e.offsetY]);
+ if(pinch&&pts.size===2){const [a,b]=[...pts.values()];view.s=Math.max(40,Math.min(4e5,pinch[1]*Math.hypot(a[0]-b[0],a[1]-b[1])/pinch[0]));draw();return;}
+ if(drag){const dx=e.offsetX-drag[0],dy=e.offsetY-drag[1];moved+=Math.abs(dx)+Math.abs(dy);view.cx=drag[2]-dx/view.s;view.cy=drag[3]-dy/view.s;draw();$('tip').hidden=true;return;}
+ const h=hitAt(e.offsetX,e.offsetY),tip=$('tip');
+ if(h){tip.hidden=false;tip.innerHTML=`<b style="color:var(--c-${h.kind})">${KIND[h.kind]}</b> · km ${(h.s/1000).toFixed(1)}<br>${esc(h.text)}`;tip.style.left=Math.min(W-290,e.offsetX+12)+'px';tip.style.top=(e.offsetY+12)+'px';cv.style.cursor='pointer';}
+ else{tip.hidden=true;cv.style.cursor='grab';}});
+const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(!pts.size){if(drag&&moved<4){const h=hitAt(e.offsetX,e.offsetY);if(h){selCh=h;renderList();const el=document.querySelector('.item.on');el&&el.scrollIntoView({block:'nearest'});draw();}}drag=null;}};
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+cv.addEventListener('pointerleave',()=>{$('tip').hidden=true;});
+function hitAt(x,y){let b=null,bd=100;for(const [px,py,c] of hits){const d=(px-x)**2+(py-y)**2;if(d<bd){bd=d;b=c;}}return b;}
+function zoomAt(x,y,f){const [lo,la]=unpj(x,y);view.s=Math.max(40,Math.min(4e5,view.s*f));const [x2,y2]=pj(lo,la);view.cx+=(x2-x)/view.s;view.cy+=(y2-y)/view.s;draw();}
+cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.offsetX,e.offsetY,Math.exp(-e.deltaY*0.0015));},{passive:false});
+cv.addEventListener('dblclick',e=>zoomAt(e.offsetX,e.offsetY,2));
+$('zin').onclick=()=>zoomAt(W/2,H/2,1.6);$('zout').onclick=()=>zoomAt(W/2,H/2,1/1.6);$('zfit').onclick=()=>fit(byId[sel].line);
+let fitted=false;new ResizeObserver(()=>{resize();if(!fitted){fitted=true;fit(cands.flatMap(c=>c.line));}}).observe(box);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+renderAll();resize();fit(cands.flatMap(c=>c.line));
+document.fonts&&document.fonts.ready.then(draw);
+</script>

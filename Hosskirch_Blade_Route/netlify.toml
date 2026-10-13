@@ -1,0 +1,5 @@
+# Netlify (this folder is the project's base directory): a push to main deploys this site only when something in this
+# folder changed, so a change to another page does not use a deploy (and its credits) here. A manual "Trigger deploy"
+# of the same commit, or a first build, always deploys.
+[build]
+  ignore = "[ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet \"$CACHED_COMMIT_REF\" \"$COMMIT_REF\" -- ."

@@ -1,0 +1,9 @@
+# The data packs the page loads (road sections, survey points): kept in the browser, re-checked after 10 minutes,
+# and on a later visit shown from the cache at once while the newer copy loads in the background. Readable from any
+# page (CORS): a downloaded copy of the page, opened from disk, loads its road view and passages from here
+/r/*
+  Cache-Control: public, max-age=600, stale-while-revalidate=86400
+  Access-Control-Allow-Origin: *
+/h/*
+  Cache-Control: public, max-age=600, stale-while-revalidate=86400
+  Access-Control-Allow-Origin: *

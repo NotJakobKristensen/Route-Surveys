@@ -1,0 +1,203 @@
+{
+ "_factory": {
+  "name": "Vestas blade plant, Goleniów (LM Wind Power until September 2025)",
+  "address": "ul. Nowa 3, Łozienica, 72-100 Goleniów, Poland",
+  "facts": [
+   "The V172 blades are built here: LM Wind Power built them for Vestas under contract; Vestas signed the takeover on 15 May 2025 and runs the plant since 5 September 2025, saying it will continue to deliver V172-7.2 MW blades.",
+   "Opened 2009, extended 2017, about 400 employees; 25 km north-east of Szczecin, beside the S3 expressway.",
+   "The convoy leaves the blade yard on Prosta and Granitowa and joins the S3 at the Goleniów junction — the first survey point."
+  ]
+ },
+ "_sources": [
+  {
+   "t": "Vestas: Vestas officially takes over Goleniów onshore blade factory (September 2025)",
+   "u": "https://www.vestas.com/en/media/company-news/2025/vestas-officially-takes-over-goleniow-onshore-blade-fac-c4230139"
+  },
+  {
+   "t": "GE Vernova / LM Wind Power: Vestas and LM Wind Power sign deal for blades factory in Poland (May 2025)",
+   "u": "https://www.gevernova.com/news/press-releases/vestas-lm-wind-power-sign-deal-blades-factory-poland"
+  }
+ ],
+ "muenster-lech-lozienica": {
+  "note": "The convoy leaves the blade plant on the estate road, turns left at km 2.62 and beside the railway at Łozienica, then takes the S3 loop ramp (radius 53 m, 116°). Wheels stay on asphalt. Passage depends on clearing the 30 m blade swing, the adjacent slip road and the railway-junction lamps and fences.",
+  "measures": [
+   "On the S3 loop ramp, close the parallel slip road west of the loop (around 53.5345,14.8090) and the nearside lane of the S3 at the merge (around 53.5337,14.8100) while the blade swings through.",
+   "At the junction beside the railway (around 53.5303,14.8102), check that the blade tip swing stays outside the railway boundary and away from its overhead-line masts; agree it with the rail operator if it does not.",
+   "At the km 2.62 corner, walk the woodland edge south-west of the junction (around 53.5286,14.8032) for branches in the tip swing; the inside corner is open grass and only needs to be clear of parked vehicles and stored material."
+  ]
+ },
+ "muenster-lech-finowfurt": {
+  "note": "Straight southbound A 11 under the Marienwerderstraße bridge just north of the Finowfurt junction. Wheels and blade stay on the road. The Brandenburg laser point cloud (LGB) puts the top of the bridge deck 5.70 m above the A 11, so the low earlier estimate was no artefact: the convoy's 4.8 m is clear only if the deck is less than 0.90 m deep, a slim slab. Passage depends on the registered clear height over the lane used being at least 4.8 m.",
+  "measures": [
+   "Get the registered clear height of the Marienwerderstraße overpass at 52.851926, 13.667833 from Autobahn GmbH Nordost's structure records, measured over the southbound lane the convoy will use, before the permit is issued.",
+   "If the registered height is below 4.8 m, plan the detour before reaching this point: the Finowfurt exit ramps leave south of the bridge, so a southbound convoy cannot get round it at this junction."
+  ]
+ },
+ "muenster-lech-briese": {
+  "note": "Straight stretch of rebuilt six-lane A 10 under a path bridge (5.3 m, clears) and the four-track Nordbahn and S-Bahn bridges. Turning and width are fine. The Brandenburg laser point cloud (LGB) puts the tops of the railway decks 6.09–6.14 m above the road, so 4.8 m is clear only if the decks, ballast included, are less than 1.29 m deep; rail decks are often deeper. Passage depends on the registered clear height of the railway bridges, and of the sign gantry east of them, being at least 4.8 m. A 2026 street photo (Panoramax) shows the railway bridge with a deep deck under the overhead wires and no height-limit sign on its face.",
+  "measures": [
+   "Get the registered clear height of the Nordbahn/S1 railway bridge (52.69939, 13.28424) from Autobahn GmbH Nordost / DB InfraGO and put it in the permit; if any lane is lower than 4.8 m, name the lane the convoy must use under the bridge.",
+   "Check the clear height of the overhead sign gantry on the westbound carriageway about 35 m east of the railway bridge (approx. 52.69934, 13.28478); the survey does not list it."
+  ]
+ },
+ "muenster-lech-grossziethen": {
+  "note": "Straight A 10 northern Berlin ring with no geometric constraint. In the Brandenburg laser point cloud (LGB) the top of the forest-road overpass at 52.6991, 13.0105 is 5.54 m above the road, so 4.8 m is clear only if its deck is less than 0.74 m deep. Passage depends on its registered clear height over the convoy's lane being at least 4.8 m.",
+  "measures": [
+   "Get the registered clear height of the forest-road overpass at 52.699062, 13.010454 from the Autobahn GmbH (Nordost) structure records. Measure it on site for each lane, because crossfall makes one lane lower than the other, and drive in the lane with the most clearance.",
+   "If the confirmed clearance is below 4.8 m, plan a bypass in advance. That means leaving the A 10 at the junction before the bridge and rejoining after it, or using a route around this ring section, because a motorway carriageway offers no local alternative line.",
+   "Also check the clear height of the sign gantry at the northern end of the passage (near km 196.34), which the survey does not list."
+  ]
+ },
+ "muenster-lech-paaren-im-glien": {
+  "note": "Straight four-lane A 10 section with no swept-path problems. The only issue is the secondary-road bridge over the motorway at 52.6494, 12.9992: in the Brandenburg laser point cloud (LGB) its deck top is 5.64 m above the road, so 4.8 m is clear only if the deck is less than 0.84 m deep. The registered clear height must be at least 4.8 m before the convoy passes. A 2025 street photo (Panoramax) shows an old beam bridge with a central pier and no height-limit sign on its face.",
+  "measures": [
+   "Get the registered clear height of the overpass at 52.64935, 12.999165 from Autobahn GmbH Nordost / the bridge register in the permit, and survey it on site if the register gives under 4.9 m.",
+   "If the registered clearance is marginal, find out which lane has the most clearance under the deck and drive that lane at walking pace with a height pole vehicle ahead."
+  ]
+ },
+ "muenster-lech-glien": {
+  "note": "Straight six-lane A 10 with no turning or swing problems. The one open point is the Brieselanger Straße overpass (52.6184, 12.9774): in the Brandenburg laser point cloud (LGB) its deck top is 5.70 m above the road, so 4.8 m is clear only if the deck is less than 0.90 m deep. Its registered clear height must be at least 4.8 m before the convoy goes. A 2025 street photo (Panoramax) shows an old beam bridge with a central pier and no height-limit sign on its face.",
+  "measures": [
+   "Get the registered clear height of the Brieselanger Straße overpass (52.618385, 12.977358) from Autobahn GmbH, Niederlassung Nordost, and find out which lane has the most clearance under the deck. Use that lane, closing the neighbouring lane if needed.",
+   "If the registered height is under 4.8 m, choose another route for this stretch of the Berliner Ring. The junction's loop ramps (radius about 50 m) are too tight for an 84 m blade, so going off and back on at this junction is not an option."
+  ]
+ },
+ "muenster-lech-zeestow": {
+  "note": "Straight six-lane A 10 at Zeestow. Steering and blade swing are no problem. Passage depends on the Brieselanger Straße and Kuhdammweg overpasses: in the Brandenburg laser point cloud (LGB) their deck tops are 5.73 m and 5.58 m above the road, so 4.8 m is clear only if the decks are less than 0.93 m and 0.78 m deep. Their registered clear heights must confirm at least 4.8 m over the convoy's lane. 2025 street photos (Panoramax) show both as old beam bridges with a central pier and no height-limit sign on their faces.",
+  "measures": [
+   "Get the registered clear heights of the Kuhdammweg bridge (52.561939, 12.967764) and the Brieselanger Straße bridge (52.573389, 12.972368) from Autobahn GmbH Nordost in the VEMAGS permit, and confirm both are at least 4.8 m over the lane the convoy uses.",
+   "If the Brieselanger Straße bridge is under 4.8 m, check with a swept-path run whether the convoy can avoid it at the Brieselang junction: leave by the southbound off-ramp, cross Brieselanger Straße straight onto the on-ramp under police control, then rejoin the motorway."
+  ]
+ },
+ "muenster-lech-kartzow": {
+  "note": "Straight A 10 at Kartzow; bends are no problem. The only question is the farm-road bridge 'Zu den Erdlöchern' (km 220.77): in the Brandenburg laser point cloud (LGB) its deck top is 5.62 m above the road, so 4.8 m is clear only if the deck is less than 0.82 m deep. The registered clear height over the lane driven must be at least 4.8 m.",
+  "measures": [
+   "Get the registered clear height of the overbridge 'Zu den Erdlöchern' over the A 10 (52.48934, 12.96329) from Autobahn GmbH Niederlassung Nordost. Measure it on site, lane by lane, under both deck edges of the southwest-bound carriageway the convoy uses.",
+   "If the clearance over the planned lane is under 4.8 m, check whether another lane or the hard shoulder has more. If none does, plan a lower front unit or root carrier, or a detour around the bridge, before the permit is applied for."
+  ]
+ },
+ "muenster-lech-industriegebiet": {
+  "note": "Straight A 9 (R 850 m) through the 309 m covered section \"Einhausung Bayreuth\" (km 554.353–554.662) under the Bayreuth–Warmensteinach railway, a 110 kV line and a cross street, then under its green and PV roof. Bends and width are no problem. The road falls about 1.4 % through it (355.2 m above sea level at the north portal, 350.8 m at the south portal, from the 1 m laser terrain). Its clear height is estimated at 4.68 m ± 0.6 from the lid, which stands 6.2–6.5 m above the road, minus 1.5 m of slab and cover; the laser point cloud (Feb 2023) cannot see inside. Passage depends on the covered section's registered clear height, including ceiling fittings, being at least 4.8 m.",
+  "measures": [
+   "Get the registered clear height of the covered section (portals at about 49.9563,11.6068 and 49.9536,11.6075) from Autobahn GmbH Nordbayern, including anything hanging from the ceiling (lights, jet fans, signs, cameras), and book the passage through the tunnel control centre.",
+   "If the covered section is below 4.8 m, plan a bypass: leave at the exit ramp north of the portal, cross the junction and the level crossing at grade with police, and rejoin the A 9 south of the PV roof.",
+   "Check the bridge construction site at 49.9593,11.6059 for falsework or protective scaffolding over the carriageway on the transport date, because it can cut the measured 5.2-6.3 m clearance."
+  ],
+  "cap": 1,
+  "capnote": "The clear height inside the 309 m covered section is estimated from its lid (4.68 m ± 0.6), not measured: the laser point cloud cannot see under the lid, so the registered height still needs confirming."
+ },
+ "muenster-lech-steinberg": {
+  "note": "Straight six-lane A 9 under the Renzenhofer Straße overbridge; the convoy stays on the carriageway with no overswing. In the laser point cloud (Jan 2025) the top of the Renzenhofer Straße deck is 6.08 m above the A 9, so 4.8 m is clear if the deck is less than 1.28 m deep, which is usual for an overbridge of this span but not guaranteed. Passage depends on the registered clear height in the Autobahn GmbH bridge records being at least 4.8 m.",
+  "measures": [
+   "Get the registered clear height of the Renzenhofer Straße overbridge (49.4738, 11.2597) for the southbound lanes from Autobahn GmbH Nordbayern. If it is below 4.8 m, use the lane with the highest soffit, or plan a detour at the nearest junction before the bridge after checking its ramps against the convoy's swept path (the cloverleaf loops at Kreuz Nürnberg 2 km south are too tight).",
+   "Also check the clear height of the overhead sign structure about 50 m north of the bridge over the southbound carriageway (approx. 49.4744, 11.2605). The clear-height list does not include it."
+  ],
+  "cap": 1,
+  "capnote": "Laser point cloud (Jan 2025): deck top 6.08 m above the road, so 4.8 m is clear if the deck is less than 1.28 m deep; verify the registered clear height."
+ },
+ "muenster-lech-roethenbachtal": {
+  "note": "Straight A9 run under the A6 bridge at the Nürnberg interchange. Curves and road width are no problem. In the laser point cloud (Dec 2024) the tops of the A6 decks are 5.94–6.11 m above the A 9, so the convoy's 4.8 m is clear only if the decks are less than 1.14 m deep at the lowest edge; a deep girder could still be too low. Only the bridge's registered clear height, ideally for each lane, decides whether this passage works.",
+  "measures": [
+   "Get the registered clear height of both decks of the A6 bridge over the A9 at 49.45866, 11.24378 for every southbound lane, and route the convoy in the lane with the most clearance.",
+   "If any lane is below 4.8 m, plan a detour off the A9 before the interchange: the cloverleaf loop ramps (radius about 50 m) cannot carry a 95 m convoy around the bridge."
+  ],
+  "cap": 1,
+  "capnote": "Laser point cloud (Dec 2024): deck tops 5.94–6.11 m above the road, so 4.8 m is clear only if the decks are less than 1.14–1.31 m deep. Registered height still to be checked."
+ },
+ "muenster-lech-pichl": {
+  "note": "Near Pichl the blade crosses the hatched gore where the slip road joins the B 16 and overswings onto grass. Passage depends on the bridge carrying the Pichl road over the B 16 giving 4.8 m clear; in the laser point cloud (Dec 2022) the top of the Mitterstraße deck is 5.72 m above the B 16, so 4.8 m is clear only if the deck is less than 0.92 m deep. Confirm the registered height. The second flagged bridge is a mapping error: the photo shows no structure.",
+  "measures": [
+   "Measure the clear height under the Pichl road bridge at 48.712699, 11.474168 (laser, both lanes) or get it from the Staatliches Bauamt Ingolstadt bridge records before the first run; if it is under 4.8 m, plan a detour leaving the B 16 at the ramps east of the bridge.",
+   "Remove the delineator posts and any sign at the nose of the hatched gore at 48.7107, 11.4822, and drive across the hatched area at walking pace.",
+   "Check the tree row on the south verge of the B 16 between 48.7104, 11.4800 and 48.7106, 11.4825 for branches over the road in the blade swing: the edge trace there follows the tree crowns, so the computed overswing on that side is not reliable."
+  ]
+ },
+ "muenster-lech-seehof": {
+  "note": "Four-lane B 16 through the Seehof junction near Manching. Gentle curves: wheels stay on the road and the blade barely swings past the edge. Passage depends on clear height under the two junction overpasses. Both look like standard modern bridges, but normal design does not guarantee the 4.8 m needed. Confirm the official heights. In the laser point cloud (Dec 2022) the Oberstimmer Straße deck top is 7.91 m above the road, clear for any normal deck, and the Im Weiherfeld deck top 6.46 m, clear if that deck is less than 1.66 m deep.",
+  "measures": [
+   "Get the official clear height of both Seehof overpasses (48.704847, 11.418822 and 48.706922, 11.423206) from the bridge records of Staatliches Bauamt Ingolstadt. Measure the lowest point over every lane in the convoy's direction.",
+   "If either bridge is below 4.8 m, plan a lower root-adapter or front-unit setup before the trip. There is no level detour: the NE bridge also spans the railway, and the junction ramps lead back onto the road that crosses the SW bridge.",
+   "Keep the convoy in the lane centred under the highest part of each deck, and pass under the bridges at walking pace with a spotter watching the root adapter's top edge."
+  ]
+ },
+ "muenster-lech-obermuehle": {
+  "note": "Gentle 1 km curve on the two-lane B 16 (radius about 580 m) with the Obermühle junction in the middle. The curve causes no trouble. The wheels stay in the own lane, but the 4.2 m blade root reaches up to 0.8 m over the centre line, so oncoming traffic needs a rolling block and the junction must be held by escort.",
+  "measures": [
+   "Have escort vehicles hold both arms of the Obermühle junction (about 48.7159, 11.3051) while the convoy and its 33 m blade overhang pass, because the tip crosses the junction mouths late.",
+   "Hold oncoming traffic over the whole 1 km as one rolling block between the field section in the west and the end of the forest in the east. There is no place to pull in partway through."
+  ],
+  "cap": 1,
+  "capnote": "The 0.16 m wheel clearance and keep-right figures come from trace errors along shadows and verges; the real need is routine oncoming-lane use with an escort"
+ },
+ "muenster-lech-zell": {
+  "note": "B 16 bypass north of Zell (Neuburg a. d. Donau): gentle bends, wheels stay on the road, small blade overswing. Passage is decided by the road bridge over the B 16 at 48.7162, 11.2389. Such bridges are usually built to 4.70 m and the convoy needs 4.8 m. Get the measured height before approval. In the laser point cloud (Dec 2022) the top of the Alarmstraße deck is 6.24 m above the road, so 4.8 m is clear if the deck is less than 1.44 m deep.",
+  "measures": [
+   "Get the measured clear height of the overpass at 48.716188, 11.238934 from the Staatliches Bauamt Ingolstadt (bridge book). If it is under 4.8 m, the root adapter must be lowered or the route changed: the interchange ramps are too tight for a 95 m convoy to bypass the bridge.",
+   "Measure the clear height on site across the whole 4.2 m width of the root frame, including the oncoming lane the convoy will use, because clear height under the deck can vary across its width.",
+   "Keep the at-grade junction with traffic islands at about 48.7153, 11.2491 clear of oncoming and turning traffic while the convoy crosses it on the oncoming lane."
+  ]
+ },
+ "muenster-lech-fleischnershausen": {
+  "note": "At the B 16 roundabout at Fleischnershausen the convoy goes round the wrong way, north of the island, with every arm closed. Passage depends on the blade clearing the island's northern half, removing a give-way sign on the east splitter island, and keeping the 28 m overswing NW and NE free of trees.",
+  "measures": [
+   "Close all four arms of the roundabout and drive it the wrong way round, north of the island, with a pilot car stopping traffic on the north and south arms.",
+   "Take down the give-way sign and any bollard on the east-arm splitter island (48.72275, 11.20882) beforehand; the wheel path passes it with only 0.2 m to spare.",
+   "Before the convoy, check that the northern half of the island (48.72284, 11.20847) is clear of planting, mounds and signs above about 1.5 m, and that the tree clump on its southern half stays outside the blade sweep."
+  ]
+ },
+ "muenster-lech-kalkbauer": {
+  "note": "A long, gentle bend (radius about 295 m) on the two-lane B 16 between two junctions. Wheels stay on the asphalt and the blade swings at most 0.7 m past the edge. The wheels stay in the own lane; the 4.2 m root frame reaches up to 0.7 m into the oncoming lane on about 150 m, so oncoming traffic must be held.",
+  "measures": [
+   "Hold traffic on both side roads at the junctions at each end of the bend (around 48.7297, 11.1586 and 48.7252, 11.1655) while the convoy runs in the oncoming lane.",
+   "Check that branches from the tree and hedge row on the outside (NE) of the bend do not reach over the road edge at blade height, and trim them if they do."
+  ]
+ },
+ "muenster-lech-hoefelhof": {
+  "note": "S-curve on the wide modern B 16 near Höfelhof (radius about 146 m). Using the oncoming lane for about 90 m (the blade root over the centre line on about 300 m), the wheels stay on the road and the blade swings at most 0.7 m past the edge. Its own lane is not enough, so the B 16 needs a short closure.",
+  "measures": [
+   "Close both side-road junctions in the middle of the curve (the crossing minor road at about 48.720, 11.124) while the convoy uses the oncoming lane.",
+   "Check the tree strip between the B 16 and the parallel minor road on the outside of the northern bend, and prune any branches that reach over the verge into the blade-tip swing."
+  ]
+ },
+ "muenster-lech-unterhausen": {
+  "note": "B 16 east of Unterhausen with wide curves (R ≈ 210 m); the blade swing stays near the road. The laser point cloud (Jan 2023) shows the Donautalbahn crossing over the B 16 on a bridge whose deck top is 7.33 m above the road, clear for any normal rail deck. The deciding point is the clear height under the local-road overbridge at 48.7166, 11.0871: its deck top is 7.12 m above the road in the laser point cloud, so 4.8 m is clear unless the deck is more than 2.3 m deep; confirm it at ≥ 4.8 m.",
+  "measures": [
+   "Get the clear height of the local-road overbridge at 48.7166, 11.0871 from the Staatliches Bauamt Ingolstadt bridge records, or measure it on site, before the transport is permitted; if it is under 4.8 m the passage is blocked and the route must be changed.",
+   "Confirm in the permit that the convoy may cross the B 16 bridge over the railway at 48.716057, 11.081921 (axle loads); no clear-height check is needed there."
+  ]
+ },
+ "muenster-lech-moos": {
+  "note": "Two-lane B 16 bypass with wide curves (minimum radius 282 m); wheels stay on the road and the blade barely swings out. Passage depends on four overpasses (two road, two farm-track): in the laser point cloud (Jan 2023) their deck tops are 6.28–6.96 m above the road, so 4.8 m is clear if the decks are less than 1.48 m deep (Bertoldsheimer Straße: deck top 6.32 m, clear if under 1.52 m). The registered heights still need confirming. The convoy needs the oncoming lane on about 350 m and its blade root reaches over the centre line on about 800 m of the 3.2 km.",
+  "measures": [
+   "Get the as-built clear heights of the four overpasses (48.709991/11.008532, 48.709437/11.019836, 48.708789/11.036841, 48.712863/11.044327) from Staatliches Bauamt Ingolstadt and confirm them on site, measuring across the full width the convoy uses, including the oncoming lane.",
+   "If any bridge has less than 4.80 m clear, plan to lower the transport height (lower the front unit or turn the blade root) before approaching, or get a detour approved before the permit is issued.",
+   "Close the B 16 to oncoming traffic between the junction west of spot1 (about 48.7100/11.004) and the start of the dual carriageway east of spot4 (48.7129/11.0443), because the convoy and its blade root run partly in the oncoming lane over these 3.2 km."
+  ]
+ },
+ "muenster-lech-feldheim": {
+  "note": "Sharp right turn off the westbound B 16 onto a 180° loop road (radius about 47 m) round a wooded pond, across the Feldheim roundabout and over the B 16 to the St 2047. The blade swings up to 20 m over fields; trees inside the loop decide passage. The 2.93 m height reading is spurious. The laser point cloud shows no deck over the convoy at that crossing, and the Niederschönenfelder Straße bridge deck top is 6.49 m above the road (clear if the deck is less than 1.69 m deep).",
+  "measures": [
+   "Fell or crown-lift the tree belt on the inside of the loop's north arc (about 48.7035, 10.9240-10.9246) and the tree row on the B 16 south verge at the loop junction (about 48.7024, 10.9243-10.9249), where the blade tail swings across the B 16.",
+   "At the roundabout, remove the give-way sign and the bollards on the west-arm splitter island (48.70367, 10.925284), let the convoy cut across the south-leg splitter island, and close the roundabout and the B 16/loop junction completely while the convoy passes.",
+   "Get the load rating of the St 2047 road bridge over the B 16 (about 48.7034, 10.9304) checked for the convoy's axle loads, and steer the rear dolly precisely there: the wheels clear the edge by only about 0.2 m."
+  ],
+  "hard": "a 77° turn into a 180° loop of radius ≈ 47 m with trees to fell inside the loop and on the B 16 verge, and only ≈ 0.2 m wheel margin on the St 2047 bridge"
+ },
+ "muenster-lech-unterpeiching": {
+  "note": "Rural stretch between two roundabouts with open fields between them. Wheels stay on the asphalt, but the convoy uses the whole roundabout width against traffic. The blade tip swings 22-25 m over both central islands. The young trees on those islands, and a verge tree at the second roundabout, decide whether the blade passes.",
+  "measures": [
+   "Remove or temporarily cut back the young trees and shrubs on the western half of the central island at the roundabout near 48.67756,10.93527, and the planting on the island at 48.67363,10.91937; pruning alone is not enough within 25 m of the blade tip.",
+   "Check the blade's height over the single tree on the south-east verge between the east entry and the south exit of the second roundabout (around 48.6734,10.9197), and prune or remove it if the tip is lower than the crown.",
+   "Close every arm of both roundabouts while the convoy passes, because it drives straight across the circulating lane against the normal direction and the blade sweeps over the north and west entries."
+  ]
+ },
+ "muenster-lech-pessenburgheim": {
+  "note": "From the St 2047 the route follows an estate road, then narrow field tracks to the crane pad, with three right-angle turns. The blade cuts each inside corner by about 4 m and wheels leave the track by up to 3.5 m. Trees must be cleared at the wooded inside corner at 48.6143, 10.9345.",
+  "measures": [
+   "At 48.614339, 10.934495, fell or cut back the woodland edge in a wedge of about 40 x 45 m south-east of the junction (needs landowner and forestry permits). Also identify the small structure on the woodland edge about 35 m south of the junction and remove it if it lies in the blade swing.",
+   "Remove the bench at the corner at 48.609164, 10.927673 and check the tree clump just north-east of it, which lies in the tail swing and the wheel run-out.",
+   "Confirm that the tracks from 48.6143, 10.9345 via 48.6106, 10.9348 and 48.6091, 10.9276 to the crane pad are built to wind-farm access standard and rated for the axle loads. On the photo they look like field tracks about 3 m wide that need widening and upgrading."
+  ],
+  "hard": "trees to fell in about 40 × 45 m of woodland at the inside corner (48.6143, 10.9345), three junction turns on narrow field tracks with up to 3.5 m wheel run-out"
+ }
+}

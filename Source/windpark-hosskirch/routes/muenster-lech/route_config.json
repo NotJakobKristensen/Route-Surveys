@@ -1,0 +1,377 @@
+{
+ "id": "muenster-lech",
+ "waypoints": [
+  [
+   14.7928,
+   53.5511
+  ],
+  [
+   14.81009,
+   53.53145
+  ],
+  [
+   10.92551,
+   48.70364
+  ],
+  [
+   10.92732,
+   48.70381
+  ],
+  [
+   10.92308,
+   48.60508
+  ]
+ ],
+ "policy": {
+  "near_m": 30000,
+  "urban_x": 8.0
+ },
+ "page": "muenster-lech-blade-route",
+ "title": "Münster (Lech) blade route survey",
+ "start_title": "Leaving the blade plant",
+ "transport_height": 4.7,
+ "map_center": [
+  12.8,
+  51.0
+ ],
+ "park": null,
+ "site": "https://muensterroutesurvey.netlify.app/",
+ "evidence": "evidence.json",
+ "text": {
+  "TITLE": "Münster (Lech) Blade Route",
+  "H1": "Münster (Lech) blade route",
+  "CONVOYS": "5 × 3",
+  "START": "Goleniów",
+  "DESC": "Route survey for 84.3 m Vestas V172 blades from the Vestas blade plant in Goleniów to the five V172 at Münster (Lech), Donau-Ries: routed and checked from open data only, every difficult stretch found by the swept-path model, measured against the laser terrain and point clouds and driven in 3D.",
+  "FROM": "From the Vestas blade plant in Goleniów (PL) to the crane pads of the five V172 in the forest at Münster (Lech), Donau-Ries (DE)"
+ },
+ "page_text": {
+  "dest": "V172 wind park · Münster (Lech)",
+  "convoys": "5 × 3",
+  "intro": "A route survey checks, before the first convoy, whether the longest and heaviest parts can pass every bend, junction and village on the way. This one does it for 84.3 m Vestas V172 blades from the Vestas blade plant in Goleniów to the five V172 commissioned in 2026 in the forest between Münster (Lech) and Thierhaupten — without any report or local knowledge of the route: the road, the difficult passages and every finding come from open data and the swept-path model alone.",
+  "method": "No reports, two fixed points: from the blade yard in Goleniów to the first crane pad, the cheapest heavy-transport path on the road network — motorways, trunk and federal roads on the long haul, town streets (50 km/h or less) avoided eightfold, minor roads only within 30 km of either end. Fixed by hand are only the yard exit (Prosta → Granitowa → S3, the plant's heavy-load exit to the expressway) and, on the B 16 at Mittelstetten, the westbound exit over the B 16 bridge, where the shortest path would turn back into the eastbound exit ramp. Every 10 m is rated (wheels beyond the measured edge, blade overswing, leaving the right lane, tight turns, clear heights) and every difficult stretch becomes a passage on survey-grade official data (20 cm photo, 1 m laser terrain, surface model): one in Poland, seven in Brandenburg and fifteen in Bavaria (Mecklenburg-Vorpommern and Saxony-Anhalt serve the same data, but no passage lies there). The clear heights of more than 300 structures are measured against the 1 m laser terrain and, in Poland, Brandenburg and Bavaria, in the raw airborne laser point clouds (GUGiK, LGB and LDBV, flown 2021–2025): the road under each bridge and the top of its deck, with a typical deck depth assumed, because a scanner flying overhead rarely sees a deck's underside. Each passage was reviewed on the aerial photo.",
+  "overview": "A route found and checked without any report or local knowledge: the cheapest heavy-transport path on the road network from the blade plant in Goleniów to the first crane pad, driven with a swept-path model of the transporter. The survey points are where the data say it gets difficult.",
+  "vehicle_note": "",
+  "legs_note": "No reports: each leg is the cheapest heavy-transport path on the road network; only the yard exit and the B 16 exit at Mittelstetten are fixed by hand."
+ },
+ "keep_towns": [
+  "Goleniów",
+  "Berlin",
+  "Potsdam",
+  "Leipzig",
+  "Hof",
+  "Bayreuth",
+  "Nürnberg",
+  "Ingolstadt",
+  "Neuburg an der Donau",
+  "Rain",
+  "Augsburg",
+  "Donauwörth",
+  "Thierhaupten",
+  "Münster",
+  "Prenzlau",
+  "Gera",
+  "Halle (Saale)",
+  "Dessau-Roßlau",
+  "Szczecin"
+ ],
+ "route_legs": [
+  [
+   "Goleniów: from the blade plant to the S3 and A6",
+   "Prosta · Granitowa · S3 → A6 (Szczecin bypass)",
+   [
+    "A6"
+   ]
+  ],
+  [
+   "A6 / A 11 to the Berlin ring",
+   "A6 · border Kołbaskowo – Pomellen · A 11 · Uckermark",
+   [
+    "A 10"
+   ]
+  ],
+  [
+   "A 10 Berliner Ring, north and west",
+   "A 10 · Dreieck Barnim → Dreieck Potsdam",
+   [
+    "A 9"
+   ]
+  ],
+  [
+   "A 9 south: Berlin → Ingolstadt",
+   "A 9 · Leipzig · Hof · Nürnberg",
+   [
+    "B 16"
+   ]
+  ],
+  [
+   "B 16 west: Ingolstadt → Neuburg → Rain",
+   "B 16 · Neuburg an der Donau",
+   [
+    "DON 30",
+    "St 2047"
+   ]
+  ],
+  [
+   "St 2047 south to Münster and the forest tracks",
+   "DON 30 · St 2047 · forest tracks to the crane pad",
+   []
+  ]
+ ],
+ "turbines": [
+  {
+   "id": "WEA 1",
+   "lon": 10.92308,
+   "lat": 48.60508,
+   "ground": 470.9,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE947843583706",
+   "start": "2026-05"
+  },
+  {
+   "id": "WEA 2",
+   "lon": 10.92539,
+   "lat": 48.60058,
+   "ground": 467.2,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE985611109659",
+   "start": "2026-06"
+  },
+  {
+   "id": "WEA 3",
+   "lon": 10.9238,
+   "lat": 48.59604,
+   "ground": 465.6,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE915417382710",
+   "start": "2026-06"
+  },
+  {
+   "id": "WEA 4",
+   "lon": 10.92272,
+   "lat": 48.59141,
+   "ground": 473.8,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE920081283232",
+   "start": "2026-07"
+  },
+  {
+   "id": "WEA 5",
+   "lon": 10.9193,
+   "lat": 48.58598,
+   "ground": 472.0,
+   "hub": 175.0,
+   "rotor": 172.0,
+   "mw": 7.2,
+   "mastr": "SEE913786396529",
+   "start": "2026-07"
+  }
+ ],
+ "hot": [
+  [
+   "muenster-lech-lozienica",
+   "Leaving the blade plant · Łozienica",
+   14.792151,
+   53.550509,
+   3650
+  ],
+  [
+   "muenster-lech-finowfurt",
+   "A 11 at Finowfurt",
+   13.670526,
+   52.855563,
+   800
+  ],
+  [
+   "muenster-lech-briese",
+   "A 10 at Briese",
+   13.290624,
+   52.698404,
+   800
+  ],
+  [
+   "muenster-lech-grossziethen",
+   "A 10 near Groß-Ziethen",
+   13.01085,
+   52.703035,
+   800
+  ],
+  [
+   "muenster-lech-paaren-im-glien",
+   "A 10 at Paaren im Glien",
+   13.001389,
+   52.6532,
+   800
+  ],
+  [
+   "muenster-lech-glien",
+   "A 10 at Glien",
+   12.979878,
+   52.621997,
+   800
+  ],
+  [
+   "muenster-lech-zeestow",
+   "A 10 at Zeestow",
+   12.972758,
+   52.575649,
+   1730
+  ],
+  [
+   "muenster-lech-kartzow",
+   "A 10 at Kartzow",
+   12.962616,
+   52.493415,
+   800
+  ],
+  [
+   "muenster-lech-industriegebiet",
+   "A 9 near Bayreuth",
+   11.605681,
+   49.960252,
+   800
+  ],
+  [
+   "muenster-lech-steinberg",
+   "A 9 at Steinberg",
+   11.263677,
+   49.476865,
+   800
+  ],
+  [
+   "muenster-lech-roethenbachtal",
+   "A 9 at Röthenbachtal",
+   11.246981,
+   49.462116,
+   800
+  ],
+  [
+   "muenster-lech-pichl",
+   "B 16 at Pichl",
+   11.482274,
+   48.710821,
+   800
+  ],
+  [
+   "muenster-lech-seehof",
+   "B 16 at Seehof",
+   11.425061,
+   48.707445,
+   800
+  ],
+  [
+   "muenster-lech-obermuehle",
+   "B 16 at Obermühle",
+   11.308497,
+   48.714348,
+   1000
+  ],
+  [
+   "muenster-lech-zell",
+   "B 16 at Zell",
+   11.261842,
+   48.714883,
+   2519
+  ],
+  [
+   "muenster-lech-fleischnershausen",
+   "B 16 at Fleischnershausen",
+   11.212751,
+   48.721827,
+   880
+  ],
+  [
+   "muenster-lech-kalkbauer",
+   "B 16 at Kalkbauer",
+   11.165236,
+   48.723994,
+   840
+  ],
+  [
+   "muenster-lech-hoefelhof",
+   "B 16 at Höfelhof",
+   11.134642,
+   48.723802,
+   1509
+  ],
+  [
+   "muenster-lech-unterhausen",
+   "B 16 at Unterhausen",
+   11.090734,
+   48.717064,
+   1110
+  ],
+  [
+   "muenster-lech-moos",
+   "B 16 at Moos",
+   11.054708,
+   48.71589,
+   3868
+  ],
+  [
+   "muenster-lech-feldheim",
+   "B 16 → St 2047 at Feldheim",
+   10.927481,
+   48.702792,
+   1159
+  ],
+  [
+   "muenster-lech-unterpeiching",
+   "DON 30 → St 2047 near Unterpeiching",
+   10.939553,
+   48.683748,
+   3737
+  ],
+  [
+   "muenster-lech-pessenburgheim",
+   "St 2047 near Pessenburgheim → crane pad",
+   10.921501,
+   48.647476,
+   null
+  ]
+ ],
+ "hot_regions": {
+  "muenster-lech-lozienica": "PL-32",
+  "muenster-lech-finowfurt": "DE-BB",
+  "muenster-lech-briese": "DE-BB",
+  "muenster-lech-grossziethen": "DE-BB",
+  "muenster-lech-paaren-im-glien": "DE-BB",
+  "muenster-lech-glien": "DE-BB",
+  "muenster-lech-zeestow": "DE-BB",
+  "muenster-lech-kartzow": "DE-BB",
+  "muenster-lech-industriegebiet": "DE-BY",
+  "muenster-lech-steinberg": "DE-BY",
+  "muenster-lech-roethenbachtal": "DE-BY",
+  "muenster-lech-pichl": "DE-BY",
+  "muenster-lech-seehof": "DE-BY",
+  "muenster-lech-obermuehle": "DE-BY",
+  "muenster-lech-zell": "DE-BY",
+  "muenster-lech-fleischnershausen": "DE-BY",
+  "muenster-lech-kalkbauer": "DE-BY",
+  "muenster-lech-hoefelhof": "DE-BY",
+  "muenster-lech-unterhausen": "DE-BY",
+  "muenster-lech-moos": "DE-BY",
+  "muenster-lech-feldheim": "DE-BY",
+  "muenster-lech-unterpeiching": "DE-BY",
+  "muenster-lech-pessenburgheim": "DE-BY"
+ },
+ "legs_fixed": {
+  "0": [
+   "tertiary",
+   "unclassified"
+  ]
+ },
+ "passages": "all",
+ "waypoint_notes": {
+  "1": "the yard exit as researched: Prosta → Granitowa → S3 Goleniów junction",
+  "2": "B 16 at Mittelstetten: the westbound exit at the Romantische Straße junction, then Neuhofweg over the B 16 bridge to the road south (the shortest path otherwise U-turns into the eastbound exit ramp)"
+ }
+}

@@ -1,0 +1,151 @@
+{
+  "_factory": {
+    "name": "LM Wind Power blade plant (Vestas since September 2025)",
+    "address": "ul. Nowa 3, Łozienica, 72-100 Goleniów, Poland",
+    "facts": [
+      "Opened 2009, extended 2017, about 400 employees.",
+      "Built the V172 blades for Vestas under contract; Vestas signed the takeover on 15 May 2025 and runs the plant since 5 September 2025, saying it will continue to deliver V172-7.2 MW blades.",
+      "Blade storage beside the S3 expressway shows in the 2021 Sentinel-2 composite; the map data calls the yard ‘Vestas Blades’."
+    ]
+  },
+  "_sources": [
+    {
+      "t": "Schwäbische Zeitung: ‘Dieser Weg war wohl falsch berechnet: Riesiges Rotorblatt blockiert Bundesstraße’ (Weingarten, May 2025)",
+      "u": "https://www.schwaebische.de/regional/oberschwaben/weingarten/tonnenschwerer-transport-bauteile-fuer-windkraftfluegel-blockieren-bundesstrasse-3602022"
+    },
+    {
+      "t": "Schwäbische Zeitung: ‘Schon wieder hängt ein Windrad fest: Bundesstraße bleibt mehrere Stunden gesperrt’ (June 2025)",
+      "u": "https://www.schwaebische.de/regional/oberschwaben/ravensburg/wieder-haengt-windrad-fest-bundesstrasse-bleibt-stundenlang-voll-gesperrt-3660067"
+    },
+    {
+      "t": "Police report, Landkreis Ravensburg, 11 June 2025 (rv-news.de)",
+      "u": "https://rv-news.de/polizeibericht-landkreis-ravensburg-1064"
+    },
+    {
+      "t": "b30oberschwaben.de: escort by Verkehrspolizei Günzburg, A 7 → B 28 → B 30",
+      "u": "https://www.b30oberschwaben.de/news.html&newsid=9013&mode=singleview"
+    },
+    {
+      "t": "Stadt Bad Saulgau, Stadtjournal 21/2025: traffic restrictions on the K 8274 between Haid and Heratskirch",
+      "u": "https://www.nussbaum.de/entdecken/news/verkehrsbehinderungen-auf-der-k-8274-zwischen-haid-und-heratskirch-2709030"
+    },
+    {
+      "t": "Uhl Windkraft: ‘Rotorblätter auf dem Weg – nächster Meilenstein für das Windprojekt in Hoßkirch’ (June 2025)",
+      "u": "https://www.uhl-windkraft.de/rotorblaetter-auf-dem-weg-naechster-meilenstein-fuer-das-windprojekt-in-hosskirch/"
+    },
+    {
+      "t": "Vestas: Vestas officially takes over Goleniów onshore blade factory (September 2025)",
+      "u": "https://www.vestas.com/en/media/company-news/2025/vestas-officially-takes-over-goleniow-onshore-blade-fac-c4230139"
+    },
+    {
+      "t": "GE Vernova / LM Wind Power: Vestas and LM Wind Power sign deal for blades factory in Poland (May 2025)",
+      "u": "https://www.gevernova.com/news/press-releases/vestas-lm-wind-power-sign-deal-blades-factory-poland"
+    }
+  ],
+  "factory": {
+    "road": "Prosta → Granitowa → S3/S6 junction Goleniów Południe (exit 15)",
+    "evidence": [
+      {
+        "t": "The local paper reports that the Hoßkirch blades travelled by road from Stettin (Szczecin) in a convoy of three, several days on the road.",
+        "s": "Schwäbische Zeitung, May 2025",
+        "u": "https://www.schwaebische.de/regional/oberschwaben/weingarten/tonnenschwerer-transport-bauteile-fuer-windkraftfluegel-blockieren-bundesstrasse-3602022"
+      },
+      {
+        "t": "Vestas says the Goleniów plant near Szczecin will continue to deliver blades for the V172-7.2 MW.",
+        "s": "Vestas, 5 Sep 2025",
+        "u": "https://www.vestas.com/en/media/company-news/2025/vestas-officially-takes-over-goleniow-onshore-blade-fac-c4230139"
+      }
+    ],
+    "note": "The press names Stettin; the plant at Goleniów (25 km away) is inferred: it is the only V172 blade plant near Szczecin. Inside the plant the blades move on its own roads; the survey starts where the convoy leaves the yard on Prosta.",
+    "cap": 1,
+    "capnote": "the plant's own exit, used for every blade it ships"
+  },
+  "feuchtwangen": {
+    "road": "A 6 → A 7 (Kreuz Feuchtwangen/Crailsheim)",
+    "note": "Motorway interchange: the convoy takes the ramp at walking pace with the interchange closed to traffic for the passage."
+  },
+  "a7-exit": {
+    "road": "A 7 exit → B 28 (Neu-Ulm)"
+  },
+  "neu-ulm": {
+    "road": "B 28 → B 30 (Neu-Ulm)",
+    "evidence": [
+      {
+        "t": "Verkehrspolizei Günzburg escorted a blade convoy from the A 7 via the B 28 onto the B 30; at the Neu-Ulm junction onto the B 30 the guardrail on the right had been removed.",
+        "s": "b30oberschwaben.de, 2025",
+        "u": "https://www.b30oberschwaben.de/news.html&newsid=9013&mode=singleview"
+      }
+    ],
+    "measures": [
+      "Dismantle the guardrail on the right of the junction onto the B 30 for the passage (reported for this junction)."
+    ],
+    "hard": "guardrail removed for the passage (reported)"
+  },
+  "gaisbeuren": {
+    "road": "B 30, two-lane through Gaisbeuren and Enzisreute",
+    "evidence": [
+      {
+        "t": "Around Bad Waldsee many curves were reported too tight; the convoy had to stop repeatedly, also inside villages.",
+        "s": "b30oberschwaben.de, 2025",
+        "u": "https://www.b30oberschwaben.de/news.html&newsid=9013&mode=singleview"
+      }
+    ],
+    "note": "The bends themselves pass; what slows the convoy are the traffic lights and buildings next to the carriageway."
+  },
+  "niederbiegen": {
+    "road": "B 30 → B 32 loop ramp at Niederbiegen (Baienfurt), towards Sigmaringen",
+    "incident": "Tue 20 May 2025, 02:30 (date inferred from the article of 23 May)",
+    "evidence": [
+      {
+        "t": "A blade got stuck on the ramp from the B 30 onto the B 32 at Niederbiegen near Weingarten at 2:30 a.m.; the guardrail on the inside of the curve was in the way. The second blade waited on the hard shoulder. The ramp stayed closed for the day while guardrails were taken down; the convoy continued after dark.",
+        "s": "Schwäbische Zeitung, 23 May 2025",
+        "u": "https://www.schwaebische.de/regional/oberschwaben/weingarten/tonnenschwerer-transport-bauteile-fuer-windkraftfluegel-blockieren-bundesstrasse-3602022"
+      }
+    ],
+    "measures": [
+      "Dismantle the guardrail on the inside of the loop for the passage (reported for this ramp; guardrails are missing from the open map data)."
+    ]
+  },
+  "blitzenreute": {
+    "road": "B 32 north of Weingarten"
+  },
+  "altshausen": {
+    "road": "B 32, Saulgauer Straße through Altshausen"
+  },
+  "hirschegg": {
+    "road": "B 32 between Altshausen and Hangen (Eichstegen)",
+    "incident": "Wed 11 Jun 2025, about 04:30",
+    "evidence": [
+      {
+        "t": "Near Hirschegg, between Hangen and Altshausen, the remote-controlled rear steering axle of a blade transporter (blade about 85 m, about 35 t) ran off the road to the left. An excavator stabilised it and brought it back onto the road; the B 32 was closed until about 10:30, damage several tens of thousands of euros. The convoy of three then continued to Hoßkirch.",
+        "s": "Police report and Schwäbische Zeitung, 11 Jun 2025",
+        "u": "https://rv-news.de/polizeibericht-landkreis-ravensburg-1064"
+      }
+    ],
+    "note": "The bends pass; the risk the model shows is the narrow carriageway without hard shoulder: the rear dolly runs close to the soft verge."
+  },
+  "haid": {
+    "road": "B 32 → K 8274 at Haid",
+    "evidence": [
+      {
+        "t": "The town of Bad Saulgau announced that all transports for the wind park on the K 8274 between Haid and Heratskirch run between 22:00 and 06:00, with full closures section by section because the convoys cannot be overtaken.",
+        "s": "Stadt Bad Saulgau, Stadtjournal 21/2025",
+        "u": "https://www.nussbaum.de/entdecken/news/verkehrsbehinderungen-auf-der-k-8274-zwischen-haid-und-heratskirch-2709030"
+      }
+    ]
+  },
+  "wilfertsweiler": {
+    "road": "K 8274 through Wilfertsweiler"
+  },
+  "forest": {
+    "road": "Heratskirch → forest track → crane pad of WEA 5",
+    "evidence": [
+      {
+        "t": "Uhl Windkraft: six night transports of three blades each; vehicles about 98 m long. The haulier adjusts traffic lights, removes guardrails and temporarily alters traffic islands along the way.",
+        "s": "Uhl Windkraft, June 2025",
+        "u": "https://www.uhl-windkraft.de/rotorblaetter-auf-dem-weg-naechster-meilenstein-fuer-das-windprojekt-in-hosskirch/"
+      }
+    ],
+    "note": "The forest tracks were built and widened for the project; the map data shows them at their mapped width, so the overswing marks the corridor that has to be clear. Only the way to the pad of WEA 5 is modelled."
+  }
+}

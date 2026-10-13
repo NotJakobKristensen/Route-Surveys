@@ -1,0 +1,6 @@
+node_modules
+windpark-hosskirch/.cache/
+windpark-hosskirch/dist/
+__pycache__/
+windpark-hosskirch/routes/*/.cache/
+windpark-hosskirch/routes/*/dist/

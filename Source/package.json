@@ -1,0 +1,13 @@
+{
+  "name": "route-surveys",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:windpark": "node windpark-hosskirch/tools/build.mjs",
+    "build:route": "node windpark-hosskirch/tools/build_route.mjs",
+    "build": "npm run build:windpark && npm run build:route"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0"
+  }
+}

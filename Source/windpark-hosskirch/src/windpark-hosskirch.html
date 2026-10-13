@@ -1,0 +1,259 @@
+<!--HEAD-->
+<title>Windpark Hoßkirch</title>
+<meta name="description" content="The six Vestas V172-7.2 MW turbines of Windpark Hoßkirch in the Wagenhart forest, rebuilt 1:1 from OpenStreetMap, Copernicus elevation and Sentinel-2 imagery.">
+<link rel="modulepreload" href="__THREE_URL__">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..750&display=swap">
+<script>/* the web font never blocks the first paint: attach its stylesheet once the preload is in flight */
+(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..750&display=swap';document.head.appendChild(l);})();</script>
+<style>
+/* Layout: full-bleed landscape; instrument panels pinned to the corners like the legend of a site plan. */
+:root{
+  --ink:#16252d; --ink-2:#43545d; --ink-3:#6f7f87;
+  --glass:rgba(246,248,247,.95); --glass-2:rgba(236,241,240,.92); --line:rgba(22,37,45,.14);
+  --accent:#145A73; --accent-ink:#fff; --focus:#0B7BA8; --signal:#C8352B; --warm:#b8741a;
+  --shadow:0 1px 2px rgba(15,30,38,.12),0 8px 28px rgba(15,30,38,.16);
+  --f-display:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --f-body:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --r:10px; --gap:12px; --pad:14px;
+  --bg:#0f1a20;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#e6eef1; --ink-2:#a9b9c0; --ink-3:#7f9199;
+    --glass:rgba(16,27,33,.93); --glass-2:rgba(22,36,44,.9); --line:rgba(230,238,241,.14);
+    --accent:#6CC3DE; --accent-ink:#08161c; --focus:#8ED6EE; --signal:#ff6b5e; --warm:#e0a24a;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#e6eef1; --ink-2:#a9b9c0; --ink-3:#7f9199;
+  --glass:rgba(16,27,33,.93); --glass-2:rgba(22,36,44,.9); --line:rgba(230,238,241,.14);
+  --accent:#6CC3DE; --accent-ink:#08161c; --focus:#8ED6EE; --signal:#ff6b5e; --warm:#e0a24a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.4;overflow:hidden;
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+#app{position:fixed;inset:0;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#c:active{cursor:grabbing}
+/* solid panels: a backdrop blur over the 3D view is re-computed on every frame */
+.panel{position:absolute;background:var(--glass);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.label{font-family:var(--f-display);font-stretch:78%;font-weight:650;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+/* overlay grid: left column (title, viewpoints), right column (compass, minimap, turbine card), dock row */
+#ui{position:absolute;inset:0;pointer-events:none;display:grid;gap:10px;
+  padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));
+  grid-template-columns:minmax(0,318px) minmax(0,1fr) minmax(0,288px);grid-template-rows:minmax(0,1fr) auto;
+  grid-template-areas:"left . right" "dock dock dock"}
+#ui.hide>*{visibility:hidden}
+#ui .panel{position:relative;pointer-events:auto}
+#left{grid-area:left;display:flex;flex-direction:column;gap:10px;align-self:start;min-width:0;max-height:100%;overflow:auto}
+#right{grid-area:right;display:flex;flex-direction:column;gap:10px;align-items:stretch;align-self:start;min-width:0;max-height:100%;overflow:auto}
+#title{padding:14px 16px 13px}
+#title h1{margin:0;font-family:var(--f-display);font-stretch:84%;font-weight:720;font-size:25px;letter-spacing:-.01em;line-height:1.05;text-wrap:balance}
+#title .spec{margin:6px 0 0;font-weight:560;font-size:13.5px;color:var(--ink)}
+#title .spec b{color:var(--signal);font-weight:700}
+#title .where{margin:3px 0 0;font-size:12.5px;color:var(--ink-2)}
+#views{padding:10px 12px 12px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+#views .row{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--glass-2);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:560;white-space:nowrap}
+.chip:hover{border-color:var(--accent)}
+#wea-list{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.wea{border:1px solid var(--line);background:var(--glass-2);border-radius:7px;height:30px;padding:0;font-family:var(--f-display);font-stretch:80%;font-weight:700;font-size:14px}
+.wea.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+#nav{padding:8px;display:grid;gap:8px;justify-items:end;align-self:end}
+#compass{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--glass-2);display:grid;place-items:center;padding:0}
+#compass svg{width:30px;height:30px}
+#minimap{width:176px;height:176px;border-radius:7px;display:block;cursor:crosshair;background:#233}
+#info{padding:14px 16px}
+#info header{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+#info h2{margin:0;font-family:var(--f-display);font-stretch:85%;font-weight:720;font-size:22px}
+#info .model{margin:2px 0 10px;color:var(--ink-2);font-size:12.5px}
+#info dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-size:13px}
+#info dt{color:var(--ink-3)}
+#info dd{margin:0;text-align:right;font-weight:560;min-width:0;overflow-wrap:anywhere}
+#info dd.small{font-size:12.5px;font-weight:520;align-self:center}
+#info dd small{display:block;font-size:11px;font-weight:450;color:var(--ink-3)}
+#info abbr{text-decoration:none}
+#info-close,#src-close{border:0;background:none;font-size:18px;line-height:1;color:var(--ink-3);padding:2px 4px}
+.stripe{height:6px;border-radius:3px;margin:10px 0 4px;background:linear-gradient(90deg,var(--line) 0 78.7%,var(--signal) 78.7% 85.8%,rgba(203,208,204,.9) 85.8% 92.9%,var(--signal) 92.9% 100%)}
+.stripe-note{margin:0;font-size:11.5px;color:var(--ink-3)}
+#dock{grid-area:dock;justify-self:center;width:min(1010px,100%);padding:10px 16px 9px;display:grid;grid-template-columns:minmax(0,1fr);gap:7px}
+#dock .top{display:flex;align-items:center;gap:6px 12px;min-width:0}
+#dock .top input[type=range]{min-width:120px}
+#more{display:none}
+.links{margin-left:auto;display:flex;gap:14px;align-items:baseline}
+#route-link{color:var(--accent);font-size:11.5px;white-space:nowrap}
+#src-btn{border:0;background:none;padding:0;color:var(--accent);font-size:11.5px;text-decoration:underline;white-space:nowrap}
+#cursor{margin:0;max-width:176px;font-size:11px;line-height:1.3;color:var(--ink-3);text-align:right}
+#dock .top .label{min-width:62px}
+#time-out{font-family:var(--f-display);font-stretch:82%;font-weight:720;font-size:22px;min-width:64px}
+input[type=range]{flex:1;min-width:0;accent-color:var(--accent);height:22px}
+#dock .bottom{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;min-width:0}
+#dock .grp{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;min-width:0}
+#dock .grp input[type=range]{width:92px;flex:none}
+.mini{font-size:11.5px;color:var(--ink-3)}
+.readout{font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+#play{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:5px 13px;font-weight:620;font-size:12.5px;white-space:nowrap}
+.toggle{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2)}
+#sources{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100vw - 32px));max-height:min(78vh,620px);overflow:auto;padding:16px 18px;z-index:4;pointer-events:auto}
+#sources header{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#sources h3{margin:0 0 8px;font-family:var(--f-display);font-stretch:85%;font-size:17px}
+#sources p,#sources li{font-size:12.5px;color:var(--ink-2);margin:0 0 7px}
+#sources ul{margin:0 0 8px;padding-left:18px}
+#sources a{color:var(--accent)}
+@media (max-width:1100px){ #dock .top{flex-wrap:wrap} #dock .times{width:100%} }
+@media (max-height:760px) and (min-width:761px){ #minimap{width:140px;height:140px} #cursor{max-width:140px} #views .label{display:none} }
+@media (max-height:820px) and (min-width:761px){ #info .stripe,#info .stripe-note{display:none} #info{padding:11px 14px 12px} #info h2{font-size:20px} #info .model{margin:1px 0 7px} }
+@media (max-width:760px){
+  #ui{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto auto;grid-template-areas:"top" "." "info" "views" "dock";gap:8px}
+  #left,#right{display:contents}
+  #title{grid-area:top;margin-right:60px;padding:10px 12px}
+  #title h1{font-size:20px}
+  #title .spec{font-size:12.5px}
+  #title .where{display:none}
+  #nav{grid-area:top;justify-self:end;align-self:start;padding:6px}
+  #minimap,#cursor{display:none}
+  #info{grid-area:info;max-height:34vh;overflow:auto;padding:10px 12px}
+  #info .stripe,#info .stripe-note,#info .model,#info .k{display:none}
+  #views{grid-area:views;padding:8px;gap:6px}
+  #views .label{display:none}
+  #views .row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent);padding-right:18px}
+  #wea-list{grid-template-columns:repeat(6,minmax(0,1fr))}
+  #dock{grid-area:dock;padding:9px 12px 8px;gap:7px}
+  #dock .top{flex-wrap:wrap}
+  #dock .top input[type=range]{min-width:50px}
+  #dock .top .label{display:none}
+  #dock .times{width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  #more{display:inline-block}
+  #dock:not(.open) #dock-more{display:none}
+  #dock .grp input[type=range]{width:78px}
+}
+/* night: the panels turn dark with the sky */
+#ui.night{--ink:#e6eef1; --ink-2:#a9b9c0; --ink-3:#7f9199; --glass:rgba(12,20,26,.92); --glass-2:rgba(20,32,40,.9); --line:rgba(230,238,241,.14);
+  --accent:#6CC3DE; --accent-ink:#08161c; --focus:#8ED6EE; --signal:#ff6b5e; color-scheme:dark}
+#ui.night .panel{color:var(--ink)}
+/* loading */
+#loading{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(120% 90% at 50% 70%,#2b4452 0%,#12212a 55%,#0b141a 100%);color:#e6eef1;transition:opacity .8s ease;z-index:5}
+#loading.done{opacity:0;pointer-events:none}
+#loading .box{width:min(340px,calc(100vw - 48px));display:grid;gap:10px}
+#loading h1{margin:0;font-family:var(--f-display);font-stretch:88%;font-weight:720;font-size:30px}
+#loading .bar{height:3px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
+#load-bar{height:100%;background:#6CC3DE;transform-origin:left;transform:scaleX(0);transition:transform .35s ease}
+#load-msg{font-size:13px;color:#a9b9c0}
+#loading.error #load-msg{color:#ffb1a8}
+@media (prefers-reduced-motion:reduce){#loading{transition:none}#load-bar{transition:none}}
+</style>
+<!--/HEAD-->
+<!--BODY-->
+<div id="app">
+  <canvas id="c" aria-label="3D view of Windpark Hoßkirch. Drag to orbit, right-drag or two fingers to pan, scroll or pinch to zoom."></canvas>
+  <div id="ui">
+    <div id="left">
+      <section id="title" class="panel">
+        <h1>Windpark Hoßkirch</h1>
+        <p class="spec">6 × Vestas V172-7.2 MW · <b>43.2 MW</b></p>
+        <p class="where">Wagenhart forest, Hoßkirch · Landkreis Ravensburg · hub 175 m, tip 261 m · in operation since 2025</p>
+      </section>
+      <nav id="views" class="panel" aria-label="Viewpoints">
+        <span class="label">Viewpoints</span>
+        <div class="row">
+          <button class="chip" type="button" data-view="overview">Overview</button>
+          <button class="chip" type="button" data-view="top">Map</button>
+          <button class="chip" type="button" data-view="hosskirch" title="From the fields between Königseggwald and Hoßkirch, 3.5 km south-south-west of the park">From the south</button>
+          <button class="chip" type="button" data-view="nacelle">On WEA 3</button>
+          <button class="chip" type="button" data-view="foot">Tower foot</button>
+        </div>
+        <span class="label">Turbines · WEA</span>
+        <div id="wea-list"></div>
+      </nav>
+    </div>
+
+    <div id="right">
+      <div id="nav" class="panel">
+        <button id="compass" type="button" aria-label="Face north" title="Face north">
+          <svg id="compass-needle" viewBox="-15 -15 30 30" aria-hidden="true"><path d="M0-13 5 0H-5Z" fill="var(--signal)"/><path d="M0 13 5 0H-5Z" fill="var(--ink-3)"/></svg>
+        </button>
+        <canvas id="minimap" width="256" height="256" aria-label="Map of the park. Click to move there."></canvas>
+        <p id="cursor" aria-live="off">Hover the landscape for coordinates</p>
+      </div>
+      <aside id="info" class="panel" hidden aria-live="polite">
+        <header><h2 id="i-id">WEA</h2><button id="info-close" type="button" aria-label="Close">×</button></header>
+        <p class="model">Vestas V172-7.2 MW · Max Bögl hybrid tower</p>
+        <dl>
+          <dt class="k">Hub height</dt><dd class="k">175 m</dd>
+          <dt class="k">Rotor diameter</dt><dd class="k">172 m</dd>
+          <dt class="k">Tip height</dt><dd class="k">261 m</dd>
+          <dt>Tower foot</dt><dd id="i-ground">–</dd>
+          <dt>Blade tip, highest</dt><dd id="i-tip">–</dd>
+          <dt>Commissioned</dt><dd id="i-date">–</dd>
+          <dt>Lat, lon</dt><dd class="small" id="i-pos">–</dd>
+          <dt><abbr title="Marktstammdatenregister, the German market master data register">MaStR no.</abbr></dt><dd class="small" id="i-mastr">–</dd>
+        </dl>
+        <div class="stripe" aria-hidden="true"></div>
+        <p class="stripe-note">Blade, root to tip: red–grey–red marking, 3 × 6 m</p>
+      </aside>
+    </div>
+
+    <section id="dock" class="panel" aria-label="Time and wind">
+      <div class="top">
+        <span class="label">19 Jun 2026</span>
+        <output id="time-out" for="time">19:40</output>
+        <input id="time" type="range" min="0" max="1439" step="1" aria-label="Time of day (CEST)">
+        <button id="play" type="button" aria-pressed="false">Play day</button>
+        <button id="more" class="chip" type="button" aria-expanded="false" aria-controls="dock-more">Wind &amp; lights</button>
+        <div class="grp times">
+          <button class="chip" type="button" data-time="360">Morning</button>
+          <button class="chip" type="button" data-time="780">Noon</button>
+          <button class="chip" type="button" data-time="1283">Sunset</button>
+          <button class="chip" type="button" data-time="1395">Night</button>
+        </div>
+      </div>
+      <div class="bottom" id="dock-more">
+        <div class="grp">
+          <label class="mini" for="wind-dir">Wind from</label>
+          <input id="wind-dir" type="range" min="0" max="359" step="1">
+          <label class="mini" for="wind-spd">Speed</label>
+          <input id="wind-spd" type="range" min="0" max="28" step="0.5">
+          <output id="wind-out" class="readout">WSW 7.5 m/s</output>
+          <output id="rpm-out" class="readout">6.7 rpm</output>
+        </div>
+        <label class="toggle"><input id="lights" type="checkbox" checked> Aviation lights</label>
+        <output id="sun-out" class="readout">Sun</output>
+        <span class="links"><a id="route-link" href="%%ROUTE_URL%%" target="_blank" rel="noopener">Blade route survey</a>
+        <button type="button" id="src-btn" aria-expanded="false" aria-controls="sources">Sources and method</button></span>
+      </div>
+    </section>
+
+    <section id="sources" class="panel" hidden>
+      <header><h3>How this was built</h3><button id="src-close" type="button" aria-label="Close">×</button></header>
+      <p>Every object sits at its mapped position in a local transverse Mercator frame centred on the park (47.9595° N, 9.4452° E, WGS84).</p>
+      <ul>
+        <li><b>Turbines:</b> OpenStreetMap power=generator nodes (7-decimal coordinates, MaStR IDs, commissioning dates from start_date), cross-checked against the crane pads and tower glint in Sentinel-2 imagery. Hub 175 m, rotor Ø 172 m (86 m along each blade; with the 6° cone and pre-bend the swept circle at rest is Ø 170 m), upper blade tip 261 m, Max Bögl hybrid tower (103 m concrete), AVV 2020 marking and lights. Tower-foot elevations: German Wikipedia.</li>
+        <li><b>Terrain:</b> Copernicus GLO-30 surface model with the forest canopy removed and corrected inside the forest to the published tower-foot elevations; crane pads and foundations levelled with embankments, lakes at their GLO-30 water surface; fine 3–8 m terrain over the pads and lakes.</li>
+        <li><b>Map features:</b> roads, tracks, buildings, forest, water, orchards, hedges and the 110 kV lines from OpenStreetMap via Overture Maps (2026-09-23), building heights from OSM and Microsoft ML.</li>
+        <li><b>Ground colour:</b> Copernicus Sentinel-2 L2A surface reflectance of 19 June 2026, the day before the park's opening ceremony; the same scene traces the crane-pad clearings and marks clear-cuts and young growth in the forest.</li>
+        <li><b>Horizon:</b> terrain to ±64 km and the Alpine skyline to 260 km from AWS Terrain Tiles (Earth curvature and refraction included); forests and towns out there from ESA WorldCover 2021.</li>
+      </ul>
+      <p>Keys: drag to orbit, right-drag to pan, scroll to zoom, W A S D to move, Q / E to turn, R / F to tilt, + / − to zoom, H to hide the panels.</p>
+      <p>© OpenStreetMap contributors (ODbL) · Overture Maps · contains modified Copernicus Sentinel-2 data 2026 · Copernicus DEM © DLR e.V. / Airbus DS, provided under COPERNICUS by the EU and ESA · AWS Terrain Tiles · ESA WorldCover 2021 · three.js (MIT).</p>
+    </section>
+  </div>
+
+  <div id="loading" role="status"><div class="box"><h1>Windpark Hoßkirch</h1><div class="bar"><div id="load-bar"></div></div><div id="load-msg">Loading</div></div></div>
+</div>
+<script id="scene-header" type="application/json">/*__HEADER__*/</script>
+<script id="scene-bin" type="application/octet-stream">__BIN__</script>
+<script id="img-core" type="application/octet-stream">__IMG_CORE__</script>
+<script id="img-wide" type="application/octet-stream">__IMG_WIDE__</script>
+<script type="module">/*__APP__*/</script>
+<!--/BODY-->
