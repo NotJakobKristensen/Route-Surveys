@@ -2,42 +2,26 @@
 
 Route survey for the 84.3 m V172 blades from the blade plant in Goleniów (PL) to the crane pads of Windpark Hoßkirch, 935 km: the whole route on a 3D map, a road view along every kilometre on official aerial photos with 3D roads, bridges, signs and the convoy, and the difficult passages driven in detail with a swept-path model.
 
-## 🆕 Version 3 (2026-10-12, evening): faster big passages, no loading hang
+## Current version: 3 (2026-10-12)
 
-[`hosskirch-blade-route-v3.html`](hosskirch-blade-route-v3.html) builds on version 2:
-- **Big passages open much faster on a slow graphics card.** While a view opens, the page stops drawing until the passage's data
-  is on the graphics card, instead of handing it over one small portion per frame. Without a graphics card (software drawing),
-  the largest Hoßkirch passage, the plant exit, now opens in about 25 s instead of about 78 s in version 2.
-- **No more "loading" hang.** The background data reader is only given up when it fails or stops answering, never while it is
-  still working.
-- **Smoother fast driving** (the next stretch of the swept path is prepared ahead) and **vehicle changes without a freeze** (the new
-  convoy is built beside the one shown, then swapped in).
+[`hosskirch-blade-route.html`](hosskirch-blade-route.html) is version 3, the newest; only the newest version is kept here (owner, 2026-10-15), the
+earlier ones are in the git history. Compared with the first version:
+- **Big passages open much faster on a slow graphics card**: while a view opens, the page stops drawing until the passage's data
+  is on the graphics card (without a graphics card, the largest Hoßkirch passage, the plant exit, opens in about 25 s instead of 78 s).
+- **No "loading" hang**, **smoother fast driving** (the next stretch of the swept path is prepared ahead) and **vehicle changes
+  without a freeze** (the new convoy is built beside the one shown, then swapped in); 3D shaders prepared ahead, a frame-rate
+  overlay with **P** / **Shift+P** (or `?perf` in the address).
 
-The measurements are unchanged: compared with the current page on all 12 passages and along the road view, with 0 differences.
-Version 2 and the current page stay as they are; all three use the same `r/` and `h/`. To open v3: in this folder run
-`python3 -m http.server 8000` and open `http://localhost:8000/hosskirch-blade-route-v3.html`.
-
-## Version 2 (2026-10-12): smoother, same survey
-
-[`hosskirch-blade-route-v2.html`](hosskirch-blade-route-v2.html) is the same survey after a performance pass: the 3D shaders are prepared ahead, so a view
-does not stutter the first time it opens; the road-view data is unpacked in the background and handed to the graphics card in small
-steps; a frame-rate overlay opens with **P** / **Shift+P** (or `?perf` in the address). The measurements are unchanged:
-carriageway widths and edges, trees, signs, signals, clear heights and swept paths were compared with the current page on all
-12 passages and along the road view, with 0 differences.
-
-The current page [`hosskirch-blade-route.html`](hosskirch-blade-route.html) stays as it is, so you can always go back to it; both use the same `r/` and
-`h/`. The browser link and the website below still show the current page. To open v2: in this folder run
-`python3 -m http.server 8000` and open `http://localhost:8000/hosskirch-blade-route-v2.html`. Opened from disk, it loads `r/` and `h/` from
-hosskirch.netlify.app like the current page (only while that website is online).
+The measurements are unchanged: compared with the first version on all 12 passages and along the road view, with 0 differences.
 
 ## ▶ [Open in the browser](https://claude.ai/artifact/9EShdBZTbkd99JhSCQwpth)
 
-https://claude.ai/artifact/9EShdBZTbkd99JhSCQwpth — opens on claude.ai with everything included.
+https://claude.ai/artifact/9EShdBZTbkd99JhSCQwpth — opens on claude.ai with everything included; it still shows the first version (version 3 is not published there yet).
 
 ## 🌐 [Open the website](https://hosskirch.netlify.app)
 
-https://hosskirch.netlify.app — the same page on its own website: no login, no Claude branding, updated automatically from this
-folder whenever `main` changes.
+https://hosskirch.netlify.app — the page on its own website: no login, no Claude branding. It is not connected to this repository, so it shows
+the version it was last deployed with (the first version).
 
 **Downloaded the page file?** It is the same page as the browser link and the website, but the road view and the
 survey-grade passages are in the folders `r/` and `h/` (about 152 MB). Opened from disk, the page loads them from the website

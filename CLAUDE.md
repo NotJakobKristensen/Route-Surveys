@@ -5,8 +5,8 @@
 - **Measurement fidelity is the point of these pages**: road widths and edges, trees, signs, signals, clear heights and swept paths
   must not change through code or performance work. Prove it (fingerprints of the decoded data, meshes, swept paths and labels of
   every passage and several road points, against the previous build) before publishing.
-- **Published versions are never overwritten**: a new build goes next to the old ones as `<page>-vN.html` (all versions share `r/`
-  and `h/`), with a short note in the page folder's README.
+- **Only the newest version is kept** (owner, 2026-10-15): a new build replaces `<page>.html` in its page folder, with a short note
+  on what changed in the folder's README; earlier versions stay in the git history. Fidelity is still proven against the previous build.
 - The packs `r/` and `h/` are built by the tools into `dist/` and copied next to the page by the build; the page fetches them
   relative to itself, and opened from disk falls back to the website named in the build.
 - Netlify: the page folders carry `netlify.toml`, `_redirects`, `_headers` for drag-and-drop or a Git-connected site (base
