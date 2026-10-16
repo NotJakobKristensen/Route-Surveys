@@ -1,6 +1,6 @@
 // Route survey page: the whole route on a 3D map, every survey point as a true-scale 3D scene with the convoy.
 import * as THREE from 'three';
-import { decodeRoute } from './rdata.js';
+import { decodeRoute, decodeBlade } from './rdata.js';
 import { makeMap, EXAG } from './mapview.js';
 import { makeHot, loadHD, preConvoy as preConvoyHot } from './hotview.js';
 import { makeRoad, preConvoy as preConvoyRoad } from './roadview.js';
@@ -416,6 +416,7 @@ async function main() {
     <p class="lead"><b>In short:</b> the road's edges were traced on the states' official aerial photos along the whole route (where an edge is hidden it is bridged and marked) and a swept-path model of this convoy drove all of it; ${n.all} structures over it are measured in laser data or surface models wherever the states publish them, and every finding links to its place on the map. Sources: the official aerial photos of ${andJ(order.map(stName))}, the laser terrain and surface models of ${andJ(order.filter((c) => !noH.includes(c)).map(stName))}${lzN ? `, laser point clouds of ${andJ(lzSt.map(stName))}` : ''}, OpenStreetMap / Overture Maps, Copernicus${dRw ? ', Autobahn GmbH roadworks' : ''}${hots.some((h) => h.pix) ? ', Panoramax street photos' : ''} (all below). Not covered: ${andJ(gaps)} — see "What may be missing".</p>
     <h4>Why it can be relied on</h4>
     <ul><li><b>The road is traced on the photo, not assumed.</b> Both edges of the carriageway were traced on the states' official aerial photos (20–25&nbsp;cm per pixel) along ${photoKm < header.km - 1 ? `${Math.round(photoKm)} of the ${Math.round(header.km)}` : `all ${Math.round(header.km)}`}&nbsp;km; where trees, shadows, vehicles or bridges hide an edge${EG ? ` (on ${pc(EG.bridged)}&nbsp;% of the metres, in runs of 200&nbsp;m or more on ${pc(EG.runs200)}&nbsp;% of the route)` : ''} it is bridged between the measured points on both sides and marked "bridged" in the road card. A swept-path model of the transporter drove the whole route, and every 10&nbsp;m is rated.</li>
+      <li><b>The blade beyond the road edge is one measure, in the passage and in the drive.</b> The vehicle of this page drives the convoy's line; its blade, as drawn, is taken at every place it passes (between the metres too, so its swing leaves no gaps) and measured against the carriageway's edges traced on the photo and, at the passages, the paved surface traced there (a junction mouth or a slip road is road, not verge). Less than 0.3&nbsp;m beyond the traced edge, its tolerance, is not counted. The passage view paints that area and its card gives its figures; driving the passage shows the same area and figures.</li>
     <li><b>Each structure over the road is measured where the data allow.</b> ${n.all} structures: ${[nLaz && `${nLaz} in the airborne laser point cloud`, nDgm && `${nDgm} against the 1&nbsp;m laser terrain`, nDom && `${nDom} in the surface model`, nSig && `${nSig} by a signed limit`, n.unknown && `${n.unknown} not measured (no height data)`].filter(Boolean).join(', ')}. For your load (${VEH.height.toFixed(2)}&nbsp;m + ${VEH.heightMargin.toFixed(2)}&nbsp;m): <b class="ok">${n.pass} pass</b>, <b>${n.check} to check on site</b>, <b class="warn">${n.fail} too low or probably too low</b>.${T.length ? ` Plus ${tunCount(T)}, with estimated or standard clear heights.` : ''}</li>
     <li><b>The passages were chosen by the data${blind ? '' : ' and the reports'}.</b> The ${np} passages${start ? ' (plus the start at the plant)' : ''} are ${blind ? 'where the ratings say it gets difficult' : 'the places named in the press and police reports and where the ratings say it gets difficult'}. Each is shown in 3D on survey-grade official data and was reviewed on the aerial photo.</li>
     <li><b>Open, dated data only.</b> Road network from Overture Maps ${esc(dOv)}${dOp ? `, map data of ${esc(dOp)}` : ''}${dRw ? `, roadworks of ${esc(dRw)}` : ''}; every source is listed below, so each finding can be checked. ${blind ? 'No reports or local knowledge went into it.' : 'The fixed points of the route come from press and police reports (listed at the end).'}</li></ul>
@@ -797,7 +798,7 @@ async function main() {
     if (HOT) { HOT.scene.remove(sun, sun.target, hemi, sky); HOT.dispose(); HOT = null; }
     hotTagEls.splice(0).forEach((e) => e.remove());
     const fresh = !ROAD || Math.abs(k * 1000 - roadS) > 15000;
-    if (fresh) { closeRoad(); ROAD = makeRoad(packIndex, FAR_ROAD, { base: PACK_BASE, vehicle: VEH, renderer, warm: WARM, probe: PROBE, cam: hcam }); ROAD.convoy.setDims(VEH); ROAD.scene.add(sun, sun.target, hemi, sky); ROAD.setRoads3D($('#t-roads3d').checked); }
+    if (fresh) { closeRoad(); ROAD = makeRoad(packIndex, FAR_ROAD, { base: PACK_BASE, vehicle: VEH, renderer, warm: WARM, probe: PROBE, cam: hcam, passages: hots.map((h) => ({ id: h.id, a: h.km[0] * 1000, b: h.km[1] * 1000 })), bladeOf: (id) => decodeBlade(R, id) }); ROAD.convoy.setDims(VEH); ROAD.scene.add(sun, sun.target, hemi, sky); ROAD.setRoads3D($('#t-roads3d').checked); }
     roadS = k * 1000;
     card.innerHTML = `<header><div><span class="label">The road · km ${k.toFixed(1)}</span><h2>Loading the aerial photo…</h2></div><button id="close-card" type="button" aria-label="Back to the route">×</button></header>`;
     $('#close-card').onclick = goRoute;
@@ -993,7 +994,7 @@ async function main() {
     const sv = ROAD.survey(roadS); if (!sv) return;
     const k = roadS / 1000, l = legAt(k);
     const lv = ROAD.liveAt(roadS);
-    const width = sv.L + sv.R, wm = lv ? lv.wc : sv.wm, out = lv ? Math.max(lv.bL, lv.bR) : Math.max(sv.bL || 0, sv.bR || 0);
+    const width = sv.L + sv.R, wm = lv ? lv.wc : sv.wm, bz = ROAD.bladeAtS(roadS), out = bz != null ? bz : Math.max(sv.bL || 0, sv.bR || 0);
     const q0 = ROAD.at(roadS), dv0 = q0 && q0.dv != null ? q0.dv : null;          // the planned tractor line (keep right)
     const tnl = ROAD.tunnelAt ? ROAD.tunnelAt(roadS) : null;                        // in a tunnel: its edges are not measured
     const curve = Number.isFinite(sv.Rc) && sv.Rc < 2500 ? `${Math.round(sv.Rc)}&nbsp;m` : 'straight';

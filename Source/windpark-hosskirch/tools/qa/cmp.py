@@ -8,6 +8,9 @@ from PIL import Image
 a, b = sys.argv[1], sys.argv[2]
 A = json.load(open(os.path.join(a, 'fid.json'))); B = json.load(open(os.path.join(b, 'fid.json')))
 bad = 0
+BLADE = os.environ.get('BLADE') == '1'
+def info(name, x, y):
+    print(('same' if x == y else 'CHANGED (blade result)') + ' ' + name)
 def chk(name, x, y):
     global bad
     ok = x == y
@@ -18,9 +21,13 @@ for ra, rb in zip(A['road'], B['road']):
     chk(f'road km {k}: packs', sorted(ra['packs']), sorted(rb['packs']))
     for p in sorted(set(ra['packs']) & set(rb['packs']), key=int):
         for f in ['hdr', 'A', 'bmps', 'meshes']: chk(f'road km {k}: pack {p} {f}', ra['packs'][p][f], rb['packs'][p][f])
-    for f in ['live', 'scene', 'samples', 'gates', 'objects', 'survey']: chk(f'road km {k}: {f}', ra.get(f), rb.get(f))
+    # BLADE=1: the blade beyond the edge may differ (its drawing in the road view, its painted area in the passages): compared
+    # apart, everything else must match
+    for f in (['live', 'sceneNoBlade', 'samples', 'gates', 'objects', 'survey'] if BLADE else ['live', 'scene', 'samples', 'gates', 'objects', 'survey']): chk(f'road km {k}: {f}', ra.get(f), rb.get(f))
+    if BLADE: info(f'road km {k}: bladeDrawn', ra.get('bladeDrawn'), rb.get('bladeDrawn'))
 for ha, hb in zip(A['hot'], B['hot']):
-    for f in ['scene', 'data', 'poses', 'swept', 'tags', 'ntags', 'trees', 'pathLength', 'markers', 'out']: chk(f"hot {ha['id']}: {f}", ha.get(f), hb.get(f))
+    for f in (['scene', 'dataNoBlade', 'poses', 'sweptNoBlade', 'tags', 'ntags', 'trees', 'pathLength', 'markers', 'out'] if BLADE else ['scene', 'data', 'poses', 'swept', 'tags', 'ntags', 'trees', 'pathLength', 'markers', 'out']): chk(f"hot {ha['id']}: {f}", ha.get(f), hb.get(f))
+    if BLADE: info(f"hot {ha['id']}: bladeArea", ha.get('bladeArea'), hb.get('bladeArea'))
 print('errors base', A['errs'][:3], 'new', B['errs'][:3])
 print('fingerprint mismatches:', bad)
 for fa in sorted(glob.glob(os.path.join(a, '*_0.png'))):

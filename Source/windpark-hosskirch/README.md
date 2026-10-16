@@ -277,8 +277,27 @@ python route_signs.py                        # speed limits, town signs, height 
                                              # speeds → corr/signs.json, corr/speed_1m.npz
                                              # (SIGNS_ONLY=1 route_pack.py / route_hd_pack.py: refresh the packs' signs only)
 python route_pack.py && python route_hd_pack.py   # → dist/r/, dist/h/
-cd ../.. && node windpark-hosskirch/tools/build_route.mjs
+cd ../.. && node windpark-hosskirch/tools/route_blade.mjs   # the blade beyond the edge at every passage and lane stretch → .cache/route/corr/blade_edge.json
+cd windpark-hosskirch/tools && python route_bake.py && cd ../..   # (again: the passages' blade figures and areas from it)
+node windpark-hosskirch/tools/build_route.mjs
 ```
+
+**The blade beyond the road edge** (`src/route/bladeedge.js`, one model for the passage view, the drive view and the bake):
+the page's vehicle drives the convoy's line (the swept-path model of `vehicle.js`, which chooses the rear dolly's steering);
+the blade as drawn (`blade.js`) is taken at every place it passes — the metre poses and the places between them as the convoy
+is animated, as many as keep its ends' moves across it within 25 cm — and measured along normals of the convoy's line (one per
+metre, more in sharp bends), each normal holding the points whose nearest normal it is. Beyond the edge is what lies outside the
+carriageway traced on the aerial photo (the band between the edges left and right of the line) and outside the paved surface
+traced on a passage's photo (`h/<id>.json` pv: junction mouths, slip roads, lay-bys), by more than the traced edge's tolerance
+(0.3 m). `tools/route_blade.mjs` runs it in Node on each passage's window (from where *Drive this passage* starts to 300 m
+beyond the passage) with the road packs as the road view reads them; `route_bake.py` takes the result for the passage view's
+painted area (layer `h_<id>_bout`), the card's figures (`bladeOut`, `bladeArea`, `lane.krBlade`), the trees in the blade's
+swing, the lane list's figures and the drive view's copy (section `h_<id>_blade`: the stretches beyond on the passage's normals,
+the depth per front-axle metre, the traced paved surface). On a passage's stretch the drive view shows that copy with the
+default convoy; elsewhere, and with another vehicle, the sweep worker measures each window the same way.
+Done for Münster (Lech) (2026-10-16). Hoßkirch is not re-run yet and its page is unchanged: rebuild it only after
+`route_blade.mjs` and `route_bake.py` have run for it (ROUTE_ROOT unset), else its drive view measures the new way while its
+passages still paint the old area.
 
 ### Another route
 

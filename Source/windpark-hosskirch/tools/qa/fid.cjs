@@ -64,6 +64,10 @@ const SHOT_HOTS = { hk: ['gaisbeuren', 'niederbiegen', 'forest'], ml: ['muenster
     window.__sha = sha;
     window.__drawables = (root, skip) => { const L = []; root.traverse((o) => { if (skip && skip(o)) return; if (o.geometry && (o.isMesh || o.isLine || o.isPoints || o.isSprite)) L.push(o); }); return L; };
     window.__under = (o, g) => { for (let q = o; q; q = q.parent) if (q === g) return true; return false; };
+    // the blade's drawing in the road view (its outer sweep, where it reaches beyond the edge): the new build tags its meshes,
+    // the builds before it drew them with these materials (fingerprinted apart: the blade beyond the edge may change)
+    window.__isBlade = (o) => { if (o.userData && o.userData.blade) return true; const m = o.material; if (!m || m.type !== 'MeshBasicMaterial' || o.renderOrder !== 2 || !m.color) return false;
+      const c = m.color.getHex(); return (c === 0xff2a1a && Math.abs(m.opacity - 0.4) < 1e-6) || c === 0xff3020 || (c === 0xff3b30 && Math.abs(m.opacity - 0.7) < 1e-6); };
   });
   const out = { url, route, road: [], hot: [], errs };
   // ---------------------------------------------------------------- road points: packs (decoded data and meshes), live swept path, the rest of the scene
@@ -93,6 +97,8 @@ const SHOT_HOTS = { hk: ['gaisbeuren', 'niederbiegen', 'forest'], ml: ['muenster
       // everything else in the scene (far landscape, live swept path drawn, warm-up gone), the convoy left out (it moves)
       const rest = window.__drawables(Q.scene, (o) => window.__under(o, conv) || sky.includes(o) || (Q.warm && window.__under(o, Q.warm)));      // (the warm-up set: never drawn)
       res.scene = await window.__setHash(rest);
+      // the same without the blade's drawing, and that drawing on its own
+      res.sceneNoBlade = await window.__setHash(rest.filter((o) => !window.__isBlade(o))); res.bladeDrawn = await window.__setHash(rest.filter((o) => window.__isBlade(o)));
       res.samples = await window.__sha([new Float64Array(Q.samples.flatMap((s) => [s.s, s.x, s.y, s.nx, s.ny, s.z, s.sl, s.L, s.R, s.off, s.sh, s.dv ?? NaN, s.oc, s.ow, s.lq, s.tw]))]);
       res.gates = Q.gates.map((g) => [g.s, g.v, g.c]).length; res.objects = Q.objects.length; res.survey = JSON.stringify(Q.survey(res.km * 1000));
       return res;
@@ -126,6 +132,11 @@ const SHOT_HOTS = { hk: ['gaisbeuren', 'niederbiegen', 'forest'], ml: ['muenster
       const D = H.H; res.data = await window.__sha([D.path, D.poses, D.trees, JSON.stringify(D.swept), JSON.stringify(D.roads), JSON.stringify(D.bld), JSON.stringify(D.obj), JSON.stringify(D.bar), JSON.stringify(D.water), D.ground.z]);
       const poses = []; for (let i = 0; i <= 200; i++) poses.push(...H.poseAt(i / 200)); res.poses = await window.__sha([new Float64Array(poses)]);
       res.swept = await window.__sha([JSON.stringify(D.swept)]);
+      // the passage's data and painted areas without the blade beyond the edge (swept kind 3, or its own layer), and that apart
+      const s3 = D.swept.filter((f) => f.a[0] !== 3);
+      res.dataNoBlade = await window.__sha([D.path, D.poses, D.trees, JSON.stringify(s3), JSON.stringify(D.roads), JSON.stringify(D.bld), JSON.stringify(D.obj), JSON.stringify(D.bar), JSON.stringify(D.water), D.ground.z]);
+      res.sweptNoBlade = await window.__sha([JSON.stringify(s3)]);
+      res.bladeArea = await window.__sha([JSON.stringify(D.bout || D.swept.filter((f) => f.a[0] === 3))]);
       res.tags = await window.__sha([JSON.stringify(H.tags)]); res.ntags = H.tags.length; res.trees = H.treeCount; res.pathLength = H.pathLength;
       res.markers = await window.__setHash(window.__drawables(H.markers)).then((x) => x.n);
       res.out = document.querySelector('#hot-out').textContent;

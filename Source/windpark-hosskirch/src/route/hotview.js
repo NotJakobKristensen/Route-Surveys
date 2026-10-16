@@ -57,7 +57,8 @@ function overlayCanvas(H, ext) {
   { const q = pat.getContext('2d'); q.fillStyle = 'rgba(230,40,30,0.22)'; q.fillRect(0, 0, 16, 16); q.strokeStyle = 'rgba(255,60,40,0.55)'; q.lineWidth = 2.2;
     q.beginPath(); q.moveTo(-4, 20); q.lineTo(20, -4); q.moveTo(-4, 4); q.lineTo(4, -4); q.moveTo(12, 20); q.lineTo(20, 12); q.stroke(); }
   const hatch = g.createPattern(pat, 'repeat');
-  const by = (k) => pathOf(H.swept.filter((f) => f.a[0] === k).flatMap((f) => f.rings));
+  // (the blade beyond the edge from its own layer where the data have one: bladeedge.js, as the drive view draws it)
+  const by = (k) => pathOf((k === 3 && H.bout ? H.bout : H.swept.filter((f) => f.a[0] === k)).flatMap((f) => f.rings));
   // each class as one path (no alpha build-up where the sampled footprints overlap)
   g.fillStyle = hatch; g.fill(by(1), 'nonzero');
   g.fillStyle = 'rgba(255,170,30,0.6)'; g.fill(by(0), 'nonzero');

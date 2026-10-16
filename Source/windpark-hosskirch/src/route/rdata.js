@@ -71,6 +71,7 @@ export function decodeHot(R, id) {
     path: R.layer(p + 'path')[0].rings[0],
     poses: poses(R.sec(p + 'poses'), S[p + 'poses'].n, S[p + 'poses'].q),
     swept: R.layer(p + 'swept'),
+    bout: S[p + 'bout'] ? R.layer(p + 'bout') : null,          // the blade beyond the edge (route_blade.mjs), where baked so
   };
 }
 
@@ -83,4 +84,27 @@ export function sampler(G) {
     const ix = fx | 0, iy = fy | 0, tx = fx - ix, ty = fy - iy, i = iy * nx + ix;
     return (z[i] * (1 - tx) + z[i + 1] * tx) * (1 - ty) + (z[i + nx] * (1 - tx) + z[i + nx + 1] * tx) * ty;
   };
+}
+
+// the blade beyond the edge at a passage (tools/route_bake.py, section h_<id>_blade, from route_blade.mjs): the stretches
+// beyond on the normals of the passage's window (place along the line in 1/sub m from the window's start sa, from / to in
+// m along the normal, left +), how far the blade reaches beyond per front-axle metre ia … ib, and the paved surface traced
+// on its photo along those normals (for the page's own sweep of another vehicle); null where the data have none
+export function decodeBlade(R, id) {
+  const m = R.header.sections[`h_${id}_blade`]; if (!m) return null;
+  const r = new Reader(R.sec(`h_${id}_blade`));
+  // rows, one per normal: its place, then intervals [start, length] in cm, each the difference from the row before's of that rank
+  const rows = (q = 0.01) => {
+    const nrow = r.var(), u = [], ru = [], at = [0], d = []; let pu = 0, prev = [];
+    for (let i = 0; i < nrow; i++) {
+      pu += r.var(); const c = r.var(), cur = [];
+      for (let j = 0; j < c; j++) { const p = prev[j] || [0, 0], a = p[0] + r.svar(), l = p[1] + r.svar(); cur.push([a, l]); u.push(pu); d.push(a * q, (a + l) * q); }
+      prev = cur; ru.push(pu); at.push(d.length / 2);
+    }
+    return { u, ru, at, d };
+  };
+  const R1 = rows(), runs = { u: Int32Array.from(R1.u), d0: Float32Array.from(R1.d.filter((_, i) => i % 2 === 0)), d1: Float32Array.from(R1.d.filter((_, i) => i % 2 === 1)) };
+  const depth = new Float32Array(m.ib - m.ia + 1); for (let c = r.var(), i = -1; c > 0; c--) { i += r.var() + 1; depth[i] = r.var() / 100; }
+  const R2 = rows(m.pq || 0.01);
+  return { sa: m.sa, n: m.n, ia: m.ia, ib: m.ib, sub: m.sub, runs, depth, paved: { u: Int32Array.from(R2.ru), at: Int32Array.from(R2.at), d: Float32Array.from(R2.d) } };
 }

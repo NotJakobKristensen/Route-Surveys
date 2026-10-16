@@ -29,6 +29,8 @@ os.makedirs(OUT, exist_ok=True)
 utm = Transformer.from_crs('EPSG:32633', 'EPSG:4326', always_xy=True)
 meta = json.load(open(C + 'map_meta.json'))
 mfw = Transformer.from_crs('EPSG:4326', meta['proj'], always_xy=True)
+# the blade beyond the edge at every passage and lane stretch (route_blade.mjs: the page's own model, as the drive view has it)
+BLADE = json.load(open(C + 'corr/blade_edge.json')) if os.path.exists(C + 'corr/blade_edge.json') else None
 
 
 class Writer:
@@ -508,6 +510,43 @@ for h in HOT:
     sm['wheel_out_max'], sm['wheel_out_area'] = depth_area(wo, D['paved'])
     D['wheel_out'] = wo
     sm['blade_out_max'], sm['blade_out_area'] = depth_area(D['blade_out'], D['paved'])
+    # the blade beyond the edge by the page's model (route_blade.mjs): the convoy of the page's vehicle driving the passage
+    # along the convoy's line, the blade as drawn at every place it takes, measured against the carriageway's measured edges
+    # and the paved surface traced on the photo; the drive view shows the same (section h_<id>_blade). Its area replaces the
+    # one above (the blade's outline every 2 m against the mapped roads), and the trees in the blade's swing follow it
+    BE = (BLADE or {}).get('hot', {}).get(hid)
+    if BE is not None:
+        _tf = Transformer.from_crs('EPSG:32633', D['proj'], always_xy=True)
+        _q = []
+        for c_ in BE['cells']:
+            _x, _y = _tf.transform(c_[0::2], c_[1::2]); _q.append(Polygon(list(zip(_x, _y))).buffer(0))
+        D['blade_out'] = unary_union(_q).buffer(0) if _q else Polygon()
+        sm['blade_out_max'], sm['blade_out_area'] = float(BE['max']), float(BE['area'])
+        if sm.get('lane'): sm['lane']['kr_blade_out_max'] = float(BE['kr']['max'])
+        from shapely.prepared import prep
+        _hd = D.get('hd') or {}
+        _tpts, _tarea = [], 0.0
+        if _hd.get('trees') is not None:
+            if not D['blade_out'].is_empty:
+                _bo = prep(D['blade_out'])
+                for x_, y_, h_, r_ in _hd['trees']:
+                    _cr = Point(x_, y_).buffer(float(r_), 8)
+                    if _bo.intersects(_cr): _tarea += _cr.intersection(D['blade_out']).area; _tpts.append((x_, y_))
+            _tc = [dict(kind='trees', what=f'trees in the blade swing ({len(_tpts)} surveyed crowns)', area=round(_tarea), sev=2)] if _tpts else []
+        elif D.get('wc') is not None:
+            _bb, _r10 = D['bb'], 1 / 12000; _fw = Transformer.from_crs('EPSG:4326', D['proj'], always_xy=True); _bo = prep(D['blade_out'])
+            for r_ in range(D['wc'].shape[1]):
+                _cols = np.nonzero(D['wc'][0, r_] == 10)[0]
+                if not len(_cols): continue
+                _X, _Y = _fw.transform(_bb[0] + (_cols + 0.5) * _r10, np.full(len(_cols), _bb[3] - (r_ + 0.5) * _r10))
+                for xx, yy in zip(_X, _Y):
+                    if _bo.contains(Point(xx, yy)): _tarea += 100.0; _tpts.append((xx, yy))
+            _tc = [dict(kind='trees', what='tree cover in the blade swing', area=round(_tarea), sev=2)] if _tarea else []
+        else: _tc = []
+        # (in the old one's place; without one, where route_hotspots.py puts it: after its own findings, before the map's)
+        _cs = sm['conflicts']; _i = next((i for i, cf in enumerate(_cs) if cf.get('kind') == 'trees'), next((i for i, cf in enumerate(_cs) if cf.get('kind') == 'osm'), len(_cs)))
+        sm['conflicts'] = [cf for cf in _cs[:_i] if cf.get('kind') != 'trees'] + _tc + [cf for cf in _cs[_i:] if cf.get('kind') != 'trees']
+        D['tree_pts'] = _tpts
     if sm['wheel_out_area'] < 0.5:
         # (not over the path's first and last 15 m: the paved area is cut off at the passage's ends — flat caps, so the band
         # does not reach back over them)
@@ -672,12 +711,45 @@ for h in HOT:
     from shapely.geometry import GeometryCollection
     k5 = LG['kr_wheel_out'].difference(D['wheel_out'].buffer(0.2)) if LG.get('kr_wheel_out') is not None and not LG['kr_wheel_out'].is_empty else GeometryCollection()
     for kind, g in enumerate((D['wheel_sw'], D['blade_sw'], D['wheel_out'], D['blade_out'], LG.get('onc') if LG.get('onc') is not None else GeometryCollection(), k5)):
+        if kind == 3 and BE is not None: continue                      # (the blade beyond the edge by route_blade.mjs: its own layer, below)
         if kind in (1, 3) and not g.is_empty: g = g.buffer(1.5, join_style=1).buffer(-1.5, join_style=1)   # close the comb of sampled blade positions
         g = g.simplify(0.5)
         for p in getattr(g, 'geoms', [g]):
             if p.geom_type != 'Polygon' or p.area < 0.5: continue
             Ls.add([kind], [list(p.exterior.coords)[:-1]] + [list(r.coords)[:-1] for r in p.interiors if Polygon(r).area > 0.5])
     Ls.finish()
+    if BE is not None:
+        # the blade beyond the edge (route_blade.mjs: swept continuously, no comb to close), in 5 cm: the area the drive view
+        # draws, painted in the passage view as the swept layer's kind 3 was
+        Lb = Layer(pre + 'bout', [], 20.0); g = D['blade_out'].simplify(0.05)
+        for p in getattr(g, 'geoms', [g]):
+            if p.geom_type != 'Polygon' or p.area < 0.01: continue
+            Lb.add([], [list(p.exterior.coords)[:-1]] + [list(r.coords)[:-1] for r in p.interiors if Polygon(r).area > 0.01])
+        Lb.finish()
+    if BE is not None:
+        # (varint stream: the stretches beyond and the paved surface as rows, one per normal [place along the line in 1/16 m
+        # from the window's start (delta), count, then per interval its start and length in cm (the paved surface in 5 cm),
+        # each as the difference from
+        # the row before's interval of that rank]; between them the depth per front-axle metre ia … ib where not 0 [count;
+        # metre (gap since the last), cm])
+        def rows_(R, q_=1):
+            w.var(len(R)); pu, pv_ = 0, []
+            for row_ in R:
+                u_, iv = row_[0], [(round(row_[j_] / q_), round(row_[j_ + 1] / q_) - round(row_[j_] / q_)) for j_ in range(1, len(row_), 2)]
+                w.var(u_ - pu); pu = u_; w.var(len(iv))
+                for j_, (a_, l_) in enumerate(iv):
+                    pa, pl = pv_[j_] if j_ < len(pv_) else (0, 0)
+                    w.svar(a_ - pa); w.svar(l_ - pl)
+                pv_ = iv
+        w = Writer()
+        _rr = {}
+        for u_, d0_, d1_ in BE['runs']: _rr.setdefault(u_, []).extend([d0_, d1_])
+        rows_([[u_] + v_ for u_, v_ in sorted(_rr.items())])
+        _nz = [(i_, d_) for i_, d_ in enumerate(BE['depth']) if d_]
+        w.var(len(_nz)); _pi = -1
+        for i_, d_ in _nz: w.var(i_ - _pi - 1); _pi = i_; w.var(d_)
+        rows_(BE['paved'], 5)                                          # (the paved surface in 5 cm)
+        add(pre + 'blade', w.b, sa=BE['sa'], n=BE['n'], ia=BE['ia'], ib=BE['ib'], sub=BLADE['sub'], nr=len(BE['runs']), npv=len(BE['paved']), pq=0.05)
     # ---- summary for the page
     lon0, lat0 = sm['lon'], sm['lat']
     hx, hy = mfw.transform(lon0, lat0)
@@ -884,13 +956,18 @@ def tunnels_hdr():
     return [dict({k: v for k, v in t.items() if k not in ('prof', 'lid')}, check=t.get('signed') is None and t.get('phys') is None)
             for t in json.load(open(fn))['items'] if t['kind'] != 'underbridge']
 REGIONS = regions_hdr()
+# a lane stretch's blade beyond the edge (using the lane / keeping right) by the page's model (route_blade.mjs), else route_lanes.py's
+_LB = {(round(q['s0'], 1), round(q['s1'], 1)): q for q in (BLADE or {}).get('lanes', [])}
+def _lb(st, key, dflt):
+    q = _LB.get((round(st['s0'], 1), round(st['s1'], 1)))
+    return float(q[key]) if q else dflt
 header = dict(
     title=routecfg.get('title', 'Windpark Hoßkirch blade route survey'), page=routecfg.get('page_text', {}), km=round(total_km, 1), blade=V['blade'], vehicle=round(V['length'], 1),
     model={k: V[k] for k in ('blade', 'front_oh', 'wheelbase', 'p1_back', 'root_ahead', 'support', 'tractor_len', 'tractor_w', 'dolly_len', 'dolly_w', 'fdolly_len', 'fdolly_w', 'overhang')},
     map=dict(proj=meta['proj'], lon0=routecfg.get('map_center', [12.1, 50.6])[0], lat0=routecfg.get('map_center', [12.1, 50.6])[1], x0=meta['x0'], y0=meta['y0'], x1=meta['x1'], y1=meta['y1'], W=meta['W'], H=meta['H'], outer={k: meta['outer'][k] for k in ('x0', 'y0', 'x1', 'y1')}),
     legs=legs, nights=nights, places=places, hot=hot_meta, sections=S, clear=CLEAR, roads=ROADREFS, roadworks=roadworks_hdr(), osm=osm_hdr(),
-    lanes=[dict(a=round(st['s0']), b=round(st['s1']), across=st['rec']['across'], krOut=st['kr']['off'], krAcross=st['kr']['across'], krBlade=st['kr']['blade'],
-                out=st['rec']['off'], blade=st['rec']['blade'], clear=st['rec']['clear'], hold=st['hold'], kind=st.get('kind', 'oncoming'))
+    lanes=[dict(a=round(st['s0']), b=round(st['s1']), across=st['rec']['across'], krOut=st['kr']['off'], krAcross=st['kr']['across'], krBlade=_lb(st, 'krBlade', st['kr']['blade']),
+                out=st['rec']['off'], blade=_lb(st, 'blade', st['rec']['blade']), clear=st['rec']['clear'], hold=st['hold'], kind=st.get('kind', 'oncoming'))
            for st in (json.load(open(C + 'corr/lanes.json')) if os.path.exists(C + 'corr/lanes.json') else [])],
     codes=dict(road=list(CODES_ROAD), obj=list(CODES_OBJ), bar=list(CODES_BAR)),
     sources=EVIDENCE.get('_sources', []), factory=EVIDENCE.get('_factory', {}),

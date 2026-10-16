@@ -9,6 +9,7 @@ import { makeConvoy, makeConvoySteps } from './convoy.js';
 import { buildSigns, signalGeo, signWarmList } from './signs.js';
 import { makeRoads3D, roadMaterials, ROAD_XR } from './roads3d.js';
 import { sweep, DEFAULTS } from './vehicle.js';
+import { cells as bladeCells, edgeOf, SUB as BSUB } from './bladeedge.js';
 import { pooled, release } from './matpool.js';
 import { slicer } from './warm.js';
 import { bridgeMaterials, bridgeAccs, bridgeMeshes, Acc, block, pier as pierGeo, column, railing, guardrail, deckProfile, smooth, deck, deckSteps, depthOf, tube, tubeMaterials, XRAY_PARS, XRAY_CUT, CUT, cutPatch } from './bridges.js';
@@ -65,6 +66,12 @@ export async function fetchPack(base, p) {
 // a short route window in the session frame, 1 m samples, for the convoy's kinematics and the ground lookup
 export function makeRoad(packIndex, far, opts = {}) {
   let VEH = opts.vehicle || { ...DEFAULTS };
+  // the passages ({id, a, b}: their stretch of the route, m) and their blade beyond the edge as the passage view has it
+  // (opts.bladeOf(id): rdata.decodeBlade, the default convoy): on its stretch the drive shows the passage's own area and figures
+  const PASS = opts.passages || [], BLADE = new Map();
+  const passBlade = (h) => { if (!BLADE.has(h.id)) { let B = null; try { B = opts.bladeOf ? opts.bladeOf(h.id) : null; } catch (e) { console.warn('blade', h.id, e); } BLADE.set(h.id, B); } return BLADE.get(h.id); };
+  let dfltV = null, dfltR = false;
+  const isDefault = () => { if (dfltV !== VEH) { dfltV = VEH; dfltR = Object.keys(DEFAULTS).every((k) => VEH[k] === DEFAULTS[k]); } return dfltR; };
   const base = opts.base || '', renderer = opts.renderer || null, warm = opts.warm || null;      // warm: makeWarmer (warm.js), with opts.probe (lights) and opts.cam
   let disposed = false;
   const scene = new THREE.Scene();
@@ -1263,10 +1270,28 @@ export function makeRoad(packIndex, far, opts = {}) {
       if (Number.isFinite(q.ow)) { if (!HO) HO = new Float32Array(n).fill(1e3); HO[i] = q.ow - sh; } }
     return { sa, sb, n, P, N, HL, HR, HO, SH };
   }
+  // the blade's measure of window w (bladeedge.js edgeOf): its whole route metres, the convoy's line and the edges there as
+  // windowAt lays them; the positions on a passage's stretch that the passage's own result measures (with the default convoy:
+  // its area and figures are the passage view's), and the paved surface traced at the passages, on their normals
+  function measureOf(w) {
+    const sa = Math.ceil(w.sa), n = Math.floor(w.sb) - sa + 1; if (n < 120) return null;
+    const P = new Float64Array(2 * n), N = new Float64Array(2 * n), HL = new Float32Array(n), HR = new Float32Array(n);
+    for (let i = 0; i < n; i++) { const q = at(sa + i); if (!q) return null; const sh = q.dv != null ? q.dv : q.sh || 0;
+      P[2 * i] = q.x + q.nx * sh; P[2 * i + 1] = q.y + q.ny * sh; N[2 * i] = q.nx; N[2 * i + 1] = q.ny; HL[i] = Math.max(0.5, q.L - sh); HR[i] = Math.max(0.5, q.R + sh); }
+    const skip = new Uint8Array(w.n), pu = [], pat = [0], pd = [], dflt = isDefault();
+    for (const h of PASS) {
+      if (h.b < w.sa - 200 || h.a > w.sb + 200) continue;
+      const B = passBlade(h); if (!B) continue;
+      if (dflt) for (let i = 0; i < w.n; i++) { const s = w.sa + i; if (s >= h.a && s <= h.b) skip[i] = 1; }
+      for (let j = 0; j < B.paved.u.length; j++) { pu.push(B.sa * BSUB + B.paved.u[j]); for (let q = B.paved.at[j]; q < B.paved.at[j + 1]; q++) pd.push(B.paved.d[2 * q], B.paved.d[2 * q + 1]); pat.push(pd.length / 2); }
+    }
+    return { n, sa, P, N, HL, HR, skip, paved: { u: Int32Array.from(pu), at: Int32Array.from(pat), d: Float32Array.from(pd) } };
+  }
   function computeLive(sc) {
     const w = windowAt(sc); if (!w) return null;
     const t0 = performance.now();
     w.res = sweep(VEH, w.P, w.N, w.HL, w.HR, 0, w.HO); w.ms = performance.now() - t0;
+    { const M = measureOf(w); w.blade = M ? edgeOf(VEH, M, w.res) : null; }
     LIVE = w; NEXT = null;
     buildLive();
     return LIVE;
@@ -1282,9 +1307,9 @@ export function makeRoad(packIndex, far, opts = {}) {
     const req = { w, veh, p: null };
     req.p = new Promise((res) => {
       const onMsg = (e) => { if (e.data.id !== id) return; W.removeEventListener('message', onMsg); if (liveReq === req) liveReq = null;
-        if (disposed || veh !== VEH) return res(false); w.res = e.data.res; w.ms = performance.now() - t0; LIVE = w; NEXT = null; buildLive(); res(true); };
+        if (disposed || veh !== VEH) return res(false); w.res = e.data.res; w.blade = e.data.blade; w.ms = performance.now() - t0; LIVE = w; NEXT = null; buildLive(); res(true); };
       W.addEventListener('message', onMsg);
-      W.postMessage({ id, v: VEH, P: w.P, N: w.N, HL: w.HL, HR: w.HR, HO: w.HO });
+      W.postMessage({ id, v: VEH, P: w.P, N: w.N, HL: w.HL, HR: w.HR, HO: w.HO, M: measureOf(w) });
     });
     liveReq = req; return req.p;
   }
@@ -1294,13 +1319,13 @@ export function makeRoad(packIndex, far, opts = {}) {
     const w = windowAt(sc); if (!w) return;
     const id = (nextReq = ++reqId), veh = VEH, t0 = performance.now();
     const onMsg = (e) => { if (e.data.id !== id) return; W.removeEventListener('message', onMsg); if (nextReq === id) nextReq = 0;
-      if (disposed || veh !== VEH) return; w.res = e.data.res; w.ms = performance.now() - t0; NEXT = w;
+      if (disposed || veh !== VEH) return; w.res = e.data.res; w.blade = e.data.blade; w.ms = performance.now() - t0; NEXT = w;
       // its drawing made now, in slices, beside the one shown: the switch to it in a frame is then a swap
       (async () => { const sl = slicer(4), ver = packVer, list = []; for (const m of liveSteps(w, list)) { if (sl.due()) await sl(); if (NEXT !== w || disposed) break; }
         if (NEXT === w && !disposed) { w.meshes = list; w.ver = ver; } else for (const m of list) m.geometry.dispose(); })();
     };
     W.addEventListener('message', onMsg);
-    W.postMessage({ id, v: VEH, P: w.P, N: w.N, HL: w.HL, HR: w.HR, HO: w.HO });
+    W.postMessage({ id, v: VEH, P: w.P, N: w.N, HL: w.HL, HR: w.HR, HO: w.HO, M: measureOf(w) });
   }
   function buildLive() {
     for (const m of liveGroup.children.splice(0)) m.geometry.dispose();
@@ -1329,16 +1354,81 @@ export function makeRoad(packIndex, far, opts = {}) {
     };
     const E = res.env;
     strip((i) => E[4 * i + 1], (i) => E[4 * i], 0.03, M_WHEEL); yield;
-    // outlines: the wheels' band (amber) and the blade's outer sweep (thin red), drawn everywhere so the reserve is visible
+    // outlines: the wheels' band (amber); the blade's outer sweep (thin red), drawn everywhere so the reserve is visible, and
+    // where the blade reaches beyond the edge (bladeedge.js: where it is, as measured there)
     for (const c of [0, 1]) { strip((i) => E[4 * i + c] - 0.07, (i) => E[4 * i + c] + 0.07, 0.04, M_WHEELL); yield; }
-    for (const c of [2, 3]) { strip((i) => E[4 * i + c] - 0.05, (i) => E[4 * i + c] + 0.05, 0.042, M_BLADEENV); yield; }
-    strip((i) => L.HL[i], (i) => E[4 * i + 2], 0.035, M_BLADE, (i) => E[4 * i + 2] > L.HL[i] + 0.05); yield;
-    strip((i) => E[4 * i + 3], (i) => -L.HR[i], 0.035, M_BLADE, (i) => E[4 * i + 3] < -L.HR[i] - 0.05); yield;
-    strip((i) => E[4 * i + 2] - 0.08, (i) => E[4 * i + 2] + 0.08, 0.045, M_BLADEL, (i) => E[4 * i + 2] > L.HL[i] + 0.05); yield;
-    strip((i) => E[4 * i + 3] - 0.08, (i) => E[4 * i + 3] + 0.08, 0.045, M_BLADEL, (i) => E[4 * i + 3] < -L.HR[i] - 0.05); yield;
+    if (L.blade) yield* bladeSteps(L, list);
     // wheels off the measured carriageway
     strip((i) => L.HL[i], (i) => L.HL[i] + Math.max(0.3, -res.wc[i]), 0.05, M_OFF, (i) => res.wc[i] < 0 && E[4 * i] > L.HL[i] - 0.05); yield;
     strip((i) => -L.HR[i] - Math.max(0.3, -res.wc[i]), (i) => -L.HR[i], 0.05, M_OFF, (i) => res.wc[i] < 0 && E[4 * i + 1] < -L.HR[i] + 0.05);
+  }
+  // the blade's drawing for window L (bladeedge.js, measured in the sweep worker): its outer sweep along the normals of the
+  // line, and the cells beyond the edge — this window's, joined on a passage's stretch with the passage's own (the default
+  // convoy: the area the passage view paints), one per normal and stretch, on the drawn surface
+  function* bladeSteps(L, list) {
+    const B = L.blade, m = B.m, S = { m, u16: B.u16, P: B.P, NT: B.NT };
+    const mesh = (pos, idx, mat, part) => { if (!idx.length) return; const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx);
+      const me = new THREE.Mesh(g, mat); me.renderOrder = 2; me.userData.blade = part; list.push(me); };
+    const hz = (x, y, lift) => surfXY(x, y, 'road') + lift;
+    // the outer sweep, left and right: the farthest the blade passes on each normal, joined where neighbours are close
+    for (const side of [0, 1]) {
+      const pos = [], idx = []; let prev = -1, px = 0, py = 0;
+      for (let k = 0; k < m; k++) {
+        if (k % 1000 === 999) yield;
+        const d = B.out[2 * k + side]; if (Number.isNaN(d)) { prev = -1; continue; }
+        const x = B.P[2 * k] + B.NT[2 * k] * d, y = B.P[2 * k + 1] + B.NT[2 * k + 1] * d;
+        if (prev >= 0 && Math.hypot(x - px, y - py) > 4) prev = -1;
+        const nx = B.NT[2 * k] * 0.05, ny = B.NT[2 * k + 1] * 0.05, v0 = pos.length / 3;
+        pos.push(x + nx, hz(x + nx, y + ny, 0.042), -(y + ny), x - nx, hz(x - nx, y - ny, 0.042), -(y - ny));
+        if (prev >= 0) idx.push(prev, prev + 1, v0, prev + 1, v0 + 1, v0);
+        prev = v0; px = x; py = y;
+      }
+      mesh(pos, idx, M_BLADEENV, 'sweep'); yield;
+    }
+    // beyond the edge: the cells and their outer ends
+    const C = bladeCells(S, mergedRuns(L)), Q = C.quads, nc = C.k.length;
+    const fp = [], fi = [], lp = [], li = [];
+    for (let r = 0; r < nc; r++) {
+      if (r % 400 === 399) yield;                        // (a slice's worth: the drawing made ahead is sliced)
+      const o = 8 * r, v0 = fp.length / 3;
+      for (let c = 0; c < 4; c++) { const x = Q[o + 2 * c], y = Q[o + 2 * c + 1]; fp.push(x, hz(x, y, 0.035), -y); }
+      fi.push(v0, v0 + 1, v0 + 2, v0, v0 + 2, v0 + 3);
+      // (its outer end: corners 3 → 2 on the left, 0 → 1 on the right; a line 16 cm wide)
+      const [a, b] = C.side[r] ? [0, 1] : [3, 2], ax = Q[o + 2 * a], ay = Q[o + 2 * a + 1], bx = Q[o + 2 * b], by = Q[o + 2 * b + 1], l = Math.hypot(bx - ax, by - ay) || 1, wx = -(by - ay) / l * 0.08, wy = (bx - ax) / l * 0.08, w0 = lp.length / 3;
+      lp.push(ax + wx, hz(ax + wx, ay + wy, 0.045), -(ay + wy), ax - wx, hz(ax - wx, ay - wy, 0.045), -(ay - wy), bx + wx, hz(bx + wx, by + wy, 0.045), -(by + wy), bx - wx, hz(bx - wx, by - wy, 0.045), -(by - wy));
+      li.push(w0, w0 + 1, w0 + 2, w0 + 1, w0 + 3, w0 + 2);
+    }
+    mesh(fp, fi, M_BLADE, 'beyond'); yield;
+    mesh(lp, li, M_BLADEL, 'outline'); yield;
+  }
+  // the stretches beyond on window L's normals: its own, and on the passages' stretches (the default convoy) the passage's,
+  // joined per normal → {k, d0, d1}
+  function mergedRuns(L) {
+    const B = L.blade, lists = new Map();
+    const add = (k, a, b) => { let q = lists.get(k); if (!q) lists.set(k, (q = [])); q.push([a, b]); };
+    for (let r = 0; r < B.k.length; r++) add(B.k[r], B.d0[r], B.d1[r]);
+    if (isDefault()) {
+      let idx = null;
+      for (const h of PASS) {
+        if (h.b < L.sa - 200 || h.a > L.sb + 200) continue;
+        const P_ = passBlade(h); if (!P_) continue;
+        if (!idx) { idx = new Map(); for (let k = 0; k < B.m; k++) idx.set(B.sa * BSUB + B.u16[k], k); }
+        for (let r = 0; r < P_.runs.u.length; r++) { const k = idx.get(P_.sa * BSUB + P_.runs.u[r]); if (k !== undefined) add(k, P_.runs.d0[r], P_.runs.d1[r]); }
+      }
+    }
+    const K = [], D0 = [], D1 = [];
+    for (const k of [...lists.keys()].sort((a, b) => a - b)) {
+      const q = lists.get(k).sort((a, b) => a[0] - b[0]); let c = null;
+      for (const x of q) { if (c && x[0] <= c[1] + 1e-4) c[1] = Math.max(c[1], x[1]); else { if (c) { K.push(k); D0.push(c[0]); D1.push(c[1]); } c = [x[0], x[1]]; } }
+      if (c) { K.push(k); D0.push(c[0]); D1.push(c[1]); }
+    }
+    return { k: Int32Array.from(K), d0: Float32Array.from(D0), d1: Float32Array.from(D1) };
+  }
+  // how far the blade reaches beyond the paved surface with the front axle at route metre s: on a passage's stretch with the
+  // default convoy the passage's own figure (as its card has it), else the live window's; null where not measured (yet)
+  function bladeAtS(s) {
+    if (isDefault()) for (const h of PASS) if (s >= h.a && s <= h.b) { const B = passBlade(h); if (B) { const j = Math.round(s) - (B.sa + B.ia); return j >= 0 && j < B.depth.length ? B.depth[j] : 0; } }
+    if (!LIVE || !LIVE.blade) return null; const i = Math.round(s - LIVE.sa); return i >= 0 && i < LIVE.n && LIVE.res.valid[i] ? LIVE.blade.depth[i] : null;
   }
   function setVehicle(v) { VEH = { ...v }; LIVE = null; NEXT = null; nextReq = 0; liveReq = null; if (convoy.setDimsAsync) convoy.setDimsAsync(VEH, slicer(5)); else convoy.setDims && convoy.setDims(VEH); refreshGates(); }
   const pose = new Float32Array(14); let nextSoon = false, liveSoon = false;
@@ -1360,8 +1450,8 @@ export function makeRoad(packIndex, far, opts = {}) {
   function liveAt(s) {
     if (!LIVE) return null; const i = Math.round(s - LIVE.sa); if (i < 0 || i >= LIVE.n || !LIVE.res.valid[i]) return null;
     const r = LIVE.res; let wmin = Infinity, wAt = 0, bmax = 0, bAt = 0;
-    for (let k = i; k < Math.min(LIVE.n, i + 1500); k++) { if (!r.valid[k]) continue; if (r.wc[k] < wmin) { wmin = r.wc[k]; wAt = k; } const b = Math.max(r.bL[k], r.bR[k]); if (b > bmax) { bmax = b; bAt = k; } }
-    return { wc: r.wc[i], bL: r.bL[i], bR: r.bR[i], off: r.off[i], ahead: { wmin, wAtS: LIVE.sa + wAt, bmax, bAtS: LIVE.sa + bAt }, ms: LIVE.ms };
+    for (let k = i; k < Math.min(LIVE.n, i + 1500); k++) { if (!r.valid[k]) continue; if (r.wc[k] < wmin) { wmin = r.wc[k]; wAt = k; } const b = bladeAtS(LIVE.sa + k) || 0; if (b > bmax) { bmax = b; bAt = k; } }
+    return { wc: r.wc[i], blade: bladeAtS(s), off: r.off[i], ahead: { wmin, wAtS: LIVE.sa + wAt, bmax, bAtS: LIVE.sa + bAt }, ms: LIVE.ms };
   }
 
   // ---------------------------------------------------------------- far landscape: the country map's picture and relief around the view
@@ -1451,5 +1541,5 @@ export function makeRoad(packIndex, far, opts = {}) {
   }
   // build times per pack (ms): the median barrier and the modelled roads in total, the longest roads step, the other parts
   const buildStats = () => [...packs.values()].map((P) => ({ p: P.hdr.p, median: +(P.msMedian || 0).toFixed(1), roads: +(P.msRoads || 0).toFixed(1), route: +(P.msRoute || 0).toFixed(1), roadsStep: +(P.msStep || 0).toFixed(1), ...(P.ms || {}) }));
-  return { scene, warm: warmG, warmDone, ensure, liveReady: (s) => (LIVE && s >= LIVE.sa + 140 && s <= LIVE.sb - 260 ? Promise.resolve(true) : requestLive(s)), available, setRoads3D: (on) => { road3dGroup.visible = on; }, poseAt, at, ground, surface, surfS, toRoute, convoy, tunnelAt, FOCUS, setOverlay, updateFar, packs, samples, survey, profile, dispose, setVehicle, liveAt, objects, gates, bridgeInfo, verdict, clearOf, buildStats, get xray() { return XRAY.value; }, get live() { return LIVE; }, get livePending() { return !!liveReq || liveSoon; }, get origin() { return O; } };
+  return { scene, warm: warmG, warmDone, ensure, liveReady: (s) => (LIVE && s >= LIVE.sa + 140 && s <= LIVE.sb - 260 ? Promise.resolve(true) : requestLive(s)), available, setRoads3D: (on) => { road3dGroup.visible = on; }, poseAt, at, ground, surface, surfS, toRoute, convoy, tunnelAt, FOCUS, setOverlay, updateFar, packs, samples, survey, profile, dispose, setVehicle, liveAt, bladeAtS, objects, gates, bridgeInfo, verdict, clearOf, buildStats, get xray() { return XRAY.value; }, get live() { return LIVE; }, get livePending() { return !!liveReq || liveSoon; }, get origin() { return O; } };
 }
