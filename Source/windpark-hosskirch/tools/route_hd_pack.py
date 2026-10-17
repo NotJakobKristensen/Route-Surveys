@@ -45,6 +45,7 @@ def build(hid):
     def add(n, a): arrays.append((n, np.ascontiguousarray(a)))
     # terrain grid
     span = max(ext[2] - ext[0], ext[3] - ext[1]); step = max(4.0, round(span / 520))
+    if reg == 'DE-SN': step = max(step, 8.0)                 # (Saxony's terrain: one web request per grid point)
     x0, y0 = math.floor(ext[0] / step) * step, math.floor(ext[1] / step) * step
     nx, ny = int(math.ceil((ext[2] - x0) / step)) + 1, int(math.ceil((ext[3] - y0) / step)) + 1
     X, Y = np.meshgrid(x0 + np.arange(nx) * step, y0 + np.arange(ny) * step)
@@ -94,9 +95,27 @@ def build(hid):
     import base64, io
     from PIL import Image
     tiles = hd_hot.photo_tiles(hid, P, proj, ext)
-    # two atlases: the 0.25 m tiles (1024 px) and the 1 m tiles (256 px), 8 per row
+    # two atlases: the 0.25 m tiles (1024 px) and the 1 m tiles (256 px), 8 per row; ONE_ATLAS=1: both in one file (the near
+    # tiles 8 per row, the far ones 32 per row below them), so a passage is two files (the hosted page's file count)
     tl = []; out_bytes = 0
-    for kind, sel, px_ in (('n', [t for t in tiles if t['px'] < 0.5], 1024), ('f', [t for t in tiles if t['px'] >= 0.5], 256)):
+    near_t, far_t = [t for t in tiles if t['px'] < 0.5], [t for t in tiles if t['px'] >= 0.5]
+    if os.environ.get('ONE_ATLAS') == '1':
+        cn = min(8, len(near_t)) if near_t else 0; rn = int(math.ceil(len(near_t) / 8)) if near_t else 0
+        cf = max(1, min(32, len(far_t), (cn * 4) or 32)) if far_t else 0; rf = int(math.ceil(len(far_t) / cf)) if far_t else 0
+        W_ = max(cn * 1024, cf * 256); H_ = rn * 1024 + rf * 256
+        A = Image.new('RGB', (max(1, W_), max(1, H_)))
+        for kind_, sel, px_, cols, y0_ in (('n', near_t, 1024, cn, 0), ('f', far_t, 256, cf, rn * 1024)):
+            for k, t in enumerate(sel):
+                im = Image.open(io.BytesIO(t['webp'])).convert('RGB')
+                if im.width != px_: im = im.resize((px_, px_))
+                ax_, ay_ = (k % cols) * px_, y0_ + (k // cols) * px_
+                A.paste(im, (ax_, ay_)); tl.append(dict(x0=t['x0'], y0=t['y0'], size=t['size'], px=t['px'], a='n', ax=ax_, ay=ay_, n=px_))
+        bb = io.BytesIO(); A.save(bb, 'WEBP', quality=66, method=6)
+        open(os.path.join(DIST, f'{hid}_n.webp'), 'wb').write(bb.getvalue()); out_bytes += len(bb.getvalue())
+        fo = os.path.join(DIST, f'{hid}_f.webp')
+        if os.path.lexists(fo): os.remove(fo)
+    else:
+      for kind, sel, px_ in (('n', near_t, 1024), ('f', far_t, 256)):
         if not sel: continue
         cols = min(8, len(sel)); rows = int(math.ceil(len(sel) / cols))
         A = Image.new('RGB', (cols * px_, rows * px_))
@@ -110,7 +129,7 @@ def build(hid):
     from hd_sources import SOURCES
     hdr = dict(id=hid, region=reg, grid=dict(x0=x0, y0=y0, nx=nx, ny=ny, step=step, zb=zb, q=0.05), tiles=tl, arrays=meta,
                nbld=len(lod), ntree=0 if T is None else int(len(T)),
-               credit=SOURCES[reg]['credit'] + {'DE-BW': '; DGM1, nDOM, LoD2: LGL (dl-de/by-2-0)', 'DE-BY': '; DGM1, DOM20, LoD2: Bayerische Vermessungsverwaltung (CC BY 4.0)', 'PL-32': '; NMT / NMPT (lidar 2022/2024): GUGiK', 'DE-BB': '; DGM1, bDOM: GeoBasis-DE/LGB (dl-de/by-2-0)', 'DE-MV': '; DGM1, DOM1: GeoBasis-DE/M-V (CC BY 4.0)', 'DE-ST': '; DGM1, DOM1: GeoBasis-DE/LVermGeo LSA (dl-de/by-2-0)'}[reg],
+               credit=SOURCES[reg]['credit'] + {'DE-BW': '; DGM1, nDOM, LoD2: LGL (dl-de/by-2-0)', 'DE-BY': '; DGM1, DOM20, LoD2: Bayerische Vermessungsverwaltung (CC BY 4.0)', 'PL-32': '; NMT / NMPT (lidar 2022/2024): GUGiK', 'DE-BB': '; DGM1, bDOM: GeoBasis-DE/LGB (dl-de/by-2-0)', 'DE-MV': '; DGM1, DOM1: GeoBasis-DE/M-V (CC BY 4.0)', 'DE-ST': '; DGM1, DOM1: GeoBasis-DE/LVermGeo LSA (dl-de/by-2-0)', 'DE-TH': '; DGM1, DOM1: © GDI-Th (dl-de/by-2-0)', 'DE-SN': '; DGM1: GeoSN (dl-de/by-2-0)'}[reg],
                bridges=bridges, signs=hd_signs(D), spd=hd_speeds(D), tun=hd_tunnels(D), blob=base64.b64encode(comp).decode())
     open(os.path.join(DIST, f'{hid}.json'), 'w').write(json.dumps(hdr, separators=(',', ':')))
     return len(comp) + out_bytes

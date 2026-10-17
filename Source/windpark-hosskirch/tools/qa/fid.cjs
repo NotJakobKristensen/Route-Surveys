@@ -1,4 +1,4 @@
-// Fidelity: node fid.cjs <url> <route hk|ml> <outdir>   env: HOTS=all|id,id  SHOTS=1  PAR=1|0
+// Fidelity: node fid.cjs <url> <route hk|ml> <outdir>   env: HOTS=all|id,id  KMS=k,k (road points)  SHOTS=1  PAR=1|0
 // Fingerprints (SHA-256) of the decoded data and of the built scene: per road pack (header, every decoded array, every mesh's
 // geometry, instances, world matrix and material state), the live swept path at each road point, per HD passage (scene,
 // decoded passage data, convoy poses along the path, labels). Screenshots at fixed cameras (pixel ratio 1): map overview,
@@ -71,7 +71,8 @@ const SHOT_HOTS = { hk: ['gaisbeuren', 'niederbiegen', 'forest'], ml: ['muenster
   });
   const out = { url, route, road: [], hot: [], errs };
   // ---------------------------------------------------------------- road points: packs (decoded data and meshes), live swept path, the rest of the scene
-  for (const k of KMS[route]) {
+  const RK = process.env.KMS ? process.env.KMS.split(',').map(Number) : KMS[route];
+  for (const k of RK) {
     await p.evaluate(() => window.__route.goRoute()); await p.waitForTimeout(2200);
     { const p0 = Math.floor(k * 1000 / 5000), list = await p.evaluate(() => fetch('r/index.json').then((r) => r.json()).then((j) => j.packs)); order = [p0, p0 - 1, p0 + 1].filter((q) => list.includes(q)); }
     await p.evaluate((n) => { window.__want = n; }, order.length);
@@ -109,7 +110,7 @@ const SHOT_HOTS = { hk: ['gaisbeuren', 'niederbiegen', 'forest'], ml: ['muenster
       await p.waitForTimeout(2500);
       await p.setViewportSize({ width: 1281, height: 800 }); await p.waitForTimeout(400); await p.setViewportSize({ width: 1280, height: 800 }); await p.waitForTimeout(1200);
       await p.evaluate(() => { const R = window.__route, w = 1280, h = 800, L = document.querySelector('#left').getBoundingClientRect(), Rr = document.querySelector('#right').getBoundingClientRect(), Dk = document.querySelector('#dock').getBoundingClientRect(); const dx = (L.right + Rr.left) / 2 - w / 2, dy = Dk.top / 2 - h / 2; for (const c of [R.mcam, R.hcam]) { c.setViewOffset(w, h, -dx, -dy, w, h); c.updateProjectionMatrix(); } const t = document.querySelector('#t-labels'); if (t) t.dispatchEvent(new Event('change')); }); await p.waitForTimeout(1500);      // (the view's offset as the page's resize computes it, from the layout now: when the page last measured it depends on load timing)
-    for (const t of [0, 1, 2]) { await p.screenshot({ path: path.join(outdir, `road${KMS[route].indexOf(k)}_${t}.png`) }); await p.waitForTimeout(1500); }
+    for (const t of [0, 1, 2]) { await p.screenshot({ path: path.join(outdir, `road${RK.indexOf(k)}_${t}.png`) }); await p.waitForTimeout(1500); }
     }
     order = null; r.routed = routed.splice(0);
     out.road.push(r);

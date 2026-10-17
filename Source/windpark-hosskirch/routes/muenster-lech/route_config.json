@@ -184,11 +184,137 @@
    3650
   ],
   [
+   "muenster-lech-warcislawiec",
+   "S3 near Warcisławiec",
+   14.804362,
+   53.515742,
+   800
+  ],
+  [
+   "muenster-lech-kliniska-male",
+   "S3 at Kliniska Małe",
+   14.78772,
+   53.465344,
+   800
+  ],
+  [
+   "muenster-lech-zalom",
+   "A6 near Załom",
+   14.762861,
+   53.421524,
+   1274
+  ],
+  [
+   "muenster-lech-kolowo",
+   "A6 near Kołowo",
+   14.698388,
+   53.371416,
+   800
+  ],
+  [
+   "muenster-lech-radziszewo",
+   "A6 near Radziszewo",
+   14.577164,
+   53.341357,
+   800
+  ],
+  [
+   "muenster-lech-kolbaskowo",
+   "A6 at Kołbaskowo",
+   14.450715,
+   53.341409,
+   800
+  ],
+  [
+   "muenster-lech-nadrensee",
+   "A 11 at Nadrensee",
+   14.360036,
+   53.328749,
+   800
+  ],
+  [
+   "muenster-lech-radewitz",
+   "A 11 at Radewitz",
+   14.166379,
+   53.299049,
+   800
+  ],
+  [
+   "muenster-lech-hohenguestow",
+   "A 11 at Hohengüstow",
+   14.014396,
+   53.247337,
+   3601
+  ],
+  [
+   "muenster-lech-heidehof",
+   "A 11 at Heidehof",
+   13.955291,
+   53.20938,
+   800
+  ],
+  [
+   "muenster-lech-trumpf",
+   "A 11 near Trumpf",
+   13.928814,
+   53.182068,
+   800
+  ],
+  [
+   "muenster-lech-neuhaus",
+   "A 11 near Neuhaus",
+   13.841787,
+   53.06665,
+   800
+  ],
+  [
+   "muenster-lech-redernswalde",
+   "A 11 at Redernswalde",
+   13.833533,
+   53.041222,
+   800
+  ],
+  [
+   "muenster-lech-althuettendorf",
+   "A 11 at Althüttendorf",
+   13.816673,
+   52.972798,
+   2541
+  ],
+  [
+   "muenster-lech-buckow",
+   "A 11 at Buckow",
+   13.732057,
+   52.899877,
+   800
+  ],
+  [
    "muenster-lech-finowfurt",
    "A 11 at Finowfurt",
-   13.670526,
-   52.855563,
+   13.670494,
+   52.855523,
+   1145
+  ],
+  [
+   "muenster-lech-woltersdorf",
+   "A 11 near Woltersdorf",
+   13.540094,
+   52.732368,
    800
+  ],
+  [
+   "muenster-lech-schmetzdorf",
+   "A 11 at Schmetzdorf",
+   13.556587,
+   52.693932,
+   1560
+  ],
+  [
+   "muenster-lech-lindenhof",
+   "A 10 near Lindenhof",
+   13.484991,
+   52.625399,
+   1660
   ],
   [
    "muenster-lech-briese",
@@ -221,9 +347,9 @@
   [
    "muenster-lech-zeestow",
    "A 10 at Zeestow",
-   12.972758,
-   52.575649,
-   1730
+   12.972754,
+   52.575613,
+   2436
   ],
   [
    "muenster-lech-kartzow",
@@ -233,11 +359,172 @@
    800
   ],
   [
+   "muenster-lech-ploetzin",
+   "A 10 near Plötzin",
+   12.818553,
+   52.382165,
+   1490
+  ],
+  [
+   "muenster-lech-reesdorf",
+   "A 9 near Reesdorf",
+   12.914488,
+   52.245802,
+   800
+  ],
+  [
+   "muenster-lech-neue-muehle",
+   "A 9 at Neue Mühle",
+   12.696237,
+   52.098806,
+   800
+  ],
+  [
+   "muenster-lech-werdermuehle",
+   "A 9 at Werdermühle",
+   12.659052,
+   52.070968,
+   800
+  ],
+  [
+   "muenster-lech-koeselitz",
+   "A 9 near Köselitz",
+   12.506117,
+   51.976182,
+   800
+  ],
+  [
+   "muenster-lech-koeselitz-2",
+   "A 9 near Köselitz",
+   12.469405,
+   51.963755,
+   800
+  ],
+  [
+   "muenster-lech-vockerode",
+   "A 9 at Vockerode",
+   12.35005,
+   51.859048,
+   800
+  ],
+  [
+   "muenster-lech-brehna",
+   "A 9 near Brehna",
+   12.187222,
+   51.557745,
+   800
+  ],
+  [
+   "muenster-lech-doberstau",
+   "A 9 at Doberstau",
+   12.197034,
+   51.519251,
+   800
+  ],
+  [
+   "muenster-lech-werlitzsch",
+   "A 9 at Werlitzsch",
+   12.201558,
+   51.433783,
+   800
+  ],
+  [
+   "muenster-lech-rippach",
+   "A 9 at Rippach",
+   12.062743,
+   51.240839,
+   800
+  ],
+  [
+   "muenster-lech-koesslitzwiedebach",
+   "A 9 near Kößlitz-Wiedebach",
+   12.003329,
+   51.17738,
+   800
+  ],
+  [
+   "muenster-lech-kleinhelmsdorf",
+   "A 9 at Kleinhelmsdorf",
+   11.939205,
+   51.033827,
+   800
+  ],
+  [
+   "muenster-lech-heideland",
+   "A 9 at Heideland",
+   11.912173,
+   50.99157,
+   800
+  ],
+  [
+   "muenster-lech-klengel",
+   "A 9 at Klengel",
+   11.841121,
+   50.95633,
+   1495
+  ],
+  [
+   "muenster-lech-tautendorf",
+   "A 9 at Tautendorf",
+   11.879623,
+   50.82885,
+   2491
+  ],
+  [
+   "muenster-lech-raila",
+   "A 9 at Raila",
+   11.798446,
+   50.519796,
+   800
+  ],
+  [
+   "muenster-lech-blintendorf",
+   "A 9 at Blintendorf",
+   11.800431,
+   50.459539,
+   800
+  ],
+  [
+   "muenster-lech-sachsenvorwerk",
+   "A 9 at Sachsenvorwerk",
+   11.783892,
+   50.41701,
+   800
+  ],
+  [
+   "muenster-lech-schwarzholzwinkel",
+   "A 9 at Schwarzholzwinkel",
+   11.780584,
+   50.241605,
+   800
+  ],
+  [
+   "muenster-lech-goessenreuth",
+   "A 9 at Gössenreuth",
+   11.617843,
+   50.059173,
+   800
+  ],
+  [
+   "muenster-lech-oberaltenreuth",
+   "A 9 at Oberaltenreuth",
+   11.605009,
+   50.0249,
+   1305
+  ],
+  [
    "muenster-lech-industriegebiet",
    "A 9 near Bayreuth",
    11.605681,
    49.960252,
    800
+  ],
+  [
+   "muenster-lech-neunkirchen-am-sand",
+   "A 9 near Neunkirchen am Sand",
+   11.309213,
+   49.520802,
+   1519
   ],
   [
    "muenster-lech-steinberg",
@@ -254,39 +541,60 @@
    800
   ],
   [
+   "muenster-lech-feucht",
+   "A 9 near Feucht",
+   11.197811,
+   49.399364,
+   800
+  ],
+  [
+   "muenster-lech-feucht-2",
+   "A 9 at Feucht",
+   11.200558,
+   49.375337,
+   1220
+  ],
+  [
+   "muenster-lech-feldkirchen",
+   "A 9 at Feldkirchen",
+   11.460188,
+   48.781204,
+   1584
+  ],
+  [
    "muenster-lech-pichl",
    "B 16 at Pichl",
-   11.482274,
-   48.710821,
-   800
+   11.483031,
+   48.713939,
+   1222
   ],
   [
    "muenster-lech-seehof",
    "B 16 at Seehof",
    11.425061,
    48.707445,
-   800
+   1282
   ],
   [
    "muenster-lech-obermuehle",
    "B 16 at Obermühle",
-   11.308497,
-   48.714348,
-   1000
+   11.326316,
+   48.711369,
+   3159
   ],
   [
    "muenster-lech-zell",
    "B 16 at Zell",
-   11.261842,
-   48.714883,
-   2519
+   11.261895,
+   48.714891,
+   3222
   ],
   [
    "muenster-lech-fleischnershausen",
    "B 16 at Fleischnershausen",
-   11.212751,
-   48.721827,
-   880
+   11.212777,
+   48.72182,
+   3241
   ],
   [
    "muenster-lech-kalkbauer",
@@ -298,16 +606,16 @@
   [
    "muenster-lech-hoefelhof",
    "B 16 at Höfelhof",
-   11.134642,
-   48.723802,
-   1509
+   11.147574,
+   48.727006,
+   2568
   ],
   [
    "muenster-lech-unterhausen",
    "B 16 at Unterhausen",
-   11.090734,
-   48.717064,
-   1110
+   11.108116,
+   48.713482,
+   2815
   ],
   [
    "muenster-lech-moos",
@@ -317,11 +625,18 @@
    3868
   ],
   [
+   "muenster-lech-neuhof",
+   "B 16 at Neuhof",
+   10.980063,
+   48.70957,
+   2479
+  ],
+  [
    "muenster-lech-feldheim",
    "B 16 → St 2047 at Feldheim",
-   10.927481,
-   48.702792,
-   1159
+   10.93365,
+   48.703959,
+   2297
   ],
   [
    "muenster-lech-unterpeiching",
@@ -361,7 +676,52 @@
   "muenster-lech-moos": "DE-BY",
   "muenster-lech-feldheim": "DE-BY",
   "muenster-lech-unterpeiching": "DE-BY",
-  "muenster-lech-pessenburgheim": "DE-BY"
+  "muenster-lech-pessenburgheim": "DE-BY",
+  "muenster-lech-warcislawiec": "PL-32",
+  "muenster-lech-kliniska-male": "PL-32",
+  "muenster-lech-zalom": "PL-32",
+  "muenster-lech-kolowo": "PL-32",
+  "muenster-lech-radziszewo": "PL-32",
+  "muenster-lech-kolbaskowo": "PL-32",
+  "muenster-lech-nadrensee": "DE-MV",
+  "muenster-lech-radewitz": "DE-MV",
+  "muenster-lech-hohenguestow": "DE-BB",
+  "muenster-lech-heidehof": "DE-BB",
+  "muenster-lech-trumpf": "DE-BB",
+  "muenster-lech-neuhaus": "DE-BB",
+  "muenster-lech-redernswalde": "DE-BB",
+  "muenster-lech-althuettendorf": "DE-BB",
+  "muenster-lech-buckow": "DE-BB",
+  "muenster-lech-woltersdorf": "DE-BB",
+  "muenster-lech-schmetzdorf": "DE-BB",
+  "muenster-lech-lindenhof": "DE-BB",
+  "muenster-lech-ploetzin": "DE-BB",
+  "muenster-lech-reesdorf": "DE-BB",
+  "muenster-lech-neue-muehle": "DE-BB",
+  "muenster-lech-werdermuehle": "DE-BB",
+  "muenster-lech-koeselitz": "DE-ST",
+  "muenster-lech-koeselitz-2": "DE-ST",
+  "muenster-lech-vockerode": "DE-ST",
+  "muenster-lech-brehna": "DE-ST",
+  "muenster-lech-doberstau": "DE-SN",
+  "muenster-lech-werlitzsch": "DE-SN",
+  "muenster-lech-rippach": "DE-ST",
+  "muenster-lech-koesslitzwiedebach": "DE-ST",
+  "muenster-lech-kleinhelmsdorf": "DE-ST",
+  "muenster-lech-heideland": "DE-TH",
+  "muenster-lech-klengel": "DE-TH",
+  "muenster-lech-tautendorf": "DE-TH",
+  "muenster-lech-raila": "DE-TH",
+  "muenster-lech-blintendorf": "DE-TH",
+  "muenster-lech-sachsenvorwerk": "DE-BY",
+  "muenster-lech-schwarzholzwinkel": "DE-BY",
+  "muenster-lech-goessenreuth": "DE-BY",
+  "muenster-lech-oberaltenreuth": "DE-BY",
+  "muenster-lech-neunkirchen-am-sand": "DE-BY",
+  "muenster-lech-feucht": "DE-BY",
+  "muenster-lech-feucht-2": "DE-BY",
+  "muenster-lech-feldkirchen": "DE-BY",
+  "muenster-lech-neuhof": "DE-BY"
  },
  "legs_fixed": {
   "0": [

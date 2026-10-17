@@ -10,7 +10,7 @@ Moved here from the WindLab repository on 2026-10-13; its history up to that mov
 | Folder | What it is |
 |---|---|
 | [`Hosskirch_Blade_Route/`](Hosskirch_Blade_Route/) | Goleniów → Windpark Hoßkirch (Baden-Württemberg), 935 km. The page `hosskirch-blade-route.html` (version 3, the newest; earlier versions in the git history); the data packs `r/` (road view) and `h/` (survey-grade passages); `windpark-hosskirch.html` |
-| [`Muenster_Lech_Blade_Route/`](Muenster_Lech_Blade_Route/) | Goleniów → Münster (Lech), Donau-Ries (Bavaria), 775 km: a blind test, routed and checked from open data only. Same layout: `muenster-lech-blade-route.html` (version 4) and its packs |
+| [`Muenster_Lech_Blade_Route/`](Muenster_Lech_Blade_Route/) | Goleniów → Münster (Lech), Donau-Ries (Bavaria), 775 km: a blind test, routed and checked from open data only. Same layout: `muenster-lech-blade-route.html` (version 5) and its packs |
 | [`Windpark_Hosskirch/`](Windpark_Hosskirch/) | 1:1 3D rebuild of Windpark Hoßkirch (6 × V172-7.2 MW) |
 | [`Source/windpark-hosskirch/`](Source/windpark-hosskirch/) | The source: page code (`src/`, `src/route/`), survey data (`data/`), build tools and the survey pipeline (`tools/`), further routes and route plans (`routes/`) |
 

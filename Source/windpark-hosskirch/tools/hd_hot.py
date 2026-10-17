@@ -8,6 +8,8 @@ from pyproj import Transformer
 from scipy import ndimage as ndi
 from PIL import Image
 from hd_sources import C as HDC, sample_source, _get
+# the official height tiles in the shared cache (as elev.py has them), not in elev_fetch's own default folder next to the tools
+os.environ.setdefault('ELEV_CACHE', os.path.join(os.path.dirname(HDC.rstrip('/')), 'elev'))
 
 REGION = {'factory': 'PL-32', 'feuchtwangen': 'DE-BY', 'a7-exit': 'DE-BY', 'neu-ulm': 'DE-BY'}
 import routecfg
@@ -33,6 +35,9 @@ def _by_tile(kind, e, n):
 
 
 def _by_sample(kind, X, Y):
+    if kind == 'dom20' and os.environ.get('BY_RANGE') == '1':      # (little disk: 100 m windows read over HTTP, elev_fetch)
+        import elev_fetch
+        return elev_fetch.sample('BY', 'dom', np.asarray(X, float), np.asarray(Y, float), crs='EPSG:25832').astype(np.float32)
     import rasterio
     out = np.full(X.shape, np.nan, np.float32)
     ek = np.floor(X / 1000).astype(int); nk = np.floor(Y / 1000).astype(int)
@@ -94,11 +99,17 @@ def _pl_sample(names, proj, X, Y):
 # border passages (Neu-Ulm: Bavaria and Baden-Württemberg either side of the Iller): the neighbouring state's data where the
 # first state's services have none
 ALT = {'DE-BY': 'DE-BW', 'DE-BW': 'DE-BY', 'DE-MV': 'DE-BB', 'DE-BB': 'DE-MV', 'DE-ST': 'DE-BB'}
+# further neighbours, tried after the first (passages on the borders of Thuringia: Saxony-Anhalt / Thuringia on the A 9 at
+# Kleinhelmsdorf, Thuringia / Bavaria at Sachsenvorwerk)
+ALT2 = {'DE-ST': ('DE-TH',), 'DE-TH': ('DE-ST', 'DE-BY'), 'DE-BY': ('DE-TH',)}
+alts = lambda reg: ((ALT[reg],) if reg in ALT else ()) + ALT2.get(reg, ())
 # states whose 1 m laser terrain and surface model come from their WCS (elev_fetch.py: Brandenburg DGM1 + bDOM, Mecklenburg-
 # Vorpommern DGM1 + DOM1, Saxony-Anhalt DGM1 + DOM1) with the 20 cm photo from their WMS; no open LoD2 service is wired in
 # for them, so the passage's buildings are the mapped footprints with their heights
-EF = {'DE-BB': 'BB', 'DE-MV': 'MV', 'DE-ST': 'ST'}
-HD_SET = ('DE-BW', 'DE-BY', 'PL-32') + tuple(EF)
+EF = {'DE-BB': 'BB', 'DE-MV': 'MV', 'DE-ST': 'ST', 'DE-TH': 'TH'}       # (Thuringia: its 1 km DGM1 / DOM1 tiles, elev_fetch.THTiles)
+# Saxony: the 20 cm photo (WMS) and its 1 m laser terrain through the state's height service (one request per cell, so the
+# terrain grid only, elev_fetch.SaxonyGFI); no surface model (trees from the land cover map) and no LoD2
+HD_SET = ('DE-BW', 'DE-BY', 'PL-32') + tuple(EF) + ('DE-SN',)
 
 
 def _ef(reg, kind, proj, X, Y):
@@ -108,11 +119,13 @@ def _ef(reg, kind, proj, X, Y):
 
 def _fill(fn, reg, proj, X, Y):
     Z = fn(reg, proj, X, Y)
-    if Z is None or reg not in ALT: return Z
-    Z = np.array(Z, float); bad = ~np.isfinite(Z)
-    if bad.any():
-        try: Z[bad] = fn(ALT[reg], proj, np.asarray(X)[bad], np.asarray(Y)[bad])
-        except Exception as ex: print('  neighbouring state data failed', ALT[reg], repr(ex)[:100])
+    if Z is None or not alts(reg): return Z
+    Z = np.array(Z, float)
+    for nb in alts(reg):
+        bad = ~np.isfinite(Z)
+        if not bad.any(): break
+        try: Z[bad] = fn(nb, proj, np.asarray(X)[bad], np.asarray(Y)[bad])
+        except Exception as ex: print('  neighbouring state data failed', nb, repr(ex)[:100])
     return Z
 
 
@@ -125,6 +138,9 @@ def _dgm(reg, proj, X, Y):
         return _pl_sample(['pl_nmt.tif', 'pl_nmt_ext.tif'], proj, X, Y)
     if reg in EF:
         return _ef(reg, 'dgm', proj, X, Y)
+    if reg == 'DE-SN':
+        import elev_fetch
+        return elev_fetch.sample('SN', 'dgm', np.asarray(X, float), np.asarray(Y, float), crs=proj, method='nearest').astype(np.float32)
     f, _ = to_utm32(proj)
     ux, uy = f.transform(X, Y)
     if reg == 'DE-BW':
@@ -171,6 +187,12 @@ def _paved_window(reg, Pw, proj, roads, half, px):
     fr = (x0, y0, x0 + W * px, y0 + H * px)
     X, Y = np.meshgrid(fr[0] + (np.arange(W) + .5) * px, fr[3] - (np.arange(H) + .5) * px)
     rgb = sample_source(reg, X, Y, crs_in=proj)
+    for nb in alts(reg):                     # (beyond the state's border its photo is blank: the neighbour's there)
+        white = rgb.min(2) > 243
+        if white.mean() <= 0.02: break
+        try:
+            rgb2 = sample_source(nb, X, Y, crs_in=proj); fill = white & (rgb2.min(2) <= 243) & (rgb2.max(2) > 12); rgb[fill] = rgb2[fill]
+        except Exception as ex: print('  neighbouring photo failed', nb, repr(ex)[:100])
     nd = sample_ndom(reg, proj, X, Y)
     if nd is None: nd = np.zeros((H, W), np.float32)
     bx = box(*fr); rl = []
@@ -230,17 +252,19 @@ def photo_tiles(hid, P, proj, ext, near_m=140.0, size=256.0):
                 bb = io.BytesIO(); Image.fromarray(rgb).save(bb, 'WEBP', quality=66 if near else 60, method=6)
                 open(fn, 'wb').write(bb.getvalue())
             # a state's photo service is blank (white) beyond its border: the neighbouring state's photo there
-            if reg in ALT:
+            if alts(reg):
                 fm = fn.replace('.webp', '_m.webp')
                 if not os.path.exists(fm):
-                    img = np.asarray(Image.open(fn).convert('RGB')).copy(); white = img.min(2) > 243
-                    if white.mean() > 0.02:
+                    img = np.asarray(Image.open(fn).convert('RGB')).copy(); white = img.min(2) > 243; done = False
+                    for nb in alts(reg):
+                        if white.mean() <= 0.02: break
                         try:
-                            rgb2 = sample_source(ALT[reg], X, Y, crs_in=proj, res_m=None if near else 1.0)
-                            img[white] = rgb2[white]
-                            bb = io.BytesIO(); Image.fromarray(img).save(bb, 'WEBP', quality=66 if near else 60, method=6); open(fm, 'wb').write(bb.getvalue())
-                            print('  photo tile', tx, ty, f'{white.mean():.0%} from', ALT[reg], flush=True)
+                            rgb2 = sample_source(nb, X, Y, crs_in=proj, res_m=None if near else 1.0)
+                            fill = white & (rgb2.min(2) <= 243) & (rgb2.max(2) > 12); img[fill] = rgb2[fill]; done = done or fill.any()     # (blank or black: no photo there)
+                            print('  photo tile', tx, ty, f'{white.mean():.0%} from', nb, flush=True)
+                            white = img.min(2) > 243
                         except Exception as ex: print('  neighbouring photo failed', repr(ex)[:100])
+                    if done: bb = io.BytesIO(); Image.fromarray(img).save(bb, 'WEBP', quality=66 if near else 60, method=6); open(fm, 'wb').write(bb.getvalue())
                 if os.path.exists(fm): fn = fm
             out.append(dict(x0=tx * size, y0=ty * size, size=size, px=px, webp=open(fn, 'rb').read()))
     return out

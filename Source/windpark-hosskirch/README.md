@@ -295,9 +295,25 @@ painted area (layer `h_<id>_bout`), the card's figures (`bladeOut`, `bladeArea`,
 swing, the lane list's figures and the drive view's copy (section `h_<id>_blade`: the stretches beyond on the passage's normals,
 the depth per front-axle metre, the traced paved surface). On a passage's stretch the drive view shows that copy with the
 default convoy; elsewhere, and with another vehicle, the sweep worker measures each window the same way.
-Done for Münster (Lech) (2026-10-16). Hoßkirch is not re-run yet and its page is unchanged: rebuild it only after
+Done for Münster (Lech) (2026-10-16; with every trouble spot of the route scan below as a passage, 2026-10-17). Hoßkirch is not re-run yet and its page is unchanged: rebuild it only after
 `route_blade.mjs` and `route_bake.py` have run for it (ROUTE_ROOT unset), else its drive view measures the new way while its
 passages still paint the old area.
+
+**Every place where the blade may have trouble** (`tools/route_scan.mjs`, then `tools/route_scan_hot.py`): the page's vehicle
+drives the whole route along the convoy's line with the page's own code, window by window, and every front-axle metre is
+checked for the blade beyond the traced edge (as above), the blade over what the road packs hold beside the road at its real
+height — mapped objects (signals, lamps, poles; the road view's labels), road signs at their plate sizes and mounting heights
+(`src/route/signdims.js`), guide posts 0.5 m beyond the edge, barriers at their typical heights (walls, noise barriers, fences,
+hedges, guard rails), buildings — with the blade's underside across its section (`blade.js`), trees whose crowns reach into
+the blade's swing beyond the edge, the wheels beyond the edge, and the structures over the road the page rates "too low" or
+"to check". Barriers and signs mapped on the carriageway itself and buildings reaching over it (bridges, canopies) are mapping
+artefacts and left out; an overhang over a mapped road only (a junction mouth, a slip road) is road, not verge.
+`route_scan_hot.py` turns the places outside the passages into passages: a place within 1.5 km of a passage extends it, the
+others become new passages (places within 2 km share one, up to 4 km), each from 250 m before its first trouble to 150 m after
+its last, then `route_hotspots.py <ids>`, `hd_trees_all.py <ids>`, `ONE_ATLAS=1 route_hd_pack.py` (the photo tiles in one
+atlas: two files per passage), `route_pix.py passages <ids>`, `route_bridges.py fetch && heights` (after a first bake: the
+passages' areas), `route_blade.mjs`, `route_bake.py`. Thuringia's DGM1 / DOM1 tiles and Saxony's terrain (its height service,
+one request per grid point: the terrain only, 8 m grid) are wired in for the passages there (`hd_hot.py`).
 
 ### Another route
 

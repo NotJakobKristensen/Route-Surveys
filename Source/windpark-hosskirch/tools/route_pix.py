@@ -6,7 +6,9 @@ to the Panoramax viewer); the passage's file is loaded only when the passage is 
 → dist/r/NNN.json  pix: [[s, id, date, fwd, host]], pixh: hosts — one picture per 100 m, for the road view (after route_pack.py)
 → .cache/route/corr/pix_index.json  {passage id: number of photos}  (read by route_bake.py)
 Usage: python route_pix.py          python route_pix.py packs   (only the road packs' pictures: nothing fetched, run after
-route_pack.py when the passages' and bridges' photo files stand)"""
+route_pack.py when the passages' and bridges' photo files stand)
+       python route_pix.py passages <id>…   (only those passages' photo files; the index keeps the others, the bridges'
+       photos and the road packs stay as they are)"""
 import routecfg
 import base64, io, json, os, pickle, time, urllib.request
 from PIL import Image
@@ -42,13 +44,16 @@ def host(p):
     return HOSTS.index(h)
 
 
-def main(packs_only=False):
+def main(packs_only=False, only=None):
     pics = json.load(open(OUT + 'panoramax.json'))['pics']
     if packs_only: return road_packs(pics)
     os.makedirs(routecfg.DIST + 'h', exist_ok=True)
     index = {}
+    if only is not None and os.path.exists(OUT + 'pix_index.json'):
+        index = {k: v for k, v in json.load(open(OUT + 'pix_index.json')).items() if k not in only and k in {h[0] for h in HOT}}
     for h in HOT:
         hid = h[0]
+        if only is not None and hid not in only: continue
         sm = pickle.load(open(routecfg.C + 'hot/' + hid + '.pkl', 'rb'))['summary']
         a, b = sm['km'][0] * 1000 - 100, sm['km'][1] * 1000 + 100
         cand = [p for p in pics if a <= p['s'] <= b and (p.get('sd') or p.get('thumb'))]
@@ -71,7 +76,9 @@ def main(packs_only=False):
         json.dump(dict(lic=', '.join(lic) or None, by=', '.join(by) or None, hosts=HOSTS, pics=out), open(fn, 'w'), separators=(',', ':'))
         index[hid] = len(out)
         print(f'  {hid:34s} {len(out)} photos  {os.path.getsize(fn) // 1024} KB', flush=True)
+    if only is not None and os.path.islink(OUT + 'pix_index.json'): os.remove(OUT + 'pix_index.json')
     json.dump(index, open(OUT + 'pix_index.json', 'w'))
+    if only is not None: return
     # the critical structures over the route (route.json's clear list: a check, too low, or under 5.3 m): the picture
     # taken 25–250 m before each, looking at it → dist/h/pix_bridges.json {round(s): {id, s, t, h (host), iw, ih, img}}
     hdr = json.load(open(routecfg.DATA + 'route.json'))
@@ -110,4 +117,4 @@ def road_packs(pics):
 
 if __name__ == '__main__':
     import sys
-    main(packs_only=sys.argv[1:2] == ['packs'])
+    main(packs_only=sys.argv[1:2] == ['packs'], only=set(sys.argv[2:]) if sys.argv[1:2] == ['passages'] else None)
