@@ -40,7 +40,7 @@ const SHOT_HOTS = { hk: ['gaisbeuren', 'niederbiegen', 'forest'], ml: ['muenster
   // same in every run (when the page first measured it depends on when its panels filled)
   await p.setViewportSize({ width: 1281, height: 800 }); await p.waitForTimeout(400); await p.setViewportSize({ width: 1280, height: 800 }); await p.waitForTimeout(1200);
   // hashing helpers in the page
-  await p.evaluate(() => {
+  await p.evaluate((GP) => {
     const enc = new TextEncoder();
     const hex = (buf) => [...new Uint8Array(buf)].map((x) => x.toString(16).padStart(2, '0')).join('');
     const sha = async (parts) => { let n = 0; const bs = parts.map((x) => (typeof x === 'string' ? enc.encode(x) : x instanceof ArrayBuffer ? new Uint8Array(x) : new Uint8Array(x.buffer, x.byteOffset, x.byteLength))); for (const x of bs) n += x.length;
@@ -62,13 +62,14 @@ const SHOT_HOTS = { hk: ['gaisbeuren', 'niederbiegen', 'forest'], ml: ['muenster
     window.__setHash = async (list) => { const hs = []; let tris = 0; for (const o of list) { hs.push(await window.__objHash(o)); const g = o.geometry; if (g && g.attributes.position) tris += ((g.index ? g.index.count : g.attributes.position.count) / 3) * (o.isInstancedMesh ? o.count : 1); }
       hs.sort(); return { n: hs.length, tris: Math.round(tris), h: await sha([hs.join(',')]) }; };
     window.__sha = sha;
+    window.__GP = GP;
     window.__drawables = (root, skip) => { const L = []; root.traverse((o) => { if (skip && skip(o)) return; if (o.geometry && (o.isMesh || o.isLine || o.isPoints || o.isSprite)) L.push(o); }); return L; };
     window.__under = (o, g) => { for (let q = o; q; q = q.parent) if (q === g) return true; return false; };
     // the blade's drawing in the road view (its outer sweep, where it reaches beyond the edge): the new build tags its meshes,
     // the builds before it drew them with these materials (fingerprinted apart: the blade beyond the edge may change)
     window.__isBlade = (o) => { if (o.userData && o.userData.blade) return true; const m = o.material; if (!m || m.type !== 'MeshBasicMaterial' || o.renderOrder !== 2 || !m.color) return false;
       const c = m.color.getHex(); return (c === 0xff2a1a && Math.abs(m.opacity - 0.4) < 1e-6) || c === 0xff3020 || (c === 0xff3b30 && Math.abs(m.opacity - 0.7) < 1e-6); };
-  });
+  }, process.env.GP === '1');
   const out = { url, route, road: [], hot: [], errs };
   // ---------------------------------------------------------------- road points: packs (decoded data and meshes), live swept path, the rest of the scene
   const RK = process.env.KMS ? process.env.KMS.split(',').map(Number) : KMS[route];
@@ -92,6 +93,13 @@ const SHOT_HOTS = { hk: ['gaisbeuren', 'niederbiegen', 'forest'], ml: ['muenster
         const bm = P.hdr.chunks.map((c) => c.bmp ? c.bmp.width + 'x' + c.bmp.height : 'closed').join(',');
         const ms = await window.__setHash(P.meshes.filter((m) => m.geometry));
         res.packs[pk] = { hdr: await window.__sha([hdr]), A: await window.__sha(arrs), bmps: await window.__sha([bm]), meshes: ms };
+        if (window.__GP) {   // GP=1: the header with the guide posts' offsets masked, and every mesh's hash with its type and instance count
+          const g6 = (c) => String(c).split('-')[0] === '620';
+          const hdrX = JSON.stringify(P.hdr, (key, v) => (key === 'bmp' ? undefined : key === 'signs' && Array.isArray(v) ? v.map((q) => (g6(q[3]) ? [q[0], 0, ...q.slice(2)] : q)) : v));
+          const list = []; for (const m of P.meshes.filter((m) => m.geometry)) list.push([await window.__objHash(m), m.type, m.isInstancedMesh ? m.count : 0]);
+          list.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+          Object.assign(res.packs[pk], { hdrX: await window.__sha([hdrX]), n620: (P.hdr.signs || []).filter((q) => g6(q[3])).length, list });
+        }
       }
       const L = Q.live; if (L) { const x = L.res; res.live = { sa: L.sa, sb: L.sb, n: L.n, h: await window.__sha(Object.keys(x).sort().map((k) => [k, x[k] && x[k].buffer ? x[k] : String(x[k])]).flat()) }; }
       const conv = Q.convoy.group, sky = R.ROAD.scene.children.filter((c) => c.isMesh && c.material && c.material.side === 1 && c.geometry.type === 'SphereGeometry');

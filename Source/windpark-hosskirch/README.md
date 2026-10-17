@@ -277,6 +277,7 @@ python route_signs.py                        # speed limits, town signs, height 
                                              # speeds → corr/signs.json, corr/speed_1m.npz
                                              # (SIGNS_ONLY=1 route_pack.py / route_hd_pack.py: refresh the packs' signs only)
 python route_pack.py && python route_hd_pack.py   # → dist/r/, dist/h/
+python route_guideposts.py ../dist/r          # the guide posts by the packed edges (after every route_pack.py)
 cd ../.. && node windpark-hosskirch/tools/route_blade.mjs   # the blade beyond the edge at every passage and lane stretch → .cache/route/corr/blade_edge.json
 cd windpark-hosskirch/tools && python route_bake.py && cd ../..   # (again: the passages' blade figures and areas from it)
 node windpark-hosskirch/tools/build_route.mjs
@@ -295,7 +296,7 @@ painted area (layer `h_<id>_bout`), the card's figures (`bladeOut`, `bladeArea`,
 swing, the lane list's figures and the drive view's copy (section `h_<id>_blade`: the stretches beyond on the passage's normals,
 the depth per front-axle metre, the traced paved surface). On a passage's stretch the drive view shows that copy with the
 default convoy; elsewhere, and with another vehicle, the sweep worker measures each window the same way.
-Done for Münster (Lech) (2026-10-16; with every trouble spot of the route scan below as a passage, 2026-10-17). Hoßkirch is not re-run yet and its page is unchanged: rebuild it only after
+Done for Münster (Lech) (2026-10-16; with every trouble spot of the route scan below as a passage, 2026-10-17; reviewed, with the blockers' clear heights corrected and the guide posts at the packed edges, version 6, 2026-10-17). Hoßkirch is not re-run yet and its page is unchanged: rebuild it only after
 `route_blade.mjs` and `route_bake.py` have run for it (ROUTE_ROOT unset), else its drive view measures the new way while its
 passages still paint the old area.
 
@@ -314,6 +315,19 @@ its last, then `route_hotspots.py <ids>`, `hd_trees_all.py <ids>`, `ONE_ATLAS=1 
 atlas: two files per passage), `route_pix.py passages <ids>`, `route_bridges.py fetch && heights` (after a first bake: the
 passages' areas), `route_blade.mjs`, `route_bake.py`. Thuringia's DGM1 / DOM1 tiles and Saxony's terrain (its height service,
 one request per grid point: the terrain only, 8 m grid) are wired in for the passages there (`hd_hot.py`).
+
+**After the bake and the packs** (each changes only what it names, byte for byte otherwise):
+- `python tools/route_guideposts.py <r/>`: the guide posts (Z 620) by the packed edge. `route_signs.py` stands them 0.5 m beyond
+  the edge traced at its time and `route_pack.py` copies them unchanged, while the packs' edges come from the later, corrected
+  trace; where an edge was traced again a post could stand off the edge or on the carriageway. Each post's offset is set to the
+  packed edge + 0.5 m at its chainage (the edges read as the road view reads them). Run it after every `route_pack.py`. The
+  passage packs (`h/`) keep their own copies of the posts (`route_hd_pack.hd_signs`), not changed by it.
+- `python tools/route_evidence_apply.py <route folder> <evidence file as last baked>`: review notes and measures from the
+  route's evidence file into `route.json` as `route_bake.py` puts them (the bake copies them; only `incident`, `hard` and
+  `cap` change what it computes, and those it refuses). With the evidence of the last bake it leaves `route.json` unchanged.
+- `python tools/route_clear_fix.py <route folder> <r/>`: reviewed corrections of single clear-height records
+  (`clear_fixes.json` in the route folder, each with its reason) in the clear list, the road pack holding the record and the
+  passages' "check the clear height" measure, rebuilt as the bake builds it.
 
 ### Another route
 
